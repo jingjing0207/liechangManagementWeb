@@ -135,7 +135,7 @@
             },
             requestFlowData() {
                 let self = this
-                axios.get(MANAGEMENTPLATFORM+'?page='+parseInt(self.currentPage-1)+'&size='+this.pageSize)
+                axios.get(MANAGEMENTPLATFORM+'?page='+parseInt(self.currentPage-1)+'&size='+self.pageSize)
                     .then((response) => {
                         console.log(response)
                         this.information.pagination = response.data
