@@ -64,6 +64,26 @@ export default new Router({
                 {
                     path: '/drag',
                     component: resolve => require(['../components/page/DragList.vue'], resolve)    // 拖拽列表组件
+                },
+                {
+                    path: '/jdlist',
+                    component: resolve => require(['../components/page/JobList.vue'], resolve)   //JD列表
+                },
+                {
+                    path: '/job',
+                    component: resolve => require(['../components/page/JobDetail.vue'], resolve)   //JD详细信息
+                },
+                {
+                    path: '/humanlist',
+                    component: resolve => require(['../components/page/HumanList.vue'], resolve)   //简历列表
+                },
+                {
+                    path: '/humandetail',
+                    component: resolve => require(['../components/page/HumanDetail.vue'], resolve)   //简历详情
+                },
+                {
+                    path: '/humanedit',
+                    component: resolve => require(['../components/page/HumanEdit.vue'], resolve)   //编辑简历
                 }
             ]
         },

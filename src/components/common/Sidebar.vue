@@ -64,8 +64,30 @@
                         ]
                     },
                     {
-                        icon: 'el-icon-date',
+                        icon: 'el-icon-LIECHANG-qiyeguanli1',
                         index: '4',
+                        title: 'JD管理',
+                        subs: [
+                            {
+                                index: 'jdlist',
+                                title: 'JD列表'
+                            }
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-date',
+                        index: '5',
+                        title: '人才管理',
+                        subs: [
+                            {
+                                index: 'humanlist',
+                                title: '人才列表管理'
+                            }
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-date',
+                        index: '6',
                         title: '表单',
                         subs: [
                             {
