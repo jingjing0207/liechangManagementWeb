@@ -20,20 +20,32 @@
                 <el-breadcrumb-item>HR注册</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
+        <el-collapse class="handle-box">
+            <el-collapse-item title="排序选项" class="sortOption">
+                <div class="sortItem" v-for="item of sortGroup">
+                    <span>{{ item.display }}</span>
+                    <el-select v-model="item.value" :name="item.name" ref="sel" size="small">
+                        <el-option v-for="option in sortOptions" :label="option.label" :value="option.value"
+                                   :key="option.value">
+                        </el-option>
+                    </el-select>
+                </div>
+            </el-collapse-item>
+        </el-collapse>
         <!--<div class="handle-box">-->
         <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
         <!--</div>-->
         <table class="table table-bordered"cellpadding="0" cellspacing="0" >
             <tr class="tr-header">
                 <!--<th></th>-->
-                <th>username</th>
-                <th>createTime</th>
+                <th>{{username.label}}</th>
+                <th>{{createTime.label}}</th>
                 <!--<th>headPic</th>-->
-                <th>lastLoginTime</th>
-                <th>type</th>
-                <th>state</th>
-                <th>companyName</th>
-                <th>operation</th>
+                <th>{{lastLoginTime.label}}</th>
+                <th>{{type.label}}</th>
+                <th>{{state.label}}</th>
+                <th>{{companyName.label}}</th>
+                <th>{{operation.label}}</th>
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
                 <!--<td>{{pro.id}}</td>-->
@@ -46,27 +58,28 @@
                 <!--<td>{{pro.headPic}}</td>-->
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
                 <td>{{pro.type}}</td>
-                <td class="currentState">{{pro.state}}</td>
-                <td>{{pro.companyName==null?"null":pro.companyName}}</td>
+                <td class="currentState">{{pro.state=="Using"?"在用":"删除"}}</td>
+                <td>{{pro.companyName==null?"Null":pro.companyName}}</td>
                 <td class="last-td">
-                    <el-button type="info" @click="modifyManageplatform(pro.id)">修改</el-button>
+                    <el-button v-if="pro.state != 'Disabled'" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
+                    <el-button v-if="pro.state != 'Disabled'" type="info" plain @click="deleteHR(pro.id)">删除</el-button>
 
-                    <el-button type="danger" @click="deleteHR(pro.id)">删除</el-button>
-                </td>
-            </tr>
-            <tr class="tr-con pagination">
-                <td colspan="7" align="center" class="lastTd">
-                    <div class="block">
-                        <el-pagination
-                            @current-change ="handleCurrentChange"
-                            layout="total, prev, pager, next"
-                            :page-size="pagesize"
-                            :total=totalNumber>
-                        </el-pagination>
-                    </div>
+                    <el-button v-if="pro.state == 'Disabled'" disabled="disabled" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
+                    <el-button v-if="pro.state == 'Disabled'" disabled="disabled" type="info" plain @click="deleteHR(pro.id)">删除</el-button>
                 </td>
             </tr>
         </table>
+        <div colspan="7" class="lastTd" style="text-align: right;margin:20px 0;">
+            <div class="block">
+                <el-pagination
+                    @current-change ="handleCurrentChange"
+                    :page-sizes="[8]"
+                    layout="total, prev, pager, next,sizes"
+                    :page-size="pagesize"
+                    :total=totalNumber>
+                </el-pagination>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -78,6 +91,34 @@
     export default {
         data() {
             return {
+                username:{
+                    title:'username',
+                    label:'用户名'
+                },
+                createTime:{
+                    title:'createTime',
+                    label:'创建时间'
+                },
+                lastLoginTime:{
+                    title:'lastLoginTime',
+                    label:'最后登录时间'
+                },
+                type:{
+                    title:'type',
+                    label:'类型'
+                },
+                state:{
+                    title:'state',
+                    label:'状态'
+                },
+                companyName:{
+                    title:'companyName',
+                    label:'公司名称'
+                },
+                operation:{
+                    title:'operation',
+                    label:'操作'
+                },
                 pagination:{},
                 tableData: [],
                 cur_page: 1,
@@ -98,7 +139,25 @@
                     password: '',
                     newPass:''
                 },
-                formLabelWidth: '120px'
+                formLabelWidth: '120px',
+
+
+                search_title: '',
+                sortBy: [],
+                sortGroup: [
+                    {value: '0', name: 'createTime', display: '创建时间'},
+                    {value: '0', name: 'title', display: '标题'},
+                    {value: '0', name: 'creatorCompanyName', display: '所属公司'},
+                    {value: '0', name: 'creatorUserName', display: '发布人'},
+                    {value: '0', name: 'education', display: '学历'},
+                    {value: '0', name: 'level', display: '级别'},
+                    {value: '0', name: 'position', display: '职位'},
+                    {value: '0', name: 'price', display: '职位奖励'},
+                    {value: '0', name: 'recruitingNumber', display: '招聘人数'}
+                ],
+                sortOptions: [{value: '0', label: '默认'},
+                    {value: 'asc', label: '升序'},
+                    {value: 'desc', label: '降序'}],
             }
         },
         created(){
@@ -162,9 +221,6 @@
 </script>
 
 <style scoped>
-    .crumbs {
-        margin-bottom: 50px!important;
-    }
     .el-table thead {
         color: #000!important;
     }
@@ -206,28 +262,6 @@
         font-size:18px;
         color:black;
     }
-    .modifyPassword{
-        /*display: none;*/
-    }
-    .handle-box{
-        width:50%;
-        display: inline-block;
-    }
-    .handle-input{
-        width:70%;
-        margin-left:2%;
-    }
-    .plugins-tips{
-        overflow: hidden;
-        padding: 12px 21px!important;
-    }
-    .addInnfo{
-        /*float: right;*/
-    }
-    .content-table-list{
-        width:100%;
-        border-radius:12px!important;
-    }
     table{
         width:100%;
         height:auto;
@@ -235,14 +269,20 @@
         border:1px solid #eee;
         cursor: default;
     }
+    table tr:hover{
+        cursor: pointer;
+        background:#f5f7f596;
+    }
     .tr-header{
         border-bottom: 1px solid #73D6ED;
     }
     .tr-header th{
         font-size: 14px;
         color: #000;
+        background:#eef1f6;
+        padding: 13px 10px!important;
     }
-    .tr-header th,.tr-con td,.lastTd td{
+    .tr-con td,.lastTd td{
         text-align: center;
         padding:12px 10px!important;
     }
@@ -250,9 +290,9 @@
         border-top:none!important;
     }
     .tr-con td{
-        /*border-right:1px solid #eee;*/
+        border-right: 1px solid #ebeef5;
         border-top: 1px solid #ebeef5;
-        font-size: 12px;
+        font-size: 13px;
         color: #606266;
     }
     .last-td{
@@ -264,5 +304,91 @@
     .passwordTitle{
         max-width: 115px;
         overflow-x: auto;
+    }
+</style>
+<style scoped>
+    .sortable-ghost {
+        opacity: .7;
+    }
+    .cell{
+        text-align:center!important;
+    }
+    .search {
+        padding: 10px 15px;
+        border-bottom: 1px solid #dfe6ec;
+    }
+
+    .handle-box {
+        border: 1px solid #dfe6ec;
+        margin-bottom: 20px;
+    }
+
+    .handle-title {
+        width: 170px;
+    }
+
+    .handle-size {
+        width: 180px;
+        vertical-align: bottom;
+    }
+
+    .sortItem {
+        border: 1px solid #bfcbd9;
+        border-radius: 4px;
+        display: inline-block;
+        padding-right: 1px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    .sortItem span {
+        display: inline-block;
+        padding: 0 10px;
+        line-height: 36px;
+        cursor: move;
+        font-size: 14px;
+        vertical-align: top;
+        color: white;
+        background-color: #42b983;
+    }
+</style>
+<style>
+    #jdlist.el-table .cell, #jdlist.el-table th div {
+        color: #333;
+        padding: 0 10px;
+    }
+
+    .jdlist-row {
+        cursor: pointer;
+    }
+
+    #jdlist th {
+        background-color: #eef1f6;
+    }
+
+    .handle-size .el-input {
+        display: inline-table;
+    }
+
+    .sortOption .el-collapse-item__arrow {
+        float: left;
+        font-size: 14px;
+        line-height: 14px;
+        margin-top: 17px;
+    }
+
+    .sortItem input {
+        color: #42b983;
+        border: none;
+        width: 75px;
+    }
+
+    .sortOption .el-collapse-item__header {
+        padding: 0 15px;
+        border-bottom: 1px solid #dfe6ec;
+    }
+
+    .sortOption .el-collapse-item__content {
+        padding: 10px 15px;
     }
 </style>

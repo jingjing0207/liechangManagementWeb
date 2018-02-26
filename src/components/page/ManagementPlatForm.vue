@@ -2,16 +2,16 @@
     <div class="table">
         <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
             <el-form :model="form"style="font-size:17px;color:black;">
-                <el-form-item label="headPic:" :label-width="formLabelWidth">
+                <el-form-item label="头像:" :label-width="formLabelWidth">
                     <el-input v-model="newHeadpic" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
-                <el-form-item label="password:" :label-width="formLabelWidth">
+                <el-form-item label="密码:" :label-width="formLabelWidth">
                     <el-input v-model="newPassword" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
-                <el-form-item label="role:" :label-width="formLabelWidth">
+                <el-form-item label="角色:" :label-width="formLabelWidth">
                     <el-input v-model="newRole" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
-                <el-form-item label="username:" :label-width="formLabelWidth">
+                <el-form-item label="用户名:" :label-width="formLabelWidth">
                     <el-input v-model="newUsername" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
             </el-form>
@@ -20,58 +20,86 @@
                 <el-button type="primary" @click="createOperation()">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog title="修改密码" :visible.sync="dialogFormVisiblePassword">
+            <el-form :model="form">
+                <el-form-item label="输入新密码" :label-width="formLabelWidth">
+                    <el-input type="password"  v-model="form1.password" auto-complete="off" style="width:70%;"></el-input>
+                </el-form-item>
+                <el-form-item label="确认新密码" :label-width="formLabelWidth">
+                    <el-input type="password"  v-model="form1.newPass" auto-complete="off" style="width:70%;"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisiblePassword = false">取 消</el-button>
+                <el-button type="primary" @click="modifypasswordMoudal()">确 定</el-button>
+            </div>
+        </el-dialog>
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-menu"></i> 用户管理</el-breadcrumb-item>
                 <el-breadcrumb-item>管理平台注册</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="plugins-tips">
-            <el-button type="info" plain class="addInnfo" @click="addUserManagement">+ 新增</el-button>
-            <div class="handle-box">
-                <el-input v-model="searchId" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="search" @click="requestFlowData()">搜索</el-button>
+        <el-collapse class="handle-box">
+            <div class="search">
+                <el-button type="info" plain class="addInnfo" @click="addUserManagement">+ 新增</el-button>
+                <div class="search-box">
+                    <el-input v-model="searchId" size="medium" placeholder="筛选关键词" class="handle-input mr10"></el-input>
+                    <el-button type="primary" icon="search" @click="requestFlowData()">搜索</el-button>
+                </div>
             </div>
-        </div>
+            <!--<el-collapse-item title="排序选项" class="sortOption">-->
+            <!--<div class="sortItem" v-for="item of sortGroup">-->
+            <!--<span>{{ item.display }}</span>-->
+            <!--<el-select v-model="item.value" :name="item.name" ref="sel" size="small">-->
+            <!--<el-option v-for="option in sortOptions" :label="option.label" :value="option.value"-->
+            <!--:key="option.value">-->
+            <!--</el-option>-->
+            <!--</el-select>-->
+            <!--</div>-->
+            <!--</el-collapse-item>-->
+        </el-collapse>
         <div class="content-table-list">
             <table class="table table-bordered"cellpadding="0" cellspacing="0" >
                 <tr class="tr-header">
-                    <th>id</th>
-                    <th>createTime</th>
-                    <th>headPic</th>
-                    <th>lastLoginTime</th>
-                    <th>role</th>
-                    <th>state</th>
-                    <th>username</th>
-                    <th>operation</th>
+                    <th>{{title.name.label}}</th>
+                    <!--<th>id</th>-->
+                    <th>{{title.createTime.label}}</th>
+                    <!--<th>headPic</th>-->
+                    <th>{{title.lastLoginTime.label}}</th>
+                    <th>{{title.role.label}}</th>
+                    <th>{{title.state.label}}</th>
+                    <th>{{title.operation.label}}</th>
                 </tr>
                 <tr class="tr-con"  v-for="(pro,idx) in information.data">
-                    <td>{{pro.id}}</td>
-                    <td>{{new Date(pro.createTime).toLocaleString()}}</td>
-                    <td>{{pro.headPic}}</td>
-                    <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
-                    <td>{{pro.role}}</td>
-                    <td>{{pro.state}}</td>
                     <td>{{pro.username}}</td>
+                    <!--<td>{{pro.id}}</td>-->
+                    <td>{{new Date(pro.createTime).toLocaleString()}}</td>
+                    <!--<td>{{pro.headPic}}</td>-->
+                    <td>{{pro.lastLoginTime==null?"Null":new Date(pro.lastLoginTime).toLocaleString()}}</td>
+                    <td>{{pro.role}}</td>
+                    <td>{{pro.state=="ENABLED"?"可用":"删除"}}</td>
                     <td class="last-td">
-                        <el-button type="info" @click="modifyManageplatform(pro.id)">修改</el-button>
-                        <el-button type="danger" @click="deleteManage(pro.id)">删除</el-button>
-                    </td>
-                </tr>
-                <tr class="tr-con">
-                    <td colspan="8" align="center" class="lastTd">
-                        <div class="block">
-                            <el-pagination
-                                @current-change="handleCurrentChange"
-                                :current-page.sync="currentPage"
-                                :page-size="pageSize"
-                                layout="total, prev, pager, next"
-                                :total="totalNumber">
-                            </el-pagination>
-                        </div>
+                        <el-button v-if="pro.state != 'DISABLED'" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
+                        <el-button v-if="pro.state != 'DISABLED'"  type="info" plain @click="deleteManage(pro.id)">删除</el-button>
+
+                        <el-button v-if="pro.state == 'DISABLED'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
+                        <el-button v-if="pro.state == 'DISABLED'" disabled="disabled" type="info" plain @click="deleteManage(pro.id)">删除</el-button>
                     </td>
                 </tr>
             </table>
+            <div colspan="8" class="lastTd" style="text-align: right;margin:20px 0;">
+                <div class="block">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-sizes="[8]"
+                        layout="total, prev, pager, next,sizes"
+                        :page-size="pageSize"
+                        :total="totalNumber">
+                    </el-pagination>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -85,6 +113,33 @@
         data: function(){
             const self = this;
             return {
+                disabled:false,
+                title:{
+                    name:{
+                        title:"name",
+                        label:"用户名"
+                    },
+                    createTime:{
+                        title:"createTime",
+                        label:"创建时间"
+                    },
+                    lastLoginTime:{
+                        title:"lastLoginTime",
+                        label:"最后登录时间"
+                    },
+                    role:{
+                        title:"role",
+                        label:"角色"
+                    },
+                    state:{
+                        title:"state",
+                        label:"状态"
+                    },
+                    operation:{
+                        title:"operation",
+                        label:"操作"
+                    },
+                },
                 information: {
                     pagination:{},
                     data:[]
@@ -103,6 +158,7 @@
                 newRole:'',
                 newUsername:'',
                 dialogFormVisible: false,
+                dialogFormVisiblePassword:false,
                 form: {
                     name: '',
                     region: '',
@@ -117,6 +173,27 @@
                 currentPage:1,
                 pageSize:0,
                 formLabelWidth: '120px',
+                form1:{
+                    newPass:'',
+                    password:''
+                },
+
+                search_title: '',
+                sortBy: [],
+                sortGroup: [
+                    {value: '0', name: 'createTime', display: '创建时间'},
+                    {value: '0', name: 'title', display: '标题'},
+                    {value: '0', name: 'creatorCompanyName', display: '所属公司'},
+                    {value: '0', name: 'creatorUserName', display: '发布人'},
+                    {value: '0', name: 'education', display: '学历'},
+                    {value: '0', name: 'level', display: '级别'},
+                    {value: '0', name: 'position', display: '职位'},
+                    {value: '0', name: 'price', display: '职位奖励'},
+                    {value: '0', name: 'recruitingNumber', display: '招聘人数'}
+                ],
+                sortOptions: [{value: '0', label: '默认'},
+                    {value: 'asc', label: '升序'},
+                    {value: 'desc', label: '降序'}],
             }
         },
         components: {
@@ -135,7 +212,7 @@
             },
             requestFlowData() {
                 let self = this
-                axios.get(MANAGEMENTPLATFORM+'?page='+parseInt(self.currentPage-1)+'&size='+self.pageSize)
+                self.$axios.get(MANAGEMENTPLATFORM+'?page='+parseInt(self.currentPage-1)+'&size='+self.pageSize)
                     .then((response) => {
                         console.log(response)
                         this.information.pagination = response.data
@@ -153,33 +230,36 @@
                 this.currentPage=val
                 this.requestFlowData()
             },
+            modifyManageplatform(id){
+                console.log(id)
+                this.deleteId=id
+                this.form1.newPass=''
+                this.form1.password=''
+                this.dialogFormVisiblePassword=true
+            },
             modifypasswordMoudal() {
-                this.$prompt('请输入新密码', '密码修改', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                    this.$message({
-                        type: 'success',
-                        message: '密码修改成功'
-                    })
+                let self = this
+                if(this.form1.newPass==this.form1.password){
                     let prams={
                         id:this.deleteId,
-                        password:value
+                        password:this.form1.newPass
                     }
-                    axios.post(MODIFYMANAGE,prams)
-                        .then((response) => {
+                    self.url = MODIFYMANAGE;
+                    self.$axios.post(self.url,prams).then((response) => {
                             console.log('我要修改密码')
                             console.log(response)
+                            this.dialogFormVisiblePassword=false
+                            this.$message({
+                                type: 'success',
+                                message: '密码修改成功'
+                            })
                         })
                         .catch((error) => {
                             console.log(error)
                         })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '取消修改'
-                    });
-                });
+                }else{
+                    self.$message.error('两次密码输入不相同,请重新输入！')
+                }
             },
             addUserManagement(){
                 this.dialogFormVisible=true
@@ -211,11 +291,6 @@
                     .catch((error) => {
                         console.log(error)
                     })
-            },
-            modifyManageplatform(id){
-                console.log(id)
-                this.deleteId=id
-                this.modifypasswordMoudal()
             },
             username() {
                 let resultMessage = sessionStorage.getItem('username')
@@ -259,6 +334,9 @@
 </script>
 
 <style scoped>
+    .el-button{
+        padding:10px 16px!important;
+    }
     .el-input__inner{
         width: 60%!important;
     }
@@ -286,7 +364,7 @@
     .modifyPassword{
         /*display: none;*/
     }
-    .handle-box{
+    .search-box{
         width:50%;
         display: inline-block;
     }
@@ -312,14 +390,20 @@
         border:1px solid #eee;
         cursor: default;
     }
+    table tr:hover{
+        cursor: pointer;
+        background:#f5f7f596;
+    }
     .tr-header{
         border-bottom: 1px solid #73D6ED;
     }
     .tr-header th{
         font-size: 14px;
         color: #000;
+        background:#eef1f6;
+        padding: 13px 10px!important;
     }
-    .tr-header th,.tr-con td,.lastTd td{
+    .tr-con td,.lastTd td{
         text-align: center;
         padding:10px!important;
     }
@@ -328,7 +412,8 @@
     }
     .tr-con td{
         border-top: 1px solid #eee;
-        font-size: 12px;
+        border-right: 1px solid #ebeef5;
+        font-size: 13px;
     }
     .last-td{
         border-right:none!important;
@@ -343,4 +428,91 @@
     /*::-webkit-scrollbar{*/
          /*display: none;*/
     /*}*/
+</style>
+
+<style scoped>
+    .sortable-ghost {
+        opacity: .7;
+    }
+    .cell{
+        text-align:center!important;
+    }
+    .search {
+        padding: 10px 15px;
+        border-bottom: 1px solid #dfe6ec;
+    }
+
+    .handle-box {
+        border: 1px solid #dfe6ec;
+        margin-bottom: 20px;
+    }
+
+    .handle-title {
+        width: 170px;
+    }
+
+    .handle-size {
+        width: 180px;
+        vertical-align: bottom;
+    }
+
+    .sortItem {
+        border: 1px solid #bfcbd9;
+        border-radius: 4px;
+        display: inline-block;
+        padding-right: 1px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    .sortItem span {
+        display: inline-block;
+        padding: 0 10px;
+        line-height: 36px;
+        cursor: move;
+        font-size: 14px;
+        vertical-align: top;
+        color: white;
+        background-color: #42b983;
+    }
+</style>
+<style>
+    #jdlist.el-table .cell, #jdlist.el-table th div {
+        color: #333;
+        padding: 0 10px;
+    }
+
+    .jdlist-row {
+        cursor: pointer;
+    }
+
+    #jdlist th {
+        background-color: #eef1f6;
+    }
+
+    .handle-size .el-input {
+        display: inline-table;
+    }
+
+    .sortOption .el-collapse-item__arrow {
+        float: left;
+        font-size: 14px;
+        line-height: 14px;
+        margin-top: 17px;
+    }
+
+    .sortItem input {
+        color: #42b983;
+        border: none;
+        width: 75px;
+    }
+
+    .sortOption .el-collapse-item__header {
+        padding: 0 15px;
+        border-bottom: 1px solid #dfe6ec;
+    }
+
+    .sortOption .el-collapse-item__content {
+        padding: 10px 15px;
+    }
 </style>

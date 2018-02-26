@@ -26,23 +26,24 @@
                 </div>
             </el-collapse-item>
         </el-collapse>
-        <el-table :data="data" border fit id="jdlist" style="width: 100%;font-size: 13px;"
+        <el-table :data="data" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center"
                   row-class-name="jdlist-row" @row-click="openDetails">
-            <el-table-column prop="createTime" label="创建时间" width="145px" :formatter="dateTimeFormat"></el-table-column>
-            <el-table-column prop="title" show-overflow-tooltip label="标题"></el-table-column>
-            <el-table-column prop="creatorCompanyName" show-overflow-tooltip label="所属公司">
+            <el-table-column  header-align="center" prop="createTime" label="创建时间" width="145px" :formatter="dateTimeFormat"></el-table-column>
+            <el-table-column  header-align="center" prop="title" show-overflow-tooltip label="标题"></el-table-column>
+            <el-table-column  header-align="center" prop="creatorCompanyName" show-overflow-tooltip label="所属公司">
             </el-table-column>
-            <el-table-column prop="creatorUsername" show-overflow-tooltip label="发布人"></el-table-column>
-            <el-table-column prop="education" label="学历" width="110px"></el-table-column>
-            <el-table-column prop="level" label="级别"></el-table-column>
-            <el-table-column prop="position" label="职位" width="130px"></el-table-column>
-            <el-table-column prop="price" label="职位奖励" :formatter="priceFormat"></el-table-column>
-            <el-table-column prop="recruitingNumber" label="招聘人数"></el-table-column>
+            <el-table-column  header-align="center" prop="creatorUsername" show-overflow-tooltip label="发布人"></el-table-column>
+            <el-table-column  header-align="center" prop="education" label="学历" width="110px"></el-table-column>
+            <el-table-column  header-align="center" prop="level" label="级别"></el-table-column>
+            <el-table-column  header-align="center" prop="position" label="职位" width="130px"></el-table-column>
+            <el-table-column  header-align="center" prop="price" label="职位奖励" :formatter="priceFormat"></el-table-column>
+            <el-table-column  header-align="center" prop="recruitingNumber" label="招聘人数"></el-table-column>
         </el-table>
         <div class="pagination">
             <el-pagination
                 @current-change="handleCurrentChange"
-                layout="prev, pager, next"
+                :page-sizes="[8]"
+                layout="total,prev, pager, next,sizes"
                 :current-page.sync="pageNo"
                 :page-size="pagesize"
                 :total="totalElements">
@@ -59,8 +60,8 @@
             return {
                 totalElements: 0,
                 pageNo: 1,
-                pagesize: 15,
-                size: 15,
+                pagesize: 8,
+                size: 8,
                 search_title: '',
                 sortBy: [],
                 sortGroup: [
@@ -173,7 +174,9 @@
     .sortable-ghost {
         opacity: .7;
     }
-
+    .cell{
+        text-align:center!important;
+    }
     .search {
         padding: 10px 15px;
         border-bottom: 1px solid #dfe6ec;

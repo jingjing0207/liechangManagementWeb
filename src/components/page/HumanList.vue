@@ -27,10 +27,10 @@
                 </div>
             </el-collapse-item>
         </el-collapse>
-        <el-table :data="data" border id="hlist" style="width: 100%;font-size: 13px;"
+        <el-table :data="data" border id="hlist" style="width: 100%;font-size: 13px;text-align: center"
                   row-class-name="hlist-row">
             <!--<el-table-column type="selection" width="55"></el-table-column>-->
-            <el-table-column prop="avatar" label="人员" width="210px" :resizable="false" show-overflow-tooltip>
+            <el-table-column  header-align="center" prop="avatar" label="人员" width="210px" align="center" :resizable="false" show-overflow-tooltip>
                 <template slot-scope="scope" prop="avatar">
                     <div id="human">
                         <img :src="scope.row.avatar" class="headImg">
@@ -45,11 +45,11 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column prop="cellphone" label="电话" :resizable="false" width="110px"
+            <el-table-column header-align="center" prop="cellphone" label="电话" :resizable="false" width="110px"
                              show-overflow-tooltip></el-table-column>
-            <el-table-column prop="company" label="公司名称" min-width="200px" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="position" label="公司职位" width="150px"></el-table-column>
-            <el-table-column prop="price" align="center" label="简历价格">
+            <el-table-column header-align="center" prop="company" label="公司名称" min-width="200px" show-overflow-tooltip></el-table-column>
+            <el-table-column header-align="center" prop="position" label="公司职位"></el-table-column>
+            <el-table-column header-align="center" prop="price" align="center" label="简历价格">
                 <template slot-scope="scope">
                     <template v-if="scope.row.edit">
                         <el-input size="mini" v-model="scope.row.price" ref="rowPrice"></el-input>
@@ -65,12 +65,12 @@
                     </template>
                 </template>
             </el-table-column>
-            <el-table-column prop="state" :resizable="false" label="简历状态" width="75px" align="center">
+            <el-table-column header-align="center" prop="state" :resizable="false" label="简历状态" width="75px" align="center">
                 <template slot-scope="scope">
                     <span>{{ scope.row.state | stateFormat }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" :resizable="false" width="70px">
+            <el-table-column header-align="center" label="操作" :resizable="false" width="70px">
                 <template slot-scope="scope">
                     <div id="option_button">
                         <el-button type="text" size="mini" style="width: 100%;" @click="view(scope.row)">查看</el-button>
@@ -84,7 +84,8 @@
         <div class="pagination">
             <el-pagination
                 @current-change="handleCurrentChange"
-                layout="prev, pager, next"
+                :page-sizes="[8]"
+                layout="total, prev, pager, next,sizes"
                 :current-page.sync="pageNo"
                 :page-size="pagesize"
                 :total="totalElements">
@@ -243,8 +244,8 @@
             return {
                 totalElements: 0,
                 pageNo: 1,
-                pagesize: 15,
-                size: 15,
+                pagesize: 6,
+                size: 6,
                 search_name: '',
                 sortBy: [],
                 sortGroup: [
@@ -390,5 +391,11 @@
     .editPrice .el-button {
         font-size: 18px;
         padding: 0;
+    }
+    .sortOption .el-table th{
+        text-align: center;
+    }
+    .sortOption .el-table th{
+        text-align: center;
     }
 </style>

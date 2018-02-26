@@ -57,14 +57,14 @@
                                 index: 'companieslist',
                                 title: '企业列表管理'
                             },
-                            {
-                                index: 'changehrmanager',
-                                title: '企业管理员账号密码管理'
-                            }
+                            // {
+                            //     index: 'changehrmanager',
+                            //     title: '企业管理员账号密码管理'
+                            // }
                         ]
                     },
                     {
-                        icon: 'el-icon-LIECHANG-qiyeguanli1',
+                        icon: 'el-icon-LIECHANG-yonghuguanli1',
                         index: '4',
                         title: 'JD管理',
                         subs: [
