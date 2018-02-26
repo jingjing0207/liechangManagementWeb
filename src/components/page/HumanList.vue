@@ -14,7 +14,7 @@
                     <template slot="prepend">每页</template>
                     <template slot="append">条</template>
                 </el-input-number>
-                <el-button type="primary" size="medium" icon="search" @click="search">查询</el-button>
+                <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
@@ -48,7 +48,7 @@
             <el-table-column prop="cellphone" label="电话" :resizable="false" width="110px"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="company" label="公司名称" min-width="200px" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="position" label="公司职位"></el-table-column>
+            <el-table-column prop="position" label="公司职位" width="150px"></el-table-column>
             <el-table-column prop="price" align="center" label="简历价格">
                 <template slot-scope="scope">
                     <template v-if="scope.row.edit">

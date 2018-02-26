@@ -49,13 +49,19 @@
                             <span>{{ info.email }}</span>
                             <icon_tel></icon_tel>
                             <span>{{ info.cellphone }}</span>
-                            <icon_address></icon_address>
-                            <span>{{ info.address }}</span>
+                            <!--<icon_address></icon_address>-->
+                            <!--<span>{{ info.address }}</span>-->
                         </div>
                     </div>
                 </div>
                 <el-row>
                     <div class="postInfo-container">
+                        <el-row>
+                            <el-col :span="24">
+                                <h5>地址：</h5>
+                                <span>{{ info.address }}</span>
+                            </el-col>
+                        </el-row>
                         <el-row>
                             <el-col :span="6">
                                 <h5>开始工作：</h5>
