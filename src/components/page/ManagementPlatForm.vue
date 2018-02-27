@@ -44,7 +44,7 @@
             <div class="search">
                 <div style="display: inline-block;">
                     <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
-                    <el-input v-model="searchId" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
+                    <el-input v-model="searchName" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
                     <el-input-number v-model="pageSize" size="medium" :min="1" :controls="false" class="handle-size">
                         <template slot="prepend">每页</template>
                         <template slot="append">条</template>
@@ -77,14 +77,14 @@
         <div class="content-table-list">
             <table class="table table-bordered"cellpadding="0" cellspacing="0" >
                 <tr class="tr-header">
-                    <th>{{title.name.label}}</th>
+                    <th>{{name.label}}</th>
                     <!--<th>id</th>-->
-                    <th>{{title.createTime.label}}</th>
+                    <th>{{createTime.label}}</th>
                     <!--<th>headPic</th>-->
-                    <th>{{title.lastLoginTime.label}}</th>
-                    <th>{{title.role.label}}</th>
-                    <th>{{title.state.label}}</th>
-                    <th>{{title.operation.label}}</th>
+                    <th>{{lastLoginTime.label}}</th>
+                    <th>{{role.label}}</th>
+                    <th>{{state.label}}</th>
+                    <th>{{operation.label}}</th>
                 </tr>
                 <tr class="tr-con"  v-for="(pro,idx) in information.data">
                     <td>{{pro.username}}</td>
@@ -119,6 +119,7 @@
 </template>
 
 <script>
+    import Sortable from 'sortablejs'
     import axios from 'axios';
     import { MANAGEMENTPLATFORM , DELETEMANAGE,MODIFYMANAGE,CREATEMANAGE } from '../../constants/Constants'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
@@ -127,31 +128,30 @@
         data: function(){
             const self = this;
             return {
-                title:{
-                    name:{
-                        title:"name",
-                        label:"用户名"
-                    },
-                    createTime:{
-                        title:"createTime",
-                        label:"创建时间"
-                    },
-                    lastLoginTime:{
-                        title:"lastLoginTime",
-                        label:"最后登录时间"
-                    },
-                    role:{
-                        title:"role",
-                        label:"角色"
-                    },
-                    state:{
-                        title:"state",
-                        label:"状态"
-                    },
-                    operation:{
-                        title:"operation",
-                        label:"操作"
-                    },
+                searchName:'',
+                name:{
+                    title:"name",
+                    label:"用户名"
+                },
+                createTime:{
+                    title:"createTime",
+                    label:"创建时间"
+                },
+                lastLoginTime:{
+                    title:"lastLoginTime",
+                    label:"最后登录时间"
+                },
+                role:{
+                    title:"role",
+                    label:"角色"
+                },
+                state:{
+                    title:"state",
+                    label:"状态"
+                },
+                operation:{
+                    title:"operation",
+                    label:"操作"
                 },
                 information: {
                     pagination:{},
@@ -194,10 +194,10 @@
                 search_title: '',
                 sortBy: [],
                 sortGroup: [
+                    {value: '0', name: 'username', display: '用户名'},
                     {value: '0', name: 'createTime', display: '创建时间'},
-                    {value: '0', name: 'title', display: '用户名'},
-                    {value: '0', name: 'creatorCompanyName', display: '所属公司'},
-                    {value: '0', name: 'education', display: '最后登录时间'}
+                    {value: '0', name: 'lastLoginTime', display: '最后登录时间'},
+                    {value: '0', name: 'state', display: '状态'}
                 ],
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
@@ -209,12 +209,32 @@
         },
         mounted (){
             this.requestFlowData()
+            this.setSort()
         },
         methods: {
+            setSort() {
+                this.$nextTick(() => {
+                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0]
+                    this.sortable = Sortable.create(el, {
+                        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+                        setData: dataTransfer => dataTransfer.setData('Text', '')
+                    })
+                })
+            },
             requestFlowData(){
                 let self = this;
+                var option = '?page='+parseInt(self.currentPage-1)+'&size='+self.pageSize
+                var sortStr = ''
+                if (self.sortBy.length != 0) {
+                    for (var s in self.sortBy) {
+                        sortStr = sortStr + '&sort=' + self.sortBy[s]
+                    }
+                }
+                if (sortStr.length != 0) {
+                    option = option + sortStr
+                }
                 self.url = MANAGEMENTPLATFORM;
-                self.$axios.get(self.url+'?page='+parseInt(self.currentPage-1)+'&size='+self.pageSize).then((response) => {
+                self.$axios.get(self.url+option).then((response) => {
                     console.log(response)
                     self.information.pagination = response.data
                     self.totalNumber=parseInt(response.data.totalElements)
@@ -231,8 +251,31 @@
             },
             search() {
                 const self = this
+                var list = document.querySelectorAll('.sortOption .el-input__inner')
+                var el = this.$refs.sel
+                var map = {}
+                self.sortBy = []
+                el.forEach(obj => {
+                    return map[obj.$options.propsData.name] = obj.$options.propsData.value
+                })
+                Array.prototype.map.call(list, obj => {
+                    if (map[obj.name] != '0') {
+                        self.sortBy.push(obj.name + ',' + map[obj.name])
+                    }
+                })
+                this.requestFlowData()
                 self.currentPage = 1;
-                self.requestFlowData();
+                self.url = MANAGEMENTPLATFORM;
+                self.$axios.get(self.url+'?page='+parseInt(self.currentPage-1)+'&size='+self.pageSize+'&username='+self.searchName).then((response) => {
+                    console.log(response)
+                    self.information.pagination = response.data
+                    self.totalNumber=parseInt(response.data.totalElements)
+                    console.log(this.totalNumber)
+                    self.information.data = response.data.content
+                    console.log(response.data.content)
+                }).catch((error) => {
+                    console.log(error)
+                })
             },
             modifyManageplatform(id){
                 console.log(id)

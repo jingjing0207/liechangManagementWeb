@@ -89,6 +89,7 @@
 </template>
 
 <script>
+    import Sortable from 'sortablejs'
     import axios from 'axios';
     import { GETAUDITEDHES,DELETEHR,MODIEFYHRPASSWORD } from '../../constants/Constants'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
@@ -161,18 +162,21 @@
                 search_title: '',
                 sortBy: [],
                 sortGroup: [
+                    {value: '0', name: 'username', display: '用户名'},
                     {value: '0', name: 'createTime', display: '创建时间'},
-                    {value: '0', name: 'title', display: '用户名'},
-                    {value: '0', name: 'creatorCompanyName', display: '所属公司'},
-                    {value: '0', name: 'education', display: '最后登录时间'}
+                    {value: '0', name: 'companyName', display: '公司名称'},
+                    {value: '0', name: 'state', display: '状态'},
+                    {value: '0', name: 'lastLoginTime', display: '最后登录时间'}
                 ],
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
                     {value: 'desc', label: '降序'}],
+                tableData: []
             }
         },
         created(){
             this.getData();
+            this.setSort()
         },
         methods: {
             setSort() {
@@ -198,7 +202,7 @@
                         self.sortBy.push(obj.name + ',' + map[obj.name])
                     }
                 })
-                this.pageNo = 1;
+                this.cur_page = 1;
                 this.getData();
             },
             handleCurrentChange(val){
@@ -207,9 +211,18 @@
             },
             getData(){
                 let self = this;
-                var option = '?page=' + (self.cur_page - 1) + '&size=' + self.pagesize
+                var option = '?page=' + (self.cur_page - 1) + '&size=' + self.pagesize+'&type=HR'
+                var sortStr = ''
+                if (self.sortBy.length != 0) {
+                    for (var s in self.sortBy) {
+                        sortStr = sortStr + '&sort=' + self.sortBy[s]
+                    }
+                }
+                if (sortStr.length != 0) {
+                    option = option + sortStr
+                }
                 self.url = GETAUDITEDHES;
-                self.$axios.get(self.url+option+'&type=HR').then((response) => {
+                self.$axios.get(self.url+option).then((response) => {
                     console.log(response.data.totalElements)
                     self.totalNumber=parseInt(response.data.totalElements)
                     self.hr_list=response.data.content

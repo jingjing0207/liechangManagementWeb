@@ -90,6 +90,7 @@
 </template>
 
 <script>
+    import Sortable from 'sortablejs'
     import axios from 'axios';
     import { GETAUDITEDHES,DELETEHR,MODIEFYHRPASSWORD } from '../../constants/Constants'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
@@ -163,10 +164,11 @@
                 search_title: '',
                 sortBy: [],
                 sortGroup: [
+                    {value: '0', name: 'username', display: '用户名'},
                     {value: '0', name: 'createTime', display: '创建时间'},
-                    {value: '0', name: 'title', display: '用户名'},
-                    {value: '0', name: 'creatorCompanyName', display: '所属公司'},
-                    {value: '0', name: 'education', display: '最后登录时间'}
+                    {value: '0', name: 'companyName', display: '公司名称'},
+                    {value: '0', name: 'state', display: '状态'},
+                    {value: '0', name: 'lastLoginTime', display: '最后登录时间'}
                 ],
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
@@ -175,11 +177,21 @@
         },
         created(){
             this.getData();
+            this.setSort()
         },
         methods: {
             handleCurrentChange(val){
                 this.cur_page = val;
                 this.getData();
+            },
+            setSort() {
+                this.$nextTick(() => {
+                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0]
+                    this.sortable = Sortable.create(el, {
+                        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+                        setData: dataTransfer => dataTransfer.setData('Text', '')
+                    })
+                })
             },
             search() {
                 const self = this
@@ -195,13 +207,23 @@
                         self.sortBy.push(obj.name + ',' + map[obj.name])
                     }
                 })
-                this.pageNo = 1;
+                this.cur_page = 1;
                 this.getData();
             },
             getData(){
                 let self = this;
+                var option = '?page='+parseInt(self.cur_page-1)+'&size='+this.pagesize+'&type=PLATFORM_MARKECTER'
+                var sortStr = ''
+                if (self.sortBy.length != 0) {
+                    for (var s in self.sortBy) {
+                        sortStr = sortStr + '&sort=' + self.sortBy[s]
+                    }
+                }
+                if (sortStr.length != 0) {
+                    option = option + sortStr
+                }
                 self.url = GETAUDITEDHES;
-                self.$axios.get(self.url+'?page='+parseInt(self.cur_page-1)+'&size='+this.pagesize+'&type=PLATFORM_MARKECTER').then((response) => {
+                self.$axios.get(self.url+option).then((response) => {
                     console.log(response.data.totalElements)
                     this.totalNumber=parseInt(response.data.totalElements)
                     this.hr_list=response.data.content

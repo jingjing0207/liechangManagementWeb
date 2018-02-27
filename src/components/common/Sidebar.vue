@@ -26,7 +26,7 @@
             return {
                 items: [
                     {
-                        icon: 'el-icon-LIECHANG-yonghuguanli1',
+                        icon: 'el-icon-yonghuguanli1',
                         index: '2',
                         title: '用户管理',
                         subs: [
@@ -49,7 +49,7 @@
                         ]
                     },
                     {
-                        icon: 'el-icon-LIECHANG-qiyeguanli1',
+                        icon: 'el-icon-qiyeguanli1',
                         index: '3',
                         title: '企业管理',
                         subs: [
@@ -64,7 +64,7 @@
                         ]
                     },
                     {
-                        icon: 'el-icon-LIECHANG-yonghuguanli1',
+                        icon: 'el-icon-suoshuzhiwei',
                         index: '4',
                         title: 'JD管理',
                         subs: [
@@ -75,7 +75,7 @@
                         ]
                     },
                     {
-                        icon: 'el-icon-date',
+                        icon: 'el-icon-rencaizhongxin',
                         index: '5',
                         title: '人才管理',
                         subs: [
