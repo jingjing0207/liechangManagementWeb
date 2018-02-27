@@ -13,7 +13,7 @@
                     <template slot="prepend">每页</template>
                     <template slot="append">条</template>
                 </el-input-number>
-                <el-button type="primary" size="medium"  icon="el-icon-search" @click="search">查询</el-button>
+                <el-button type="primary" size="medium" @click="search">搜索</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
@@ -38,6 +38,7 @@
             <el-table-column  header-align="center" prop="position" label="职位" width="130px"></el-table-column>
             <el-table-column  header-align="center" prop="price" label="职位奖励" :formatter="priceFormat"></el-table-column>
             <el-table-column  header-align="center" prop="recruitingNumber" label="招聘人数"></el-table-column>
+            <el-table-column  header-align="center" prop="state" label="状态" :formatter="stateFormat"></el-table-column>
         </el-table>
         <div class="pagination">
             <el-pagination
@@ -114,6 +115,22 @@
             },
             priceFormat(row, column) {
                 return parseFloat(row.price) / 100 + '元';
+            },
+            stateFormat(row, column) {
+                var v = (row.state + '').toString().toLowerCase()
+                if (v == 'submit') {
+                    return '提交'
+                } else if (v == 'wait_audit'){
+                    return '待审核'
+                } else if (v == 'audit_failed'){
+                    return '已驳回'
+                } else if (v == 'publish'){
+                    return '发布'
+                } else if (v == 'completed'){
+                    return '已完结'
+                } else {
+                    return '未知'
+                }
             },
             dateTimeFormat(row, column) {
                 var time = new Date(+row.createTime);

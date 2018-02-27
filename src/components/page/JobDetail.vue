@@ -12,6 +12,7 @@
                 <h2>{{ info.title }}</h2>
                 <el-tag color="white" size="small" type="success">{{ info.creatorCompanyName }}</el-tag>
                 <el-tag color="white" size="small" type="success">支付方式：{{ info.payType | payTypeFormat}}</el-tag>
+                <el-tag color="white" size="small" type="success">状态：{{ info.state | stateFormat}}</el-tag>
             </div>
             <el-card class="box-card">
                 <el-row>
@@ -131,11 +132,27 @@
                 } else if (v == 'alipay'){
                     return '支付宝'
                 } else if (v == 'bank'){
-                    return '网银'
+                    return '银行卡'
                 } else if (v == 'companypay'){
-                    return '公司支付'
+                    return '企业结算'
                 } else {
-                    return '未设定'
+                    return '未知'
+                }
+            },
+            stateFormat(val) {
+                var v = (val + '').toString().toLowerCase()
+                if (v == 'submit') {
+                    return '提交'
+                } else if (v == 'wait_audit'){
+                    return '待审核'
+                } else if (v == 'audit_failed'){
+                    return '已驳回'
+                } else if (v == 'publish'){
+                    return '发布'
+                } else if (v == 'completed'){
+                    return '已完结'
+                } else {
+                    return '未知'
                 }
             },
             priceFormat(val) {

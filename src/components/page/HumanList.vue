@@ -14,7 +14,7 @@
                     <template slot="prepend">每页</template>
                     <template slot="append">条</template>
                 </el-input-number>
-                <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
+                <el-button type="primary" size="medium" @click="search">搜索</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
@@ -84,7 +84,7 @@
         <div class="pagination">
             <el-pagination
                 @current-change="handleCurrentChange"
-                :page-sizes="[8]"
+                :page-sizes="[6]"
                 layout="total, prev, pager, next,sizes"
                 :current-page.sync="pageNo"
                 :page-size="pagesize"
@@ -118,9 +118,9 @@
             stateFormat(val) {
                 var v = (val + '').toString().toLowerCase()
                 if (v == 'using') {
-                    return '在用'
+                    return '启用'
                 } else if (v == 'disabled') {
-                    return '删除'
+                    return '禁用'
                 } else {
                     return '未知'
                 }

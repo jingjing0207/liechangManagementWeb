@@ -236,9 +236,9 @@
             stateFormat(val) {
                 var v = (val + '').toString().toLowerCase()
                 if (v == 'using') {
-                    return '在用'
+                    return '启用'
                 } else if (v == 'disabled'){
-                    return '删除'
+                    return '禁用'
                 } else {
                     return '未知'
                 }

@@ -80,11 +80,11 @@ export default new Router({
                 {
                     path: '/humandetail',
                     component: resolve => require(['../components/page/HumanDetail.vue'], resolve)   //简历详情
+                },
+                {
+                    path: '/humanedit',
+                    component: resolve => require(['../components/page/HumanEdit.vue'], resolve)   //编辑简历
                 }
-                // {
-                //     path: '/humanedit',
-                //     component: resolve => require(['../components/page/HumanEdit.vue'], resolve)   //编辑简历
-                // }
             ]
         },
         {
