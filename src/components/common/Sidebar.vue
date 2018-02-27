@@ -111,7 +111,7 @@
     }
     .sideIcon {
         margin-left: 10px;
-        margin-right: 5px;
+        margin-right: 8px;
         vertical-align: text-bottom;
     }
 </style>
