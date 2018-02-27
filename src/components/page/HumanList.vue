@@ -14,7 +14,7 @@
                     <template slot="prepend">每页</template>
                     <template slot="append">条</template>
                 </el-input-number>
-                <el-button type="primary" size="medium" @click="search">搜索</el-button>
+                <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
@@ -84,8 +84,7 @@
         <div class="pagination">
             <el-pagination
                 @current-change="handleCurrentChange"
-                :page-sizes="[6]"
-                layout="total, prev, pager, next,sizes"
+                layout="total,prev,pager,next"
                 :current-page.sync="pageNo"
                 :page-size="pagesize"
                 :total="totalElements">
@@ -96,6 +95,7 @@
 
 <script>
     import Sortable from 'sortablejs'
+    import {GET_RESUME_LIST,SET_PRICE,DELETE_RESUME} from '../../constants/Constants'
     import icon_female from './iconfemale'
     import icon_male from './iconmale'
 
@@ -135,11 +135,13 @@
                 row.originalPrice = row.price
                 let userForm = {
                     id: row.id,
-                    price: row.price * 100
+                    price: Math.ceil(row.price * 1000 / 10)
                 }
+                console.info(row.price)
+                console.info(userForm.price)
                 this.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 this.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                this.$axios.post("http://120.78.184.120:9002/api/operatorHuman/setPrice", userForm)
+                this.$axios.post(SET_PRICE, userForm)
                     .then(res => {
                         row.edit = false
                     })
@@ -160,7 +162,7 @@
             del(row) {
                 this.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 this.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                this.$axios.delete("http://120.78.184.120:9002/api/operatorHuman/delete/" + row.id)
+                this.$axios.delete(DELETE_RESUME + row.id)
                     .then(res => {
                         this.getData()
                     })
@@ -214,7 +216,7 @@
                 }
                 self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                self.$axios.get('http://120.78.184.120:9002/api/operatorHuman/resumes' + option)
+                self.$axios.get(GET_RESUME_LIST + option)
                     .then(res => {
                         self.pagesize = parseInt(self.size)
                         self.totalElements = parseInt(res.data.totalElements)

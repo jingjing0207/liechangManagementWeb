@@ -146,7 +146,6 @@
                 <el-collapse-item title="自我评价" name="0">
                     <div>
                         <el-input v-model="info.selfEvaluation" type="textarea" resize="none" :rows="6"></el-input>
-                        <!--<div v-for="res in info.selfEvaluation" class="text item">{{ res }}</div>-->
                     </div>
                 </el-collapse-item>
                 <el-collapse-item title="技能" name="1">
@@ -157,31 +156,26 @@
                 <el-collapse-item title="工作经历" name="2">
                     <div>
                         <el-input v-model="info.workExperience" type="textarea" resize="none" :rows="10"></el-input>
-                        <!--<div v-for="res in info.workExperience" class="text item">{{ res }}</div>-->
                     </div>
                 </el-collapse-item>
                 <el-collapse-item title="项目经历" name="3">
                     <div>
                         <el-input v-model="info.projectExperience" type="textarea" resize="none" :rows="10"></el-input>
-                        <!--<div v-for="res in info.projectExperience" class="text item">{{ res }}</div>-->
                     </div>
                 </el-collapse-item>
                 <el-collapse-item title="教育经历" name="4">
                     <div>
                         <el-input v-model="info.educationExperience" type="textarea" resize="none" :rows="6"></el-input>
-                        <!--<div v-for="res in info.educationExperience" class="text item">{{ res }}</div>-->
                     </div>
                 </el-collapse-item>
                 <el-collapse-item title="培训经历" name="5">
                     <div>
                         <el-input v-model="info.trainingExperience" type="textarea" resize="none" :rows="6"></el-input>
-                        <!--<div v-for="res in info.trainingExperience" class="text item">{{ res }}</div>-->
                     </div>
                 </el-collapse-item>
                 <el-collapse-item title="语言" name="6">
                     <div>
                         <el-input v-model="info.languageAbility" type="textarea" resize="none" :rows="6"></el-input>
-                        <!--<div v-for="res in info.languageAbility" class="text item">{{ res }}</div>-->
                     </div>
                 </el-collapse-item>
             </el-collapse>
@@ -190,6 +184,7 @@
 </template>
 
 <script>
+    import {MODIFY_RESUME} from '../../constants/Constants'
     import icon_female from './iconfemale'
     import icon_male from './iconmale'
     import icon_mail from './iconmail'
@@ -221,8 +216,8 @@
                 self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
                 var newinfo = Object.assign({}, this.info)
-                newinfo.price = newinfo.price * 100
-                this.$axios.post("http://120.78.184.120:9002/api/operatorHuman/modify", newinfo)
+                newinfo.price = Math.ceil(newinfo.price * 1000 / 10)
+                this.$axios.post(MODIFY_RESUME, newinfo)
                     .then(res => {
                         this.$router.push({path: '/humandetail', query: {id: this.human_id}})
                     })

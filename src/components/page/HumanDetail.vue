@@ -159,6 +159,7 @@
 </template>
 
 <script>
+    import {GET_RESUME_DETAIL} from '../../constants/Constants'
     import icon_female from './iconfemale'
     import icon_male from './iconmale'
     import icon_mail from './iconmail'
@@ -200,7 +201,7 @@
                 let self = this;
                 self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                self.$axios.get('http://120.78.184.120:9002/api/operatorHuman/resume/' + self.human_id)
+                self.$axios.get(GET_RESUME_DETAIL + self.human_id)
                     .then((res) => {
                         self.info = res.data
                         self.info.selfEvaluation = self.splitText(self.info.selfEvaluation)

@@ -9,11 +9,11 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <el-input v-model="search_title" size="medium" placeholder="筛选标题" class="handle-title"></el-input>
-                <el-input-number v-model="size" size="medium"  :min="1" :controls="false" class="handle-size">
+                <el-input-number v-model="size" size="medium" :min="1" :controls="false" class="handle-size">
                     <template slot="prepend">每页</template>
                     <template slot="append">条</template>
                 </el-input-number>
-                <el-button type="primary" size="medium" @click="search">搜索</el-button>
+                <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
@@ -28,23 +28,24 @@
         </el-collapse>
         <el-table :data="data" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center"
                   row-class-name="jdlist-row" @row-click="openDetails">
-            <el-table-column  header-align="center" prop="createTime" label="创建时间" width="145px" :formatter="dateTimeFormat"></el-table-column>
-            <el-table-column  header-align="center" prop="title" show-overflow-tooltip label="标题"></el-table-column>
-            <el-table-column  header-align="center" prop="creatorCompanyName" show-overflow-tooltip label="所属公司">
+            <el-table-column header-align="center" prop="createTime" label="创建时间" width="145px"
+                             :formatter="dateTimeFormat"></el-table-column>
+            <el-table-column header-align="center" prop="title" show-overflow-tooltip label="标题"></el-table-column>
+            <el-table-column header-align="center" prop="creatorCompanyName" show-overflow-tooltip label="所属公司">
             </el-table-column>
-            <el-table-column  header-align="center" prop="creatorUsername" show-overflow-tooltip label="发布人"></el-table-column>
-            <el-table-column  header-align="center" prop="education" label="学历" width="110px"></el-table-column>
-            <el-table-column  header-align="center" prop="level" label="级别"></el-table-column>
-            <el-table-column  header-align="center" prop="position" label="职位" width="130px"></el-table-column>
-            <el-table-column  header-align="center" prop="price" label="职位奖励" :formatter="priceFormat"></el-table-column>
-            <el-table-column  header-align="center" prop="recruitingNumber" label="招聘人数"></el-table-column>
-            <el-table-column  header-align="center" prop="state" label="状态" :formatter="stateFormat"></el-table-column>
+            <el-table-column header-align="center" prop="creatorUsername" show-overflow-tooltip
+                             label="发布人"></el-table-column>
+            <el-table-column header-align="center" prop="education" label="学历" width="110px"></el-table-column>
+            <el-table-column header-align="center" prop="level" label="级别"></el-table-column>
+            <el-table-column header-align="center" prop="position" label="职位" width="130px"></el-table-column>
+            <el-table-column header-align="center" prop="price" label="职位奖励" :formatter="priceFormat"></el-table-column>
+            <el-table-column header-align="center" prop="recruitingNumber" label="招聘人数"></el-table-column>
+            <el-table-column header-align="center" prop="state" label="状态" :formatter="stateFormat"></el-table-column>
         </el-table>
         <div class="pagination">
             <el-pagination
                 @current-change="handleCurrentChange"
-                :page-sizes="[8]"
-                layout="total,prev, pager, next,sizes"
+                layout="total,prev,pager,next"
                 :current-page.sync="pageNo"
                 :page-size="pagesize"
                 :total="totalElements">
@@ -55,6 +56,8 @@
 
 <script>
     import Sortable from 'sortablejs'
+    import {GET_JOB_LIST} from '../../constants/Constants'
+
     export default {
         name: 'job-list',
         data() {
@@ -120,13 +123,13 @@
                 var v = (row.state + '').toString().toLowerCase()
                 if (v == 'submit') {
                     return '提交'
-                } else if (v == 'wait_audit'){
+                } else if (v == 'wait_audit') {
                     return '待审核'
-                } else if (v == 'audit_failed'){
+                } else if (v == 'audit_failed') {
                     return '已驳回'
-                } else if (v == 'publish'){
+                } else if (v == 'publish') {
                     return '发布'
-                } else if (v == 'completed'){
+                } else if (v == 'completed') {
                     return '已完结'
                 } else {
                     return '未知'
@@ -167,7 +170,7 @@
                 }
                 self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                self.$axios.get('http://120.78.184.120:9002/api/operator/getJobDetails' + option)
+                self.$axios.get(GET_JOB_LIST + option)
                     .then(res => {
                         self.pagesize = parseInt(self.size)
                         self.totalElements = parseInt(res.data.totalElements)
@@ -191,9 +194,11 @@
     .sortable-ghost {
         opacity: .7;
     }
-    .cell{
-        text-align:center!important;
+
+    .cell {
+        text-align: center !important;
     }
+
     .search {
         padding: 10px 15px;
         border-bottom: 1px solid #dfe6ec;

@@ -110,6 +110,7 @@
 
 <script>
     import Vue from 'vue'
+    import {GET_JOB_DETAIL} from '../../constants/Constants'
 
     export default {
         name: "job-detail",
@@ -187,7 +188,7 @@
                 let self = this;
                 self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                self.$axios.get('http://120.78.184.120:9002/api/operator/getJobDetail/' + self.jd_id)
+                self.$axios.get(GET_JOB_DETAIL + self.jd_id)
                     .then((res) => {
                         self.info = res.data
                     })
