@@ -4,7 +4,7 @@
             <template v-for="item in items">
                 <template v-if="item.subs">
                     <el-submenu :index="item.index">
-                        <template slot="title"><i :class="item.icon"></i>{{ item.title }}</template>
+                        <template slot="title"><i :class="item.icon" class="fontFamily sideIcon"></i>{{ item.title }}</template>
                         <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">{{ subItem.title }}
                         </el-menu-item>
                     </el-submenu>
@@ -84,39 +84,6 @@
                                 title: '人才列表管理'
                             }
                         ]
-                    },
-                    {
-                        icon: 'el-icon-date',
-                        index: '6',
-                        title: '表单',
-                        subs: [
-                            {
-                                index: 'baseform',
-                                title: '基本表单'
-                            },
-                            {
-                                index: 'vueeditor',
-                                title: '编辑器'
-                            },
-                            {
-                                index: 'markdown',
-                                title: 'markdown'
-                            },
-                            {
-                                index: 'upload',
-                                title: '文件上传'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-star-on',
-                        index: 'basecharts',
-                        title: '图表'
-                    },
-                    {
-                        icon: 'el-icon-upload2',
-                        index: 'drag',
-                        title: '拖拽'
                     }
                 ]
             }
@@ -141,5 +108,10 @@
     }
     .sidebar > ul {
         height:100%;
+    }
+    .sideIcon {
+        margin-left: 10px;
+        margin-right: 5px;
+        vertical-align: text-bottom;
     }
 </style>
