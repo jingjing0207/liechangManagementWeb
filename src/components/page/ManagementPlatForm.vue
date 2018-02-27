@@ -42,12 +42,27 @@
         </div>
         <el-collapse class="handle-box">
             <div class="search">
-                <el-button type="info" plain class="addInnfo" @click="addUserManagement">+ 新增</el-button>
-                <div class="search-box">
-                    <el-input v-model="searchId" size="medium" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="search" @click="requestFlowData()">搜索</el-button>
+                <div style="display: inline-block;">
+                    <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
+                    <el-input v-model="searchId" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
+                    <el-input-number v-model="pageSize" size="medium" :min="1" :controls="false" class="handle-size">
+                        <template slot="prepend">每页</template>
+                        <template slot="append">条</template>
+                    </el-input-number>
+                    <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
                 </div>
+                <el-button type="info" plain class="addInnfo" @click="addUserManagement" style="float: right;">+ 新增</el-button>
             </div>
+            <el-collapse-item title="排序选项" class="sortOption">
+                <div class="sortItem" v-for="item of sortGroup">
+                    <span>{{ item.display }}</span>
+                    <el-select v-model="item.value" :name="item.name" ref="sel" size="small">
+                        <el-option v-for="option in sortOptions" :label="option.label" :value="option.value"
+                                   :key="option.value">
+                        </el-option>
+                    </el-select>
+                </div>
+            </el-collapse-item>
             <!--<el-collapse-item title="排序选项" class="sortOption">-->
             <!--<div class="sortItem" v-for="item of sortGroup">-->
             <!--<span>{{ item.display }}</span>-->
@@ -78,7 +93,7 @@
                     <!--<td>{{pro.headPic}}</td>-->
                     <td>{{pro.lastLoginTime==null?"Null":new Date(pro.lastLoginTime).toLocaleString()}}</td>
                     <td>{{pro.role}}</td>
-                    <td>{{pro.state=="ENABLED"?"可用":"删除"}}</td>
+                    <td>{{pro.state=="ENABLED"?"启用":"禁用"}}</td>
                     <td class="last-td">
                         <el-button v-if="pro.state != 'DISABLED'" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
                         <el-button v-if="pro.state != 'DISABLED'"  type="info" plain @click="deleteManage(pro.id)">删除</el-button>
@@ -93,8 +108,7 @@
                     <el-pagination
                         @current-change="handleCurrentChange"
                         :current-page.sync="currentPage"
-                        :page-sizes="[8]"
-                        layout="total, prev, pager, next,sizes"
+                        layout="total, prev, pager, next"
                         :page-size="pageSize"
                         :total="totalNumber">
                     </el-pagination>
@@ -113,7 +127,6 @@
         data: function(){
             const self = this;
             return {
-                disabled:false,
                 title:{
                     name:{
                         title:"name",
@@ -171,7 +184,7 @@
                 },
                 totalNumber:0,
                 currentPage:1,
-                pageSize:0,
+                pageSize:8,
                 formLabelWidth: '120px',
                 form1:{
                     newPass:'',
@@ -182,14 +195,9 @@
                 sortBy: [],
                 sortGroup: [
                     {value: '0', name: 'createTime', display: '创建时间'},
-                    {value: '0', name: 'title', display: '标题'},
+                    {value: '0', name: 'title', display: '用户名'},
                     {value: '0', name: 'creatorCompanyName', display: '所属公司'},
-                    {value: '0', name: 'creatorUserName', display: '发布人'},
-                    {value: '0', name: 'education', display: '学历'},
-                    {value: '0', name: 'level', display: '级别'},
-                    {value: '0', name: 'position', display: '职位'},
-                    {value: '0', name: 'price', display: '职位奖励'},
-                    {value: '0', name: 'recruitingNumber', display: '招聘人数'}
+                    {value: '0', name: 'education', display: '最后登录时间'}
                 ],
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
@@ -200,35 +208,31 @@
 
         },
         mounted (){
-        },
-        created(){
-            this.init()
+            this.requestFlowData()
         },
         methods: {
-            init() {
-                this.currentPage = 1;
-                this.pageSize = 8;
-                this.requestFlowData();
-            },
-            requestFlowData() {
-                let self = this
-                self.$axios.get(MANAGEMENTPLATFORM+'?page='+parseInt(self.currentPage-1)+'&size='+self.pageSize)
-                    .then((response) => {
-                        console.log(response)
-                        this.information.pagination = response.data
-                        this.totalNumber=parseInt(response.data.totalElements)
-                        console.log(this.totalNumber)
-                        this.information.data = response.data.content
-                        console.log(response.data.content)
-                    })
-                    .catch((error) => {
+            requestFlowData(){
+                let self = this;
+                self.url = MANAGEMENTPLATFORM;
+                self.$axios.get(self.url+'?page='+parseInt(self.currentPage-1)+'&size='+self.pageSize).then((response) => {
+                    console.log(response)
+                    self.information.pagination = response.data
+                    self.totalNumber=parseInt(response.data.totalElements)
+                    console.log(this.totalNumber)
+                    self.information.data = response.data.content
+                    console.log(response.data.content)
+                }).catch((error) => {
                         console.log(error)
                     })
             },
             handleCurrentChange(val) {
-                this.init()
                 this.currentPage=val
                 this.requestFlowData()
+            },
+            search() {
+                const self = this
+                self.currentPage = 1;
+                self.requestFlowData();
             },
             modifyManageplatform(id){
                 console.log(id)

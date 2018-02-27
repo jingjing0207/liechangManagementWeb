@@ -10,15 +10,15 @@ export default new Router({
             redirect: '/login'
         },
         {
-            path: '/readme',
+            path: '/basetable',
             component: resolve => require(['../components/common/Home.vue'], resolve),
             children:[
+                // {
+                //     path: '/',
+                //     component: resolve => require(['../components/page/Readme.vue'], resolve)
+                // },
                 {
                     path: '/',
-                    component: resolve => require(['../components/page/Readme.vue'], resolve)
-                },
-                {
-                    path: '/basetable',
                     component: resolve => require(['../components/page/HR.vue'], resolve)
                 },
                 {
@@ -32,7 +32,7 @@ export default new Router({
                 {
                     path: '/registermange',
                     component: resolve => require(['../components/page/ManagementPlatForm.vue'], resolve)    // 管理平台
-                },,
+                },
                 {
                     path: '/companieslist',
                     component: resolve => require(['../components/page/OperatorGetCompanies.vue'], resolve)    // 销售注册

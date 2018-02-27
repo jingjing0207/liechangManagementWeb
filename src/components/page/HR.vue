@@ -22,14 +22,14 @@
         </div>
 
         <el-collapse class="handle-box">
-            <!--<div class="search">-->
+            <div class="search">
                 <!--<el-input v-model="search_title" size="medium" placeholder="筛选标题" class="handle-title"></el-input>-->
-                <!--&lt;!&ndash;<el-input-number v-model="size" size="medium"  :min="1" :controls="false" class="handle-size">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<template slot="prepend">每页</template>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<template slot="append">条</template>&ndash;&gt;-->
-                <!--&lt;!&ndash;</el-input-number>&ndash;&gt;-->
-                <!--<el-button type="primary" size="medium"  icon="el-icon-search" @click="search">查询</el-button>-->
-            <!--</div>-->
+                <el-input-number v-model="pagesize" size="medium"  :min="1" :controls="false" class="handle-size">
+                    <template slot="prepend">每页</template>
+                    <template slot="append">条</template>
+                </el-input-number>
+                <el-button type="primary" size="medium"  icon="el-icon-search" @click="search">查询</el-button>
+            </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
                     <span>{{ item.display }}</span>
@@ -79,8 +79,7 @@
             <div class="block">
                 <el-pagination
                     @current-change ="handleCurrentChange"
-                    :page-sizes="[8]"
-                    layout="total, prev, pager, next,sizes"
+                    layout="total, prev, pager, next"
                     :page-size="pagesize"
                     :total=totalNumber>
                 </el-pagination>
@@ -99,11 +98,11 @@
             stateFormat(val) {
                 var v = (val + '').toString().toLowerCase()
                 if (v == 'using') {
-                    return '在用'
+                    return '启用'
                 } else if (v == 'auditing') {
-                    return '审核中'
+                    return '审核'
                 } else {
-                    return '删除'
+                    return '禁用'
                 }
             }
         },
@@ -163,14 +162,9 @@
                 sortBy: [],
                 sortGroup: [
                     {value: '0', name: 'createTime', display: '创建时间'},
-                    {value: '0', name: 'title', display: '标题'},
+                    {value: '0', name: 'title', display: '用户名'},
                     {value: '0', name: 'creatorCompanyName', display: '所属公司'},
-                    {value: '0', name: 'creatorUserName', display: '发布人'},
-                    {value: '0', name: 'education', display: '学历'},
-                    {value: '0', name: 'level', display: '级别'},
-                    {value: '0', name: 'position', display: '职位'},
-                    {value: '0', name: 'price', display: '职位奖励'},
-                    {value: '0', name: 'recruitingNumber', display: '招聘人数'}
+                    {value: '0', name: 'education', display: '最后登录时间'}
                 ],
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
@@ -181,6 +175,15 @@
             this.getData();
         },
         methods: {
+            setSort() {
+                this.$nextTick(() => {
+                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0]
+                    this.sortable = Sortable.create(el, {
+                        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+                        setData: dataTransfer => dataTransfer.setData('Text', '')
+                    })
+                })
+            },
             search() {
                 const self = this
                 var list = document.querySelectorAll('.sortOption .el-input__inner')
@@ -204,13 +207,12 @@
             },
             getData(){
                 let self = this;
+                var option = '?page=' + (self.cur_page - 1) + '&size=' + self.pagesize
                 self.url = GETAUDITEDHES;
-                self.$axios.get(self.url+'?page='+parseInt(self.cur_page-1)+'&size='+this.pagesize+'&type=HR').then((response) => {
+                self.$axios.get(self.url+option+'&type=HR').then((response) => {
                     console.log(response.data.totalElements)
-                    this.totalNumber=parseInt(response.data.totalElements)
-                    // if(response.data.content.type==='HR'){
-                        this.hr_list=response.data.content
-                    // }
+                    self.totalNumber=parseInt(response.data.totalElements)
+                    self.hr_list=response.data.content
                     console.log(this.hr_list)
                 })
             },
@@ -379,6 +381,7 @@ table tr:hover{
     .handle-box {
         border: 1px solid #dfe6ec;
         margin-bottom: 20px;
+        overflow: hidden;
     }
 
     .handle-title {

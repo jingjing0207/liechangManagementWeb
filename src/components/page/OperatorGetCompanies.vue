@@ -22,21 +22,26 @@
         </div>
         <el-collapse class="handle-box">
             <div class="search">
-                <div class="search-box">
-                    <el-input v-model="searchId" size="medium" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-                    <el-button type="primary" icon="search" @click="searchCompanyId()">搜索</el-button>
+                <div class="">
+                    <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
+                    <el-input v-model="searchId" size="medium" placeholder="输入企业名" class="handle-title"></el-input>
+                    <el-input-number v-model="pagesize" size="medium" :min="1" :controls="false" class="handle-size">
+                        <template slot="prepend">每页</template>
+                        <template slot="append">条</template>
+                    </el-input-number>
+                    <el-button type="primary" size="medium" icon="el-icon-search" @click="searchCompanyId">查询</el-button>
                 </div>
             </div>
-            <!--<el-collapse-item title="排序选项" class="sortOption">-->
-            <!--<div class="sortItem" v-for="item of sortGroup">-->
-            <!--<span>{{ item.display }}</span>-->
-            <!--<el-select v-model="item.value" :name="item.name" ref="sel" size="small">-->
-            <!--<el-option v-for="option in sortOptions" :label="option.label" :value="option.value"-->
-            <!--:key="option.value">-->
-            <!--</el-option>-->
-            <!--</el-select>-->
-            <!--</div>-->
-            <!--</el-collapse-item>-->
+            <el-collapse-item title="排序选项" class="sortOption">
+                <div class="sortItem" v-for="item of sortGroup">
+                    <span>{{ item.display }}</span>
+                    <el-select v-model="item.value" :name="item.name" ref="sel" size="small">
+                        <el-option v-for="option in sortOptions" :label="option.label" :value="option.value"
+                            :key="option.value">
+                        </el-option>
+                    </el-select>
+                </div>
+            </el-collapse-item>
         </el-collapse>
         <table class="table table-bordered" cellpadding="0" cellspacing="0" >
             <tr class="tr-header">
@@ -51,17 +56,17 @@
                 <th>{{gethrManager.label}}</th>
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list" v-show="allResult">
-                <td>{{pro.name}}</td>
-                <td>{{pro.settleType==null?"Null":pro.settleType}}</td>
+                <td style="max-width:78px;">{{pro.name}}</td>
+                <td>{{pro.settleType| stateFormat}}</td>
                 <td>
                     {{pro.contacts==null?"Null":pro.contacts}}
                 </td>
                 <td>
                     {{pro.contactNumber==null?"Null":pro.contactNumber}}
                 </td>
-                <td class="currentState">{{pro.state=="ON"?"在用":"不可用"}}</td>
+                <td class="currentState">{{pro.state=="ON"?"开启":"关闭"}}</td>
                 <td>{{pro.taxNumber==''?"null":pro.taxNumber}}</td>
-                <td>{{pro.address==null?"Null":pro.address}}</td>
+                <td style="max-width:78px;">{{pro.address==null?"Null":pro.address}}</td>
                 <td>
                     <el-button v-if="pro.state != 'OFF'" type="primary" plain @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
                     <el-button v-if="pro.state == 'OFF'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
@@ -71,17 +76,17 @@
                 </td>
             </tr>
             <tr class="tr-con" v-show="searchResult">
-                <td>{{searhresult.name}}</td>
-                <td>{{searhresult.settleType==null?"null":searhresult.settleType}}</td>
+                <td style="max-width:78px;">{{searhresult.name}}</td>
+                <td>{{searhresult.settleType | stateFormat}}</td>
                 <td>
                     {{searhresult.contacts==null?"null":searhresult.contacts}}
                 </td>
                 <td>
                     {{searhresult.contactNumber==null?"null":searhresult.contactNumber}}
                 </td>
-                <td class="currentState">{{searhresult.state}}</td>
+                <td class="currentState">{{searhresult.state=="ON"?"开启":"关闭"}}</td>
                 <td>{{searhresult.taxNumber==''?"null":searhresult.taxNumber}}</td>
-                <td>{{searhresult.address==null?"null":searhresult.address}}</td>
+                <td style="max-width:78px;">{{searhresult.address==null?"null":searhresult.address}}</td>
                 <td>
                     <el-button v-if="searhresult.state != 'OFF'" type="primary" plain @click="modifyManageplatform(searhresult.id)">重置平台服务费</el-button>
                     <el-button v-if="searhresult.state == 'OFF'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(searhresult.id)">重置平台服务费</el-button>
@@ -95,8 +100,7 @@
             <div class="block">
                 <el-pagination
                     @current-change ="handleCurrentChange"
-                    :page-sizes="[8]"
-                    layout="total, prev, pager, next,sizes"
+                    layout="total, prev, pager, next"
                     :page-size="pagesize"
                     :total=totalNumber>
                 </el-pagination>
@@ -116,7 +120,7 @@
                 </tr>
                 <tr class="tr-header hrInfo">
                     <td><strong>当前状态:</strong></td>
-                    <td class="contents">{{hrInfo.state=="Using"?"在用":"删除"}}</td>
+                    <td class="contents">{{hrInfo.state=="Using"?"启用":"禁用"}}</td>
                     <td><strong>评论数:</strong></td>
                     <td>{{hrInfo.evaluateCount}}</td>
                 </tr>
@@ -220,6 +224,18 @@
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
     axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     export default {
+        filters: {
+            stateFormat(val) {
+                var v = (val + '').toString().toLowerCase()
+                if (v == 'company_settle') {
+                    return '公司结算'
+                } else if (v == 'order_settle') {
+                    return '订单结算'
+                } else {
+                    return 'Null'
+                }
+            }
+        },
         data() {
             return {
                 name:{
@@ -228,7 +244,7 @@
                 },
                 settleType:{
                     title:'settleType',
-                    label:'扣费方式'
+                    label:'结算方式'
                 },
                 contacts:{
                     title:'contacts',
@@ -336,19 +352,37 @@
                     this.hr_list=response.data.content
                     console.log(this.hr_list)
                     sessionStorage.setItem('percentageService',this.hr_list)
+                }).catch(() => {
+                    this.hr_list=''
+                    this.$message({
+                        type: 'info',
+                        message: '暂无数据'
+                    })
                 })
             },
             searchCompanyId(){
                 let self = this;
                 self.url = SEARCHCOMPANY;
-                self.$axios.get(self.url+'/'+this.searchId).then((response) => {
-                    console.log(response)
-                    this.totalNumber=1
-                    this.searhresult=response.data
-                    console.log(this.searhresult)
-                    this.searchResult=true
-                    this.allResult=false
-                })
+                if(this.searchId!=''){
+                    self.$axios.get(self.url+'/'+this.searchId).then((response) => {
+                        console.log(response)
+                        this.totalNumber=1
+                        this.searhresult=response.data
+                        console.log(this.searhresult)
+                        this.searchResult=true
+                        this.allResult=false
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '查找失败'
+                        })
+                    })
+                }else{
+                    this.getData()
+                    this.allResult=true
+                    this.searchResult=false
+                }
+
             },
             modifyManageplatform(id){
                 let self = this;

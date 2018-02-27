@@ -1,0 +1,21 @@
+User用户类型 = [
+     'HR',
+     'HEADHUNTER',
+     'HR_MANAGER',
+     'PLATFORM_MARKECTER'
+ ] ：HR("HR"), HEADHUNTER("猎头"), HR_MANAGER("HR管理员"), PLATFORM_MARKECTER("平台销售");
+
+User账号状态 = [
+'Using',
+'Auditing',
+'Disabled'] ：Using("启用"), Auditing("审核"), Disabled("禁用");
+
+Operator账号状态 ：DISABLED("禁用"),  ENABLED("启用")；
+
+Company结算方式：COMPANY_SETTLE("公司结算"), ORDER_SETTLE("订单结算");
+Company状态：ON("开启"), OFF("关闭");
+
+JobDetail 状态：SUBMIT("提交"),WAIT_AUDIT("待审核"),AUDIT_FAILED("已驳回"), PUBLISH("发布"), COMPLETED("已完结");
+JobDetail支付方式：WechatPay("微信"),AliPay("支付宝"),Bank("银行卡"), CompanyPay("企业结算");
+
+Human简历状态：Using("启用"), Disabled("禁用");

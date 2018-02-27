@@ -21,6 +21,13 @@
             </el-breadcrumb>
         </div>
         <el-collapse class="handle-box">
+            <div class="search">
+                <el-input-number v-model="pagesize" size="medium"  :min="1" :controls="false" class="handle-size">
+                    <template slot="prepend">每页</template>
+                    <template slot="append">条</template>
+                </el-input-number>
+                <el-button type="primary" size="medium"  icon="el-icon-search" @click="search">查询</el-button>
+            </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
                     <span>{{ item.display }}</span>
@@ -57,8 +64,8 @@
                 <td>{{new Date(pro.createTime).toLocaleString()}}</td>
                 <!--<td>{{pro.headPic}}</td>-->
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
-                <td>{{pro.type}}</td>
-                <td class="currentState">{{pro.state=="Using"?"在用":"删除"}}</td>
+                <td>{{pro.type=="HEADHUNTER"?"猎头":"其他"}}</td>
+                <td class="currentState">{{pro.state | stateFormat}}</td>
                 <td>{{pro.companyName==null?"Null":pro.companyName}}</td>
                 <td class="last-td">
                     <el-button v-if="pro.state != 'Disabled'" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
@@ -89,6 +96,18 @@
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
     axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     export default {
+        filters: {
+            stateFormat(val) {
+                var v = (val + '').toString().toLowerCase()
+                if (v == 'using') {
+                    return '启用'
+                } else if (v == 'auditing') {
+                    return '审核'
+                } else {
+                    return '禁用'
+                }
+            }
+        },
         data() {
             return {
                 username:{
@@ -146,14 +165,9 @@
                 sortBy: [],
                 sortGroup: [
                     {value: '0', name: 'createTime', display: '创建时间'},
-                    {value: '0', name: 'title', display: '标题'},
+                    {value: '0', name: 'title', display: '用户名'},
                     {value: '0', name: 'creatorCompanyName', display: '所属公司'},
-                    {value: '0', name: 'creatorUserName', display: '发布人'},
-                    {value: '0', name: 'education', display: '学历'},
-                    {value: '0', name: 'level', display: '级别'},
-                    {value: '0', name: 'position', display: '职位'},
-                    {value: '0', name: 'price', display: '职位奖励'},
-                    {value: '0', name: 'recruitingNumber', display: '招聘人数'}
+                    {value: '0', name: 'education', display: '最后登录时间'}
                 ],
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
@@ -166,6 +180,23 @@
         methods: {
             handleCurrentChange(val){
                 this.cur_page = val;
+                this.getData();
+            },
+            search() {
+                const self = this
+                var list = document.querySelectorAll('.sortOption .el-input__inner')
+                var el = this.$refs.sel
+                var map = {}
+                self.sortBy = []
+                el.forEach(obj => {
+                    return map[obj.$options.propsData.name] = obj.$options.propsData.value
+                })
+                Array.prototype.map.call(list, obj => {
+                    if (map[obj.name] != '0') {
+                        self.sortBy.push(obj.name + ',' + map[obj.name])
+                    }
+                })
+                this.pageNo = 1;
                 this.getData();
             },
             getData(){

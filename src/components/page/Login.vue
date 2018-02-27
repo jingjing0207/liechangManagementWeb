@@ -58,7 +58,7 @@
                         if (response.status === 200) {
                             sessionStorage.setItem('resultMessage', response.data.token)//存如登录的信息
                             sessionStorage.setItem('userName',this.ruleForm.username)
-                            this.$router.push({path: '/readme'})
+                            this.$router.push({path: '/basetable'})
                         } else if (response.data.resultCode === 1) {
                             console.log('error submit!!');
                             return false;
