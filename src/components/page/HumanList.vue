@@ -32,9 +32,9 @@
             <!--<el-table-column type="selection" width="55"></el-table-column>-->
             <el-table-column  header-align="center" prop="avatar" label="人员" width="210px" align="center" :resizable="false" show-overflow-tooltip>
                 <template slot-scope="scope" prop="avatar">
-                    <div id="human">
+                    <div class="human">
                         <img :src="scope.row.avatar" class="headImg">
-                        <div id="info">
+                        <div class="info">
                             <icon_female v-if="scope.row.gender == '女'" class="icon"></icon_female>
                             <icon_male v-if="scope.row.gender == '男'" class="icon"></icon_male>
                             <span class="name">{{ scope.row.name }}</span>
@@ -271,7 +271,9 @@
 </script>
 
 <style scoped>
-    #human {
+    .human {
+        padding-left: 8px;
+        text-align: left;
         margin: 8px 0;
     }
 
@@ -289,7 +291,7 @@
         font-size: 20px;
     }
 
-    #info {
+    .info {
         margin-top: 8px;
         margin-left: 8px;
         display: inline-block;
