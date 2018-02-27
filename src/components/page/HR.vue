@@ -54,11 +54,6 @@
                 <th>{{operation.label}}</th>
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
-                <!--<td>{{pro.id}}</td>-->
-                <!--<td>-->
-                    <!--&lt;!&ndash;<el-checkbox v-model="checked"></el-checkbox>&ndash;&gt;-->
-                    <!--<el-table-column type="selection"></el-table-column>-->
-                <!--</td>-->
                 <td>{{pro.username}}</td>
                 <td>{{new Date(pro.createTime).toLocaleString()}}</td>
                 <!--<td>{{pro.headPic}}</td>-->

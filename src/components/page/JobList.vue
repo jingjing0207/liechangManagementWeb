@@ -28,7 +28,7 @@
         </el-collapse>
         <el-table :data="data" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center"
                   row-class-name="jdlist-row" @row-click="openDetails">
-            <el-table-column header-align="center" prop="createTime" label="创建时间" width="145px"
+            <el-table-column header-align="center" prop="createTime" label="创建时间" width="160px"
                              :formatter="dateTimeFormat"></el-table-column>
             <el-table-column header-align="center" prop="title" show-overflow-tooltip label="标题"></el-table-column>
             <el-table-column header-align="center" prop="creatorCompanyName" show-overflow-tooltip label="所属公司">
@@ -142,13 +142,14 @@
                     return v.substring(v.length - 2, v.length)
                 }
                 if (time == null) return;
-                var year = time.getFullYear();
-                var month = time.getMonth() + 1;
-                var date = time.getDate();
-                var hours = time.getHours();
-                var minutes = time.getMinutes();
-                var seconds = time.getSeconds();
-                return year + '-' + rightTwo(month) + '-' + rightTwo(date) + ' ' + rightTwo(hours) + ':' + rightTwo(minutes) /*+ ':' + rightTwo(seconds)*/;
+                // var year = time.getFullYear();
+                // var month = time.getMonth() + 1;
+                // var date = time.getDate();
+                // var hours = time.getHours();
+                // var minutes = time.getMinutes();
+                // var seconds = time.getSeconds();
+                return new Date(time).toLocaleString()
+                // return year + '-' + rightTwo(month) + '-' + rightTwo(date) + ' ' + rightTwo(hours) + ':' + rightTwo(minutes) /*+ ':' + rightTwo(seconds)*/;
             },
             openDetails(row) {
                 this.$router.push({path: '/job', query: {id: row.id}})

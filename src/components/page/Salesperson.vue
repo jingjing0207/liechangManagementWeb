@@ -64,7 +64,7 @@
                 <td>{{new Date(pro.createTime).toLocaleString()}}</td>
                 <!--<td>{{pro.headPic}}</td>-->
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
-                <td>{{pro.type=="PLATFORM_MARKECTER"?"HR管理员":"其他"}}</td>
+                <td>{{pro.type=="PLATFORM_MARKECTER"?"平台销售":"其他"}}</td>
                 <td class="currentState">{{pro.state | stateFormat}}</td>
                 <td>{{pro.companyName==null?"Null":pro.companyName}}</td>
                 <td class="last-td">

@@ -114,7 +114,7 @@
                 </tr>
                 <tr class="tr-header hrInfo">
                     <td><strong>类型:</strong></td>
-                    <td>{{hrInfo.type=="HR_MANAGER"?"猎头":"其他"}}</td>
+                    <td>{{hrInfo.type=="HR_MANAGER"?"HR管理员":"其他"}}</td>
                     <td><strong>工号:</strong></td>
                     <td>{{hrInfo.jobNumber}}</td>
                 </tr>
