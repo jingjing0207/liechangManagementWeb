@@ -65,7 +65,7 @@
                     {{pro.contactNumber==null?"Null":pro.contactNumber}}
                 </td>
                 <td class="currentState">{{pro.state=="ON"?"开启":"关闭"}}</td>
-                <td>{{pro.taxNumber==''?"null":pro.taxNumber}}</td>
+                <td>{{pro.taxNumber==''?"Null":pro.taxNumber}}</td>
                 <td style="max-width:78px;">{{pro.address==null?"Null":pro.address}}</td>
                 <td>
                     <el-button v-if="pro.state != 'OFF'" type="primary" plain @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
@@ -85,8 +85,8 @@
                     {{searhresult.contactNumber==null?"null":searhresult.contactNumber}}
                 </td>
                 <td class="currentState">{{searhresult.state=="ON"?"开启":"关闭"}}</td>
-                <td>{{searhresult.taxNumber==''?"null":searhresult.taxNumber}}</td>
-                <td style="max-width:78px;">{{searhresult.address==null?"null":searhresult.address}}</td>
+                <td>{{searhresult.taxNumber==''?"Null":searhresult.taxNumber}}</td>
+                <td style="max-width:78px;">{{searhresult.address==null?"Null":searhresult.address}}</td>
                 <td>
                     <el-button v-if="searhresult.state != 'OFF'" type="primary" plain @click="modifyManageplatform(searhresult.id)">重置平台服务费</el-button>
                     <el-button v-if="searhresult.state == 'OFF'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(searhresult.id)">重置平台服务费</el-button>
