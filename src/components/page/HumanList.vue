@@ -30,7 +30,8 @@
         <el-table :data="data" border id="hlist" style="width: 100%;font-size: 13px;text-align: center"
                   row-class-name="hlist-row">
             <!--<el-table-column type="selection" width="55"></el-table-column>-->
-            <el-table-column  header-align="center" prop="avatar" label="人员" width="210px" align="center" :resizable="false" show-overflow-tooltip>
+            <el-table-column header-align="center" prop="avatar" label="人员" width="210px" align="center"
+                             :resizable="false" show-overflow-tooltip>
                 <template slot-scope="scope" prop="avatar">
                     <div class="human">
                         <img :src="scope.row.avatar" class="headImg">
@@ -39,7 +40,8 @@
                             <icon_male v-if="scope.row.gender == '男'" class="icon"></icon_male>
                             <span class="name">{{ scope.row.name }}</span>
                             <div>
-                                <el-tag type="success" size="small">{{ scope.row.education + " | " + scope.row.city }}</el-tag>
+                                <el-tag type="success" size="small">{{ scope.row.education + " | " + scope.row.city }}
+                                </el-tag>
                             </div>
                         </div>
                     </div>
@@ -47,7 +49,8 @@
             </el-table-column>
             <el-table-column header-align="center" prop="cellphone" label="电话" :resizable="false" width="110px"
                              show-overflow-tooltip></el-table-column>
-            <el-table-column header-align="center" prop="company" label="公司名称" min-width="200px" show-overflow-tooltip></el-table-column>
+            <el-table-column header-align="center" prop="company" label="公司名称" min-width="200px"
+                             show-overflow-tooltip></el-table-column>
             <el-table-column header-align="center" prop="position" label="公司职位"></el-table-column>
             <el-table-column header-align="center" prop="price" align="center" label="简历价格">
                 <template slot-scope="scope">
@@ -65,7 +68,8 @@
                     </template>
                 </template>
             </el-table-column>
-            <el-table-column header-align="center" prop="state" :resizable="false" label="简历状态" width="75px" align="center">
+            <el-table-column header-align="center" prop="state" :resizable="false" label="简历状态" width="75px"
+                             align="center">
                 <template slot-scope="scope">
                     <span>{{ scope.row.state | stateFormat }}</span>
                 </template>
@@ -75,7 +79,7 @@
                     <div id="option_button">
                         <el-button type="text" size="mini" style="width: 100%;" @click="view(scope.row)">查看</el-button>
                         <el-button v-if="scope.row.state != 'Disabled'" type="text" size="mini"
-                                   style="width: 100%;" @click="del(scope.row)">删除
+                                   style="width: 100%;" @click="del(scope.row)">禁用
                         </el-button>
                     </div>
                 </template>
@@ -95,7 +99,7 @@
 
 <script>
     import Sortable from 'sortablejs'
-    import {GET_RESUME_LIST,SET_PRICE,DELETE_RESUME} from '../../constants/Constants'
+    import {GET_RESUME_LIST, SET_PRICE, DELETE_RESUME} from '../../constants/Constants'
     import icon_female from './iconfemale'
     import icon_male from './iconmale'
 
@@ -396,10 +400,12 @@
         font-size: 18px;
         padding: 0;
     }
-    .sortOption .el-table th{
+
+    .sortOption .el-table th {
         text-align: center;
     }
-    .sortOption .el-table th{
+
+    .sortOption .el-table th {
         text-align: center;
     }
 </style>
