@@ -177,9 +177,6 @@
                         })
                     })
             },
-            setPrice(row) {
-                console.info(row.id)
-            },
             search() {
                 const self = this
                 var list = document.querySelectorAll('.sortOption .el-input__inner')
