@@ -17,6 +17,7 @@ const SEARCHCOMPANY = `${ONLINEBASEURL}/api/operatorCompany/getCompany`
 const GETHRMANAGER = `${ONLINEBASEURL}/api/operatorCompany/getHRManager/`
 const MODIFYHRMANAGEPASSWORD = `${ONLINEBASEURL}/api/operatorCompany/modifyHrManagerPassword`
 const CHANGEHRMANAGER = `${ONLINEBASEURL}/api/operatorCompany/changeHrManager`
+const CHANGECOMPANYSTATE = `${ONLINEBASEURL}/api/operatorCompany/setCompanyState`
 const GET_JOB_LIST = `${ONLINEBASEURL}/api/operator/getJobDetails`
 const GET_JOB_DETAIL = `${ONLINEBASEURL}/api/operator/getJobDetail/`
 const SET_PRICE = `${ONLINEBASEURL}/api/operatorHuman/setPrice`
@@ -24,6 +25,8 @@ const GET_RESUME_LIST = `${ONLINEBASEURL}/api/operatorHuman/resumes`
 const GET_RESUME_DETAIL = `${ONLINEBASEURL}/api/operatorHuman/resume/`
 const MODIFY_RESUME = `${ONLINEBASEURL}/api/operatorHuman/modify`
 const DELETE_RESUME = `${ONLINEBASEURL}/api/operatorHuman/delete/`
+const GETALLCOMPANIES = `${ONLINEBASEURL}/api/operatorCompany/companies`
+///api/operatorCompany/companies
 module.exports = {
     LOGINURL: LOGINURL,
     LOGINOUTTOKEN: LOGINOUTTOKEN,
@@ -41,6 +44,8 @@ module.exports = {
     GETHRMANAGER:GETHRMANAGER,
     MODIFYHRMANAGEPASSWORD:MODIFYHRMANAGEPASSWORD,
     CHANGEHRMANAGER:CHANGEHRMANAGER,
+    CHANGECOMPANYSTATE:CHANGECOMPANYSTATE,
+    GETALLCOMPANIES:GETALLCOMPANIES,
     GET_JOB_LIST:GET_JOB_LIST,
     GET_JOB_DETAIL:GET_JOB_DETAIL,
     SET_PRICE:SET_PRICE,

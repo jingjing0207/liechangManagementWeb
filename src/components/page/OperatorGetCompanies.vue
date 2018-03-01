@@ -5,7 +5,7 @@
                 <el-form-item label="原服务费：" :label-width="formLabelWidth">
                     <el-input disabled="disabled" v-model="form.oldPercentageServiceFee" auto-complete="off" style="width:70%;border:none;"></el-input>
                 </el-form-item>
-                <el-form-item label="重置：" :label-width="formLabelWidth">
+                <el-form-item label="新服务费：" :label-width="formLabelWidth">
                     <el-input v-model="form.percentageServiceFee" auto-complete="off" style="width:70%;"></el-input>
                 </el-form-item>
             </el-form>
@@ -23,13 +23,8 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <div class="">
-                    <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
-                    <el-input v-model="searchId" size="medium" placeholder="输入企业ID" class="handle-title"></el-input>
-                    <el-input-number v-model="pagesize" size="medium" :min="1" :controls="false" class="handle-size">
-                        <template slot="prepend">每页</template>
-                        <template slot="append">条</template>
-                    </el-input-number>
-                    <el-button type="primary" size="medium" icon="el-icon-search" @click="searchCompanyId">查询</el-button>
+                    <el-input v-model="searchName" size="medium" placeholder="输入企业名称" class="handle-title"></el-input>
+                    <el-button type="primary" size="medium" icon="el-icon-search" @click="searchCompany">查询</el-button>
                 </div>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
@@ -55,18 +50,20 @@
                 <th>{{setCompanyServiceFee.label}}</th>
                 <th>{{gethrManager.label}}</th>
             </tr>
-            <tr class="tr-con"  v-for="(pro,idx) in hr_list" v-show="allResult">
+            <tr class="tr-con"  v-for="(pro,idx) in hr_list">
                 <td style="max-width:78px;">{{pro.name}}</td>
                 <td>{{pro.settleType| stateFormat}}</td>
                 <td>
-                    {{pro.contacts==null?"Null":pro.contacts}}
+                    {{pro.contacts==null?"":pro.contacts}}
                 </td>
                 <td>
-                    {{pro.contactNumber==null?"Null":pro.contactNumber}}
+                    {{pro.contactNumber==null?"":pro.contactNumber}}
                 </td>
-                <td class="currentState">{{pro.state=="ON"?"开启":"关闭"}}</td>
-                <td>{{pro.taxNumber==''?"Null":pro.taxNumber}}</td>
-                <td style="max-width:78px;">{{pro.address==null?"Null":pro.address}}</td>
+                <td class="currentState" @click="changeState(pro.id,pro.state,idx)">
+                    <el-button type="primary" plain round>{{pro.state| stateChange}}</el-button>
+                </td>
+                <td>{{pro.taxNumber==''?"":pro.taxNumber}}</td>
+                <td style="max-width:78px;">{{pro.address==null?"":pro.address}}</td>
                 <td>
                     <el-button v-if="pro.state != 'OFF'" type="primary" plain @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
                     <el-button v-if="pro.state == 'OFF'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
@@ -75,41 +72,24 @@
                     <el-button type="info" plain @click="getHRManager(pro.id)">获取HR管理员信息</el-button>
                 </td>
             </tr>
-            <tr class="tr-con" v-show="searchResult">
-                <td style="max-width:78px;">{{searhresult.name}}</td>
-                <td>{{searhresult.settleType | stateFormat}}</td>
-                <td>
-                    {{searhresult.contacts==null?"null":searhresult.contacts}}
-                </td>
-                <td>
-                    {{searhresult.contactNumber==null?"null":searhresult.contactNumber}}
-                </td>
-                <td class="currentState">{{searhresult.state=="ON"?"开启":"关闭"}}</td>
-                <td>{{searhresult.taxNumber==''?"Null":searhresult.taxNumber}}</td>
-                <td style="max-width:78px;">{{searhresult.address==null?"Null":searhresult.address}}</td>
-                <td>
-                    <el-button v-if="searhresult.state != 'OFF'" type="primary" plain @click="modifyManageplatform(searhresult.id)">重置平台服务费</el-button>
-                    <el-button v-if="searhresult.state == 'OFF'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(searhresult.id)">重置平台服务费</el-button>
-                </td>
-                <td class="last-td">
-                    <el-button type="info" plain @click="getHRManager(searhresult.id)">获取HR管理员信息</el-button>
-                </td>
-            </tr>
         </table>
         <div colspan="9" class="lastTd" style="text-align: right;margin:20px 0;">
             <div class="block">
                 <el-pagination
-                    @current-change ="handleCurrentChange"
-                    layout="total, prev, pager, next"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="cur_page"
+                    :page-sizes="[5,10,15,20,25,30]"
                     :page-size="pagesize"
-                    :total=totalNumber>
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="totalNumber">
                 </el-pagination>
             </div>
         </div>
         <el-dialog title="该企业HR管理员信息" :visible.sync="outerVisible">
             <table style="padding:0 5px;" class="table table-bordered" cellpadding="0" cellspacing="0" >
                 <tr class="tr-header hrInfo">
-                    <td><strong>用户名:</strong></td>
+                    <td><strong>企业名称:</strong></td>
                     <td class="contents">{{hrInfo.username}}</td>
                 </tr>
                 <tr class="tr-header hrInfo">
@@ -136,33 +116,6 @@
                     <td><strong>最后登录时间:</strong></td>
                     <td>{{new Date(hrInfo.lastLoginTime).toLocaleString()}}</td>
                 </tr>
-                <!--<div class="company" v-show="isShow">-->
-                    <!--<tr class="tr-header tr-con hrInfo">-->
-                        <!--<td colspan="2" rowspan="4"><strong>company</strong></td>-->
-                        <!--<td><strong>name:</strong></td>-->
-                        <!--<td>{{hrInfo.company.name}}</td>-->
-                        <!--<td><strong>settleType:</strong></td>-->
-                        <!--<td>{{hrInfo.company.settleType}}</td>-->
-                    <!--</tr>-->
-                    <!--<tr class="tr-header tr-con hrInfo">-->
-                        <!--<td><strong>address:</strong></td>-->
-                        <!--<td>{{hrInfo.company.address}}</td>-->
-                        <!--<td><strong>contactNumber:</strong></td>-->
-                        <!--<td>{{hrInfo.company.contactNumber}}</td>-->
-                    <!--</tr>-->
-                    <!--<tr class="tr-header tr-con hrInfo">-->
-                        <!--<td><strong>contacts:</strong></td>-->
-                        <!--<td>{{hrInfo.company.contacts}}</td>-->
-                        <!--<td><strong>createTime:</strong></td>-->
-                        <!--<td>{{hrInfo.company.createTime}}</td>-->
-                    <!--</tr>-->
-                    <!--<tr class="tr-header tr-con hrInfo">-->
-                        <!--<td><strong>state:</strong></td>-->
-                        <!--<td>{{hrInfo.company.state}}</td>-->
-                        <!--<td><strong>taxNumber:</strong></td>-->
-                        <!--<td>{{hrInfo.company.taxNumber}}</td>-->
-                    <!--</tr>-->
-                <!--</div>-->
             </table>
             <el-dialog
                 width="50%"
@@ -218,10 +171,10 @@
 <script>
     import Sortable from 'sortablejs'
     import axios from 'axios';
-    import {GETCOMPONANIESLIST,
+    import { GETCOMPONANIESLIST,
         SETCOMPANYSERVICEFEE,SEARCHCOMPANY,
         GETHRMANAGER,MODIFYHRMANAGEPASSWORD,
-        CHANGEHRMANAGER} from '../../constants/Constants'
+        CHANGEHRMANAGER,CHANGECOMPANYSTATE } from '../../constants/Constants'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
     axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     export default {
@@ -233,15 +186,31 @@
                 } else if (v == 'order_settle') {
                     return '订单结算'
                 } else {
-                    return 'Null'
+                    return ''
+                }
+            },
+            stateChange(val) {
+                var v = (val + '').toString().toLowerCase()
+                if (v == 'on') {
+                    return '开启'
+                } else if (v == 'off') {
+                    return '关闭'
+                } else {
+                    return ''
                 }
             }
         },
+        computed: {
+
+        },
         data() {
             return {
+                changestate:'',
+                changeCompanyId:'',
+                value3:false,
                 name:{
                     title:'name',
-                    label:'用户名'
+                    label:'企业名称'
                 },
                 settleType:{
                     title:'settleType',
@@ -288,7 +257,7 @@
                 pro:0,
                 is_search: false,
                 totalNumber:0,
-                pagesize:8,
+                pagesize:10,
                 checked:false,
                 deleteId:'',
                 modifyId:'',
@@ -298,7 +267,7 @@
                     oldPercentageServiceFee:0.1,
                 },
                 formLabelWidth: '160px',
-                searchId:'',
+                searchName:'',
                 searchResult:false,
                 allResult:true,
                 searhresult:'',
@@ -337,6 +306,11 @@
             this.setSort()
         },
         methods: {
+            handleSizeChange(val){
+                this.pagesize=val
+                this.getData();
+                this.searchCompany()
+            },
             handleCurrentChange(val){
                 this.cur_page = val;
                 this.getData();
@@ -368,7 +342,6 @@
                     self.totalNumber=parseInt(response.data.totalElements);
                     self.hr_list=response.data.content
                     console.log(this.hr_list)
-                    sessionStorage.setItem('percentageService',this.hr_list)
                 }).catch(() => {
                     self.hr_list=[]
                     self.$message({
@@ -377,7 +350,7 @@
                     })
                 })
             },
-            searchCompanyId(){
+            searchCompany(){
                 let self = this;
                 var list = document.querySelectorAll('.sortOption .el-input__inner')
                 var el = this.$refs.sel
@@ -391,27 +364,20 @@
                         self.sortBy.push(obj.name + ',' + map[obj.name])
                     }
                 })
-                self.url = SEARCHCOMPANY;
-                if(this.searchId!=''){
-                    self.$axios.get(self.url+'/'+this.searchId).then((response) => {
-                        console.log(response)
-                        this.totalNumber=1
-                        this.searhresult=response.data
-                        console.log(this.searhresult)
-                        this.searchResult=true
-                        this.allResult=false
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '查找失败'
-                        })
+                this.getData()
+                self.cur_page = 1;
+                self.url = GETCOMPONANIESLIST;
+                self.$axios.get(self.url+'?page='+parseInt(self.cur_page-1)+'&size='+self.pagesize+'&name='+self.searchName).then((response) => {
+                    console.log(response)
+                    self.totalNumber=parseInt(response.data.totalElements)
+                    self.hr_list=response.data.content
+                    console.log(this.hr_list)
+                }).catch(() => {
+                    self.$message({
+                        type: 'info',
+                        message: '查找失败'
                     })
-                }else{
-                    this.getData()
-                    this.allResult=true
-                    this.searchResult=false
-                }
-
+                })
             },
             modifyManageplatform(id){
                 let self = this;
@@ -444,7 +410,7 @@
             },
             modifyManagerPassword(){
                 let self = this
-                if(this.newPassword==this.oldPassword){
+                if((self.form.password!='' && self.form.newPass!='') && (self.form.newPass == self.form.password)){
                     let modifyManager={
                         id:sessionStorage.getItem('hrManagerId'),
                         password:this.newPassword
@@ -458,7 +424,11 @@
                         })
                     })
                 }else{
-                    self.$message.error('两次密码输入不相同,请重新输入！')
+                    if(self.form.password=='' || self.form.newPass==''){
+                        self.$message.error('密码输入为空，无效！')
+                    }else if (self.form.newPass != self.form.password){
+                        self.$message.error('两次密码不一致，请重新输入！')
+                    }
                 }
             },
             ResetPercentageServiceFee() {
@@ -503,6 +473,30 @@
                             this.hrInfo=response.data
                         })
                     }
+                })
+            },
+            changeState(id,state,idx) {
+                let self = this;
+                this.changeCompanyId=id
+                this.changestate=state
+                console.log(this.changeCompanyId)
+                console.log(this.changestate)
+                if(this.changestate==='ON'){
+                     this.changestate='OFF'
+                }else if(this.changestate==='OFF'){
+                     this.changestate='ON'
+                }
+                console.log(this.changestate)
+                let changedState={
+                    id:this.changeCompanyId,
+                    state: this.changestate
+                }
+                self.url = CHANGECOMPANYSTATE;
+                self.$axios.post(self.url,changedState).then((response) => {
+                    console.log(response)
+                    console.log(response.data.state)
+                    self.hr_list[idx].state=response.data.state
+                    console.log(self.hr_list.state)
                 })
             }
         }

@@ -3,10 +3,10 @@
         <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
             <el-form :model="form">
                 <el-form-item label="输入新密码" :label-width="formLabelWidth">
-                    <el-input v-model="form.password" auto-complete="off" style="width:70%;"></el-input>
+                    <el-input type="password" v-model="form.password" auto-complete="off" style="width:70%;"></el-input>
                 </el-form-item>
                 <el-form-item label="确认新密码" :label-width="formLabelWidth">
-                    <el-input v-model="form.newPass" auto-complete="off" style="width:70%;"></el-input>
+                    <el-input type="password" v-model="form.newPass" auto-complete="off" style="width:70%;"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -22,10 +22,7 @@
         </div>
         <el-collapse class="handle-box">
             <div class="search">
-                <el-input-number v-model="pagesize" size="medium"  :min="1" :controls="false" class="handle-size">
-                    <template slot="prepend">每页</template>
-                    <template slot="append">条</template>
-                </el-input-number>
+                <el-input v-model="searchName" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
                 <el-button type="primary" size="medium"  icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
@@ -39,15 +36,10 @@
                 </div>
             </el-collapse-item>
         </el-collapse>
-        <!--<div class="handle-box">-->
-        <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
-        <!--</div>-->
         <table class="table table-bordered"cellpadding="0" cellspacing="0" >
             <tr class="tr-header">
-                <!--<th></th>-->
                 <th>{{username.label}}</th>
                 <th>{{createTime.label}}</th>
-                <!--<th>headPic</th>-->
                 <th>{{lastLoginTime.label}}</th>
                 <th>{{type.label}}</th>
                 <th>{{state.label}}</th>
@@ -55,18 +47,13 @@
                 <th>{{operation.label}}</th>
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
-                <!--<td>{{pro.id}}</td>-->
-                <!--<td>-->
-                <!--&lt;!&ndash;<el-checkbox v-model="checked"></el-checkbox>&ndash;&gt;-->
-                <!--<el-table-column type="selection"></el-table-column>-->
-                <!--</td>-->
                 <td>{{pro.username}}</td>
                 <td>{{new Date(pro.createTime).toLocaleString()}}</td>
                 <!--<td>{{pro.headPic}}</td>-->
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
                 <td>{{pro.type=="HEADHUNTER"?"猎头":"其他"}}</td>
                 <td class="currentState">{{pro.state | stateFormat}}</td>
-                <td>{{pro.companyName==null?"Null":pro.companyName}}</td>
+                <td>{{pro.companyName==null?"":pro.companyName}}</td>
                 <td class="last-td">
                     <el-button v-if="pro.state != 'Disabled'" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
                     <el-button v-if="pro.state != 'Disabled'" type="info" plain @click="deleteHR(pro.id)">删除</el-button>
@@ -80,10 +67,13 @@
         <div colspan="7" class="lastTd" style="text-align: right;margin:20px 0;">
             <div class="block">
                 <el-pagination
-                    @current-change ="handleCurrentChange"
-                    layout="total, prev, pager, next"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="cur_page"
+                    :page-sizes="[5,10,15,20,25,30]"
                     :page-size="pagesize"
-                    :total=totalNumber>
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="totalNumber">
                 </el-pagination>
             </div>
         </div>
@@ -111,6 +101,7 @@
         },
         data() {
             return {
+                searchName:'',
                 username:{
                     title:'username',
                     label:'用户名'
@@ -181,6 +172,11 @@
             this.setSort()
         },
         methods: {
+            handleSizeChange(val){
+                this.pagesize=val
+                this.getData();
+                this.search()
+            },
             handleCurrentChange(val){
                 this.cur_page = val;
                 this.getData();
@@ -251,24 +247,29 @@
             },
             modifyPassword(){
                 let self = this
-                if(this.form.newPass==this.form.password){
-                    let newModify={
-                        id:this.modifyId,
-                        password:this.form.newPass
+                if((self.form.password!='' && self.form.newPass!='') && (self.form.newPass == self.form.password)){
+                    let newModify = {
+                        id: self.modifyId,
+                        password: self.form.newPass
                     }
                     self.url = MODIEFYHRPASSWORD;
-                    self.$axios.post(self.url,newModify).then((response) => {
+                    self.$axios.post(self.url, newModify).then((response) => {
                         console.log(response)
-                        this.dialogFormVisible=false
+                        this.dialogFormVisible = false
                         this.$message({
                             type: 'success',
                             message: '密码修改成功'
                         })
                     })
-                }else{
-                    self.$message.error('两次密码输入不相同,请重新输入！')
+                } else {
+                    if(self.form.password=='' || self.form.newPass==''){
+                        self.$message.error('密码输入为空，无效！')
+                    }else if (self.form.newPass != self.form.password){
+                        self.$message.error('两次密码不一致，请重新输入！')
+                    }
                 }
             }
+
         }
     }
 </script>

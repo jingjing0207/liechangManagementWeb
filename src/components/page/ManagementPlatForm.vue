@@ -43,15 +43,10 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <div style="display: inline-block;">
-                    <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
+                    <el-button type="info" plain class="addInnfo" @click="addUserManagement" style="float: left;margin-right:10px;">+ 新增</el-button>
                     <el-input v-model="searchName" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
-                    <el-input-number v-model="pageSize" size="medium" :min="1" :controls="false" class="handle-size">
-                        <template slot="prepend">每页</template>
-                        <template slot="append">条</template>
-                    </el-input-number>
                     <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
                 </div>
-                <el-button type="info" plain class="addInnfo" @click="addUserManagement" style="float: right;">+ 新增</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
@@ -63,24 +58,12 @@
                     </el-select>
                 </div>
             </el-collapse-item>
-            <!--<el-collapse-item title="排序选项" class="sortOption">-->
-            <!--<div class="sortItem" v-for="item of sortGroup">-->
-            <!--<span>{{ item.display }}</span>-->
-            <!--<el-select v-model="item.value" :name="item.name" ref="sel" size="small">-->
-            <!--<el-option v-for="option in sortOptions" :label="option.label" :value="option.value"-->
-            <!--:key="option.value">-->
-            <!--</el-option>-->
-            <!--</el-select>-->
-            <!--</div>-->
-            <!--</el-collapse-item>-->
         </el-collapse>
         <div class="content-table-list">
             <table class="table table-bordered"cellpadding="0" cellspacing="0" >
                 <tr class="tr-header">
                     <th>{{name.label}}</th>
-                    <!--<th>id</th>-->
                     <th>{{createTime.label}}</th>
-                    <!--<th>headPic</th>-->
                     <th>{{lastLoginTime.label}}</th>
                     <th>{{role.label}}</th>
                     <th>{{state.label}}</th>
@@ -88,28 +71,28 @@
                 </tr>
                 <tr class="tr-con"  v-for="(pro,idx) in information.data">
                     <td>{{pro.username}}</td>
-                    <!--<td>{{pro.id}}</td>-->
                     <td>{{new Date(pro.createTime).toLocaleString()}}</td>
-                    <!--<td>{{pro.headPic}}</td>-->
-                    <td>{{pro.lastLoginTime==null?"Null":new Date(pro.lastLoginTime).toLocaleString()}}</td>
+                    <td>{{pro.lastLoginTime==null?"":new Date(pro.lastLoginTime).toLocaleString()}}</td>
                     <td>{{pro.role}}</td>
                     <td>{{pro.state=="ENABLED"?"启用":"禁用"}}</td>
                     <td class="last-td">
-                        <el-button v-if="pro.state != 'DISABLED'" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
-                        <el-button v-if="pro.state != 'DISABLED'"  type="info" plain @click="deleteManage(pro.id)">删除</el-button>
+                        <el-button v-if="pro.state != 'DISABLED' && pro.username!='admin'"  type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
+                        <el-button v-if="pro.state != 'DISABLED' && pro.username!='admin'"  type="info" plain @click="deleteManage(pro.id)">删除</el-button>
 
-                        <el-button v-if="pro.state == 'DISABLED'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
-                        <el-button v-if="pro.state == 'DISABLED'" disabled="disabled" type="info" plain @click="deleteManage(pro.id)">删除</el-button>
+                        <el-button v-if="pro.state == 'DISABLED' || pro.username=='admin'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
+                        <el-button v-if="pro.state == 'DISABLED' || pro.username=='admin'" disabled="disabled" type="info" plain @click="deleteManage(pro.id)">删除</el-button>
                     </td>
                 </tr>
             </table>
             <div colspan="8" class="lastTd" style="text-align: right;margin:20px 0;">
                 <div class="block">
                     <el-pagination
+                        @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page.sync="currentPage"
-                        layout="total, prev, pager, next"
+                        :current-page="cur_page"
+                        :page-sizes="[5,10,15,20,25,30]"
                         :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
                         :total="totalNumber">
                     </el-pagination>
                 </div>
@@ -158,8 +141,8 @@
                     data:[]
                 },
                 query:'',
-                idx:'',
-                pro:'',
+                idx:1,
+                pro:1,
                 deleteId:'',
                 searchId:'',
                 modifyPassword:'',
@@ -184,7 +167,7 @@
                 },
                 totalNumber:0,
                 currentPage:1,
-                pageSize:8,
+                pageSize:10,
                 formLabelWidth: '120px',
                 form1:{
                     newPass:'',
@@ -245,6 +228,11 @@
                         console.log(error)
                     })
             },
+            handleSizeChange(val){
+                this.pageSize=val
+                this.requestFlowData();
+                this.search()
+            },
             handleCurrentChange(val) {
                 this.currentPage=val
                 this.requestFlowData()
@@ -286,26 +274,30 @@
             },
             modifypasswordMoudal() {
                 let self = this
-                if(this.form1.newPass==this.form1.password){
+                if((self.form.password!='' && self.form.newPass!='') && (self.form.newPass == self.form.password)){
                     let prams={
                         id:this.deleteId,
                         password:this.form1.newPass
                     }
                     self.url = MODIFYMANAGE;
                     self.$axios.post(self.url,prams).then((response) => {
-                            console.log('我要修改密码')
-                            console.log(response)
-                            this.dialogFormVisiblePassword=false
-                            this.$message({
-                                type: 'success',
-                                message: '密码修改成功'
-                            })
+                        console.log('我要修改密码')
+                        console.log(response)
+                        this.dialogFormVisiblePassword=false
+                        this.$message({
+                            type: 'success',
+                            message: '密码修改成功'
                         })
+                    })
                         .catch((error) => {
                             console.log(error)
                         })
                 }else{
-                    self.$message.error('两次密码输入不相同,请重新输入！')
+                    if(self.form.password=='' || self.form.newPass==''){
+                        self.$message.error('密码输入为空，无效！')
+                    }else if (self.form.newPass != self.form.password){
+                        self.$message.error('两次密码不一致，请重新输入！')
+                    }
                 }
             },
             addUserManagement(){
