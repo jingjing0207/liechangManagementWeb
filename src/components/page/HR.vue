@@ -24,11 +24,7 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <el-input v-model="searchUserId" placeholder="输入用户名" class="handle-title"></el-input>
-                <!--<el-input-number v-model="pagesize" size="medium"  :min="1" :controls="false" class="handle-size">-->
-                    <!--<template slot="prepend">每页</template>-->
-                    <!--<template slot="append">条</template>-->
-                <!--</el-input-number>-->
-                <el-select @change="searchCompany" v-model="currentCpmpany" placeholder="请选公司名称" class="currentSelect">
+                <el-select clearable @change="searchCompany" v-model="currentCpmpany" placeholder="请选公司名称" class="currentSelect">
                     <el-option
                         v-for="item in allCompanies"
                         :key="item.id"
@@ -37,8 +33,6 @@
                     </el-option>
                 </el-select>
                 <el-button type="primary" size="medium"  icon="el-icon-search" @click="search()">查询</el-button>
-
-
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
