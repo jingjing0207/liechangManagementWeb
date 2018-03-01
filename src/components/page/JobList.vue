@@ -9,10 +9,10 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <el-input v-model="search_title" size="medium" placeholder="筛选标题" class="handle-title"></el-input>
-                <el-input-number v-model="size" size="medium" :min="1" :controls="false" class="handle-size">
-                    <template slot="prepend">每页</template>
-                    <template slot="append">条</template>
-                </el-input-number>
+                <!--<el-input-number v-model="size" size="medium" :min="1" :controls="false" class="handle-size">-->
+                    <!--<template slot="prepend">每页</template>-->
+                    <!--<template slot="append">条</template>-->
+                <!--</el-input-number>-->
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
@@ -44,9 +44,11 @@
         </el-table>
         <div class="pagination">
             <el-pagination
+                @size-change="sizeChange"
                 @current-change="handleCurrentChange"
-                layout="total,prev,pager,next"
+                layout="total, sizes, prev, pager, next, jumper"
                 :current-page.sync="pageNo"
+                :page-sizes="[5,10,15,20,25,30]"
                 :page-size="pagesize"
                 :total="totalElements">
             </el-pagination>
@@ -64,8 +66,8 @@
             return {
                 totalElements: 0,
                 pageNo: 1,
-                pagesize: 8,
-                size: 8,
+                pagesize: 10,
+                size: 10,
                 search_title: '',
                 sortBy: [],
                 sortGroup: [
@@ -112,6 +114,10 @@
                 })
                 this.pageNo = 1;
                 this.getData();
+            },
+            sizeChange(val) {
+                this.size = val
+                this.search()
             },
             handleCurrentChange(val) {
                 this.getData();
@@ -211,7 +217,7 @@
     }
 
     .handle-title {
-        width: 170px;
+        width: 370px;
     }
 
     .handle-size {

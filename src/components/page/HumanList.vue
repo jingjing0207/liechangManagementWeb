@@ -10,10 +10,10 @@
             <div class="search">
                 <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
                 <el-input v-model="search_name" size="medium" placeholder="搜索姓名" class="handle-title"></el-input>
-                <el-input-number v-model="size" size="medium" :min="1" :controls="false" class="handle-size">
-                    <template slot="prepend">每页</template>
-                    <template slot="append">条</template>
-                </el-input-number>
+                <!--<el-input-number v-model="size" size="medium" :min="1" :controls="false" class="handle-size">-->
+                    <!--<template slot="prepend">每页</template>-->
+                    <!--<template slot="append">条</template>-->
+                <!--</el-input-number>-->
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
@@ -87,9 +87,11 @@
         </el-table>
         <div class="pagination">
             <el-pagination
+                @size-change="sizeChange"
                 @current-change="handleCurrentChange"
-                layout="total,prev,pager,next"
+                layout="total, sizes, prev, pager, next, jumper"
                 :current-page.sync="pageNo"
+                :page-sizes="[5,10,15,20,25,30]"
                 :page-size="pagesize"
                 :total="totalElements">
             </el-pagination>
@@ -102,6 +104,7 @@
     import {GET_RESUME_LIST, SET_PRICE, DELETE_RESUME} from '../../constants/Constants'
     import icon_female from './iconfemale'
     import icon_male from './iconmale'
+    import human_import from './HumanImport'
 
     export default {
         name: "human-list",
@@ -113,7 +116,8 @@
         },
         components: {
             icon_female: icon_female,
-            icon_male: icon_male
+            icon_male: icon_male,
+            human_import: human_import
         },
         filters: {
             priceFormat(val) {
@@ -141,8 +145,6 @@
                     id: row.id,
                     price: Math.ceil(row.price * 1000 / 10)
                 }
-                console.info(row.price)
-                console.info(userForm.price)
                 this.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 this.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
                 this.$axios.post(SET_PRICE, userForm)
@@ -176,6 +178,10 @@
                             type: 'error'
                         })
                     })
+            },
+            sizeChange(val) {
+                this.size = val
+                this.search()
             },
             search() {
                 const self = this
@@ -247,8 +253,8 @@
             return {
                 totalElements: 0,
                 pageNo: 1,
-                pagesize: 6,
-                size: 6,
+                pagesize: 10,
+                size: 10,
                 search_name: '',
                 sortBy: [],
                 sortGroup: [
@@ -321,7 +327,7 @@
     }
 
     .handle-title {
-        width: 170px;
+        width: 370px;
     }
 
     .handle-size {
