@@ -194,13 +194,13 @@
                 })
             },
             handleSizeChange(val){
-                this.pagesize=val
+                this.pagesize=parseInt(val)
                 this.getData();
-                this.search()
+
             },
             handleCurrentChange(val){
                 this.cur_page = val;
-                this.getData();
+                // this.getData();
                 this.search()
             },
             getData(){
@@ -256,6 +256,7 @@
                         self.totalNumber=parseInt(response.data.totalElements)
                         self.hr_list=response.data.content
                         console.log(this.hr_list)
+                        // this.handleSizeChange()
                     }else{
                         self.$message.error('暂无数据！')
                     }
