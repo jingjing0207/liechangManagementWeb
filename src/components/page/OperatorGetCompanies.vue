@@ -60,7 +60,7 @@
                     {{pro.contactNumber==null?"":pro.contactNumber}}
                 </td>
                 <td class="currentState" @click="changeState(pro.id,pro.state,idx)">
-                    <el-button type="primary" plain round>{{pro.state| stateChange}}</el-button>
+                    <el-button type="primary" plain style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>
                 </td>
                 <td>{{pro.taxNumber==''?"":pro.taxNumber}}</td>
                 <td style="max-width:78px;">{{pro.address==null?"":pro.address}}</td>
@@ -410,7 +410,7 @@
             },
             modifyManagerPassword(){
                 let self = this
-                if((self.form.password!='' && self.form.newPass!='') && (self.form.newPass == self.form.password)){
+                if((self.oldPassword!='' && self.newPassword!='') && (self.newPassword == self.oldPassword)){
                     let modifyManager={
                         id:sessionStorage.getItem('hrManagerId'),
                         password:this.newPassword
@@ -424,9 +424,9 @@
                         })
                     })
                 }else{
-                    if(self.form.password=='' || self.form.newPass==''){
+                    if(self.oldPassword=='' || self.newPassword==''){
                         self.$message.error('密码输入为空，无效！')
-                    }else if (self.form.newPass != self.form.password){
+                    }else if (self.newPassword != self.oldPassword){
                         self.$message.error('两次密码不一致，请重新输入！')
                     }
                 }
