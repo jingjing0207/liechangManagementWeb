@@ -228,6 +228,7 @@
                 })
             },
             search() {
+                // this.pagesize='';
                 const self = this
                 var list = document.querySelectorAll('.sortOption .el-input__inner')
                 var el = this.$refs.sel
@@ -261,6 +262,7 @@
                         self.$message.error('暂无数据！')
                     }
                 })
+                self.cur_page=1;
             },
             getCompaniesSelect(){
                 let self = this;
