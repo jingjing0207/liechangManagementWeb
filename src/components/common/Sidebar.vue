@@ -82,6 +82,10 @@
                             {
                                 index: 'humanlist',
                                 title: '人才列表管理'
+                            },
+                            {
+                                index: 'importresume',
+                                title: '简历导入'
                             }
                         ]
                     }

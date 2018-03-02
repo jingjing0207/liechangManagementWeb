@@ -84,7 +84,12 @@ export default new Router({
                 {
                     path: '/humanedit',
                     component: resolve => require(['../components/page/HumanEdit.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/importresume',
+                    component: resolve => require(['../components/page/HumanImport.vue'], resolve)   //编辑简历
                 }
+
             ]
         },
         {
