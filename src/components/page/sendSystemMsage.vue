@@ -211,7 +211,6 @@
                     console.log(response)
                     self.totalNumber=parseInt(response.data.totalElements)
                     self.userList = response.data.content
-                    self.id= response.data.content.id
                 })
             },
             showTabel(){
@@ -219,19 +218,21 @@
                 this.dialogTableVisible = true
             },
             searchUser(){
-                let self = this;
-                var option = '?page=' + (self.currentPage - 1) + '&size=' + self.pageSize+'&username='+this.searchname
-                self.url = GETAUDITEDHES;
-                self.$axios.get(self.url+option).then((response) => {
-
-                    self.totalNumber=parseInt(response.data.totalElements)
-                    self.userList = response.data.content.map(v => {
-                        this.$set(v, 'price', parseFloat(v['price']) / 100)
-                        this.$set(v, 'edit', false)
-                        this.$set(v, 'originalPrice', v['price'])
-                        return v
-                    })
+                const self = this
+                var list = document.querySelectorAll('.sortOption .el-input__inner')
+                var el = this.$refs.sel
+                var map = {}
+                self.sortBy = []
+                el.forEach(obj => {
+                    return map[obj.$options.propsData.name] = obj.$options.propsData.value
                 })
+                Array.prototype.map.call(list, obj => {
+                    if (map[obj.name] != '0') {
+                        self.sortBy.push(obj.name + ',' + map[obj.name])
+                    }
+                })
+                this.currentPage=1;
+                this.getData()
             },
             handleSelectionChange(val) {
                 this.currentRow = val;
@@ -257,8 +258,6 @@
                 console.log(this.receiverId)
                 console.log(this.scheduleTime)
                 console.log(this.sendType)
-
-
 
                 if(this.radio==1){
                     this.receiverId=0
