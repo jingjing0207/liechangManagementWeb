@@ -15,7 +15,8 @@
                 ref="singleTable"
                 :data="userList"
                 highlight-current-row
-                @current-change="handleSelectionChange" style="width: 100%;font-size: 12px;text-align: center">
+                @current-change="handleSelectionChange"
+                style="width: 100%;font-size: 12px;text-align: center">
                 <el-table-column header-align="center" type="index" width="40"></el-table-column>
                 <el-table-column header-align="center" property="username" label="用户名" width=""></el-table-column>
                 <el-table-column header-align="center" property="createTime" label="创建时间" width=""></el-table-column>
@@ -186,6 +187,7 @@
 
         },
         mounted(){
+            this.getData()
         },
         created() {
             this.getCompaniesSelect();
@@ -208,17 +210,12 @@
                 self.$axios.get(self.url+option).then((response) => {
                     console.log(response)
                     self.totalNumber=parseInt(response.data.totalElements)
-                    self.userList = response.data.content.map(v => {
-                        this.$set(v, 'price', parseFloat(v['price']) / 100)
-                        this.$set(v, 'edit', false)
-                        this.$set(v, 'originalPrice', v['price'])
-                        return v
-                    })
+                    self.userList = response.data.content
                     self.id= response.data.content.id
                 })
             },
             showTabel(){
-                this.getData()
+                this.selectedUserId=''
                 this.dialogTableVisible = true
             },
             searchUser(){
@@ -236,11 +233,12 @@
                     })
                 })
             },
-            handleSelectionChange(val,obj) {
+            handleSelectionChange(val) {
                 this.currentRow = val;
-                console.log(obj.id)
-                if(obj.id!=''){
-                    this.selectedUserId=obj.id
+                console.log(val)
+                console.log(val.id)
+                if(val.id!=''){
+                    this.selectedUserId=val.id
                 }else{
                     self.$message.error('请重新选择')
                 }
