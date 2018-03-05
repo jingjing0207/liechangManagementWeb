@@ -25,11 +25,11 @@
         <el-table :data="sendListDetail" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center"
                   row-class-name="jdlist-row">
             <el-table-column header-align="center" prop="messageType" label="消息类型" width="110px"></el-table-column>
-            <el-table-column header-align="center" prop="receiver" label="指定接收对象"></el-table-column>
+            <el-table-column header-align="center" prop="receiver"  show-overflow-tooltip label="指定接收对象"></el-table-column>
             <el-table-column header-align="center" prop="sendType" label="发送类型" width="130px"></el-table-column>
             <el-table-column header-align="center" prop="createTime" label="创建时间" :formatter="dateTimeFormat"></el-table-column>
             <el-table-column header-align="center" prop="scheduleTime" label="指定发送时间" :formatter="setTimeFormat"></el-table-column>
-            <el-table-column header-align="center" prop="content" label="消息内容"></el-table-column>
+            <el-table-column header-align="center" prop="content"  show-overflow-tooltip label="消息内容"></el-table-column>
         </el-table>
         <div class="pagination">
             <el-pagination

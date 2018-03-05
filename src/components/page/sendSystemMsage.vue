@@ -52,7 +52,7 @@
                             <el-col :span="6">
                                 <el-radio v-model="radio" label="2">
                                     <h4 class="labelFont font_inner">用 户</h4>
-                                    <el-input v-model="selectedUserId" class="" disabled size="small" style="vertical-align: middle;"></el-input>
+                                    <el-input v-model="selectedUserId" placeholder="请选择用户" class="" disabled size="small" style="vertical-align: middle;"></el-input>
                                     <el-button type="primary" size="small" @click="showTabel" >查询</el-button>
                                 </el-radio>
                             </el-col>
