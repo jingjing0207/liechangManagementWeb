@@ -26,7 +26,7 @@
             return {
                 items: [
                     {
-                        icon: 'el-icon-yonghuguanli1',
+                        icon: 'el-icon-yonghuguanli',
                         index: '2',
                         title: '用户管理',
                         subs: [
