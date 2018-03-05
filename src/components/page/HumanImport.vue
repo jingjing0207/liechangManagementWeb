@@ -9,14 +9,16 @@
         <div class="main">
             <uploader :options="options" :autoStart="false" :fileStatusText="fileStatusText"
                       class="uploader-example" ref="up">
-                <uploader-btn class="select-file">选择文件</uploader-btn>
-                <el-button style="margin-left: 10px;" icon="el-icon-delete" size="small" type="primary"
-                           @click="clearList">清空列表
-                </el-button>
-                <el-button style="margin-left: 10px;" icon="el-icon-upload" size="small" type="success"
-                           @click="startup">开始上传
-                </el-button>
-                <uploader-list></uploader-list>
+                <template slot-scope="props">
+                    <uploader-btn class="select-file">选择文件</uploader-btn>
+                    <el-button style="margin-left: 10px;" icon="el-icon-delete" size="small" type="primary"
+                               @click="clearList">清空列表
+                    </el-button>
+                    <el-button style="margin-left: 10px;" icon="el-icon-upload" size="small" type="success"
+                               @click="startup">开始上传
+                    </el-button>
+                    <uploader-list></uploader-list>
+                </template>
             </uploader>
         </div>
     </div>
@@ -30,7 +32,6 @@
             clearList() {
                 var j = 0
                 const fileNum = this.$refs.up.uploader.files.length
-                console.info(JSON.stringify(this.$refs.up.uploader.files[0]))
                 for (j = 0; j < fileNum; j++) {
                     this.$refs.up.uploader.files[0].cancel()
                 }
