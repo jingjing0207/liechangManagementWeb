@@ -173,7 +173,7 @@
                     {value: 'desc', label: '降序'}],
                 tableData: [],
                 searchName:'',
-                crrentCompanyBy:[]
+                crrentCompanyBy:[],
             }
         },
         created(){

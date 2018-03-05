@@ -148,14 +148,7 @@
                     return v.substring(v.length - 2, v.length)
                 }
                 if (time == null) return;
-                // var year = time.getFullYear();
-                // var month = time.getMonth() + 1;
-                // var date = time.getDate();
-                // var hours = time.getHours();
-                // var minutes = time.getMinutes();
-                // var seconds = time.getSeconds();
                 return new Date(time).toLocaleString()
-                // return year + '-' + rightTwo(month) + '-' + rightTwo(date) + ' ' + rightTwo(hours) + ':' + rightTwo(minutes) /*+ ':' + rightTwo(seconds)*/;
             },
             openDetails(row) {
                 this.$router.push({path: '/job', query: {id: row.id}})

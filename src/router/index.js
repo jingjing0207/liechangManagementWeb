@@ -88,8 +88,15 @@ export default new Router({
                 {
                     path: '/importresume',
                     component: resolve => require(['../components/page/HumanImport.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/sendSystemMsage',
+                    component: resolve => require(['../components/page/sendSystemMsage.vue'], resolve)   //简历详情
+                },
+                {
+                    path: '/SystemMsageManage',
+                    component: resolve => require(['../components/page/SystemMsageManage.vue'], resolve)   //编辑简历
                 }
-
             ]
         },
         {

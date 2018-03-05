@@ -150,6 +150,7 @@
                     newPass:''
                 },
                 formLabelWidth: '120px',
+                searchName:'',
 
 
                 search_title: '',

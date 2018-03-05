@@ -56,11 +56,7 @@
                             {
                                 index: 'companieslist',
                                 title: '企业列表管理'
-                            },
-                            // {
-                            //     index: 'changehrmanager',
-                            //     title: '企业管理员账号密码管理'
-                            // }
+                            }
                         ]
                     },
                     {
@@ -86,6 +82,21 @@
                             {
                                 index: 'importresume',
                                 title: '简历导入'
+                            }
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-news',
+                        index: '6',
+                        title: '系统消息管理',
+                        subs: [
+                            {
+                                index: 'sendSystemMsage',
+                                title: '发送系统消息'
+                            },
+                            {
+                                index: 'SystemMsageManage',
+                                title: '系统消息列表管理'
                             }
                         ]
                     }
@@ -117,5 +128,10 @@
         margin-left: 10px;
         margin-right: 8px;
         vertical-align: text-bottom;
+    }
+    .el-icon-rencaizhongxin{
+        font-size: 22px;
+        margin-right:4px!important;
+        margin-left:7px!important;
     }
 </style>
