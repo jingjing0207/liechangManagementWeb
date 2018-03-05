@@ -218,21 +218,14 @@
                 this.dialogTableVisible = true
             },
             searchUser(){
-                const self = this
-                var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = this.$refs.sel
-                var map = {}
-                self.sortBy = []
-                el.forEach(obj => {
-                    return map[obj.$options.propsData.name] = obj.$options.propsData.value
+                let self = this;
+                var option = '?page=' + (self.currentPage - 1) + '&size=' + self.pageSize+'&username='+this.searchname
+                self.url = GETAUDITEDHES;
+                self.$axios.get(self.url+option).then((response) => {
+                    console.log(response)
+                    self.totalNumber=parseInt(response.data.totalElements)
+                    self.userList = response.data.content
                 })
-                Array.prototype.map.call(list, obj => {
-                    if (map[obj.name] != '0') {
-                        self.sortBy.push(obj.name + ',' + map[obj.name])
-                    }
-                })
-                this.currentPage=1;
-                this.getData()
             },
             handleSelectionChange(val) {
                 this.currentRow = val;
