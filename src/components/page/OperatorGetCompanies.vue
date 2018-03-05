@@ -89,7 +89,7 @@
         <el-dialog title="该企业HR管理员信息" :visible.sync="outerVisible">
             <table style="padding:0 5px;" class="table table-bordered" cellpadding="0" cellspacing="0" >
                 <tr class="tr-header hrInfo">
-                    <td><strong>企业名称:</strong></td>
+                    <td><strong>用户名:</strong></td>
                     <td class="contents">{{hrInfo.username}}</td>
                 </tr>
                 <tr class="tr-header hrInfo">
