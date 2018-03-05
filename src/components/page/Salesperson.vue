@@ -36,11 +36,10 @@
                 </div>
             </el-collapse-item>
         </el-collapse>
-        <table class="table table-bordered"cellpadding="0" cellspacing="0" >
+        <table class="table table-bordered" cellpadding="0" cellspacing="0" >
             <tr class="tr-header">
                 <th>{{username.label}}</th>
                 <th>{{createTime.label}}</th>
-                <!--<th>headPic</th>-->
                 <th>{{lastLoginTime.label}}</th>
                 <th>{{type.label}}</th>
                 <th>{{state.label}}</th>
@@ -50,7 +49,6 @@
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
                 <td>{{pro.username}}</td>
                 <td>{{new Date(pro.createTime).toLocaleString()}}</td>
-                <!--<td>{{pro.headPic}}</td>-->
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
                 <td>{{pro.type=="PLATFORM_MARKECTER"?"平台销售":"其他"}}</td>
                 <td class="currentState">{{pro.state | stateFormat}}</td>

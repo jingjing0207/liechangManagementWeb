@@ -50,8 +50,8 @@
     import axios from 'axios';
     import { GETSENDLIST } from '../../constants/Constants'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-    // axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
-    axios.defaults.headers['X-OperatorToken'] = '9cee02c6a9f848eeba3119b8a828c66d'
+    axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
+    // axios.defaults.headers['X-OperatorToken'] = '9cee02c6a9f848eeba3119b8a828c66d'
     //
     export default {
         name: "",
