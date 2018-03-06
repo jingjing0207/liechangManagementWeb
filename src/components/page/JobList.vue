@@ -8,11 +8,7 @@
         </div>
         <el-collapse class="handle-box">
             <div class="search">
-                <el-input v-model="search_title" size="medium" placeholder="筛选标题" class="handle-title"></el-input>
-                <!--<el-input-number v-model="size" size="medium" :min="1" :controls="false" class="handle-size">-->
-                    <!--<template slot="prepend">每页</template>-->
-                    <!--<template slot="append">条</template>-->
-                <!--</el-input-number>-->
+                <el-input v-model="search_title" size="medium" placeholder="筛选标题" class="handle-title"/>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
@@ -26,31 +22,40 @@
                 </div>
             </el-collapse-item>
         </el-collapse>
+        <el-card class="confirm">
+            <div style="height: 24px;line-height: 24px;">
+                <span>赏金确认天数：</span>
+                <span v-if="!setConfirm">{{ confirmDateCount }}天
+                    <el-button size="mini" type="text" class="setConfirm" @click="setConfirm = true">
+                        <i class="el-icon-edit"></i>修改
+                    </el-button>
+                </span>
+                <span v-else>
+                    <el-input-number size="mini" :controls="false" :min="0" class="inputCount"
+                                     v-model="confirmDateCount"/>天
+                    <el-button size="mini" type="primary" plain class="setConfirm" @click="confirmSet">确定</el-button>
+                    <el-button size="mini" type="primary" plain class="setConfirm" @click="cancelSet">取消</el-button>
+                </span>
+            </div>
+        </el-card>
         <el-table :data="data" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center"
                   row-class-name="jdlist-row" @row-click="openDetails">
             <el-table-column header-align="center" prop="createTime" label="创建时间" width="160px"
-                             :formatter="dateTimeFormat"></el-table-column>
-            <el-table-column header-align="center" prop="title" show-overflow-tooltip label="标题"></el-table-column>
-            <el-table-column header-align="center" prop="creatorCompanyName" show-overflow-tooltip label="所属公司">
-            </el-table-column>
-            <el-table-column header-align="center" prop="creatorUsername" show-overflow-tooltip
-                             label="发布人"></el-table-column>
-            <el-table-column header-align="center" prop="education" label="学历" width="110px"></el-table-column>
-            <el-table-column header-align="center" prop="level" label="级别"></el-table-column>
-            <el-table-column header-align="center" prop="position" label="职位" width="130px"></el-table-column>
-            <el-table-column header-align="center" prop="price" label="职位奖励" :formatter="priceFormat"></el-table-column>
-            <el-table-column header-align="center" prop="recruitingNumber" label="招聘人数"></el-table-column>
-            <el-table-column header-align="center" prop="state" label="状态" :formatter="stateFormat"></el-table-column>
+                             :formatter="dateTimeFormat"/>
+            <el-table-column header-align="center" prop="title" show-overflow-tooltip label="标题"/>
+            <el-table-column header-align="center" prop="creatorCompanyName" show-overflow-tooltip label="所属公司"/>
+            <el-table-column header-align="center" prop="creatorUsername" show-overflow-tooltip label="发布人"/>
+            <el-table-column header-align="center" prop="education" label="学历" width="110px"/>
+            <el-table-column header-align="center" prop="level" label="级别"/>
+            <el-table-column header-align="center" prop="position" label="职位" width="130px"/>
+            <el-table-column header-align="center" prop="price" label="职位奖励" :formatter="priceFormat"/>
+            <el-table-column header-align="center" prop="recruitingNumber" label="招聘人数"/>
+            <el-table-column header-align="center" prop="state" label="状态" :formatter="stateFormat"/>
         </el-table>
         <div class="pagination">
-            <el-pagination
-                @size-change="sizeChange"
-                @current-change="handleCurrentChange"
-                layout="total, sizes, prev, pager, next, jumper"
-                :current-page.sync="pageNo"
-                :page-sizes="[5,10,15,20,25,30]"
-                :page-size="pagesize"
-                :total="totalElements">
+            <el-pagination @size-change="sizeChange" @current-change="handleCurrentChange"
+                           layout="total, sizes, prev, pager, next, jumper" :current-page.sync="pageNo"
+                           :page-sizes="[5,10,15,20,25,30]" :page-size="pagesize" :total="totalElements">
             </el-pagination>
         </div>
     </div>
@@ -58,7 +63,12 @@
 
 <script>
     import Sortable from 'sortablejs'
-    import {GET_JOB_LIST} from '../../constants/Constants'
+    import axios from 'axios'
+    import {GET_JOB_LIST, GET_COMMISSION_COMFIRM, SET_COMMISSION_COMFIRM} from '../../constants/Constants'
+
+    axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8';
+    axios.defaults.headers['X-UserToken'] = sessionStorage.getItem('userName');
+    axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName');
 
     export default {
         name: 'job-list',
@@ -70,6 +80,10 @@
                 size: 10,
                 search_title: '',
                 sortBy: [],
+                confirmID: 1,
+                confirmDateCount: 0,
+                originalConfirmDateCount: 0,
+                setConfirm: false,
                 sortGroup: [
                     {value: '0', name: 'createTime', display: '创建时间'},
                     {value: '0', name: 'title', display: '标题'},
@@ -88,39 +102,53 @@
             }
         },
         created() {
+            this.getConfirm();
             this.getData();
-            this.setSort();
+            this.setSort()
         },
         computed: {
             data() {
-                const self = this;
-                return self.tableData
+                return this.tableData
             }
         },
         methods: {
             search() {
-                const self = this
-                var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = this.$refs.sel
-                var map = {}
-                self.sortBy = []
-                el.forEach(obj => {
-                    return map[obj.$options.propsData.name] = obj.$options.propsData.value
-                })
+                const list = document.querySelectorAll('.sortOption .el-input__inner');
+                const map = {};
+                this.sortBy = [];
+                this.$refs.sel.forEach(obj => map[obj.name] = obj.value);
                 Array.prototype.map.call(list, obj => {
                     if (map[obj.name] != '0') {
-                        self.sortBy.push(obj.name + ',' + map[obj.name])
+                        this.sortBy.push(obj.name + ',' + map[obj.name])
                     }
-                })
+                });
                 this.pageNo = 1;
                 this.getData();
             },
+            confirmSet() {
+                let userForm = {
+                    id: this.confirmID,
+                    confirmDateCount: this.confirmDateCount
+                };
+                axios.post(SET_COMMISSION_COMFIRM, userForm)
+                    .then(res => this.setConfirm = false)
+                    .catch((error) => {
+                        this.$message({
+                            message: '修改失败',
+                            type: 'error'
+                        })
+                    })
+            },
+            cancelSet() {
+                this.confirmDateCount = this.originalConfirmDateCount
+                this.setConfirm = false
+            },
             sizeChange(val) {
-                this.size = val
+                this.size = val;
                 this.search()
             },
             handleCurrentChange(val) {
-                this.getData();
+                this.getData()
             },
             priceFormat(row, column) {
                 return parseFloat(row.price) / 100 + '元';
@@ -142,44 +170,47 @@
                 }
             },
             dateTimeFormat(row, column) {
-                var time = new Date(+row.createTime);
-                var rightTwo = (v) => {
-                    v = '0' + v
+                let time = new Date(+row.createTime);
+                let rightTwo = (v) => {
+                    v = '0' + v;
                     return v.substring(v.length - 2, v.length)
-                }
+                };
                 if (time == null) return;
                 return new Date(time).toLocaleString()
             },
             openDetails(row) {
                 this.$router.push({path: '/job', query: {id: row.id}})
             },
+            getConfirm() {
+                axios.get(GET_COMMISSION_COMFIRM)
+                    .then(res => {
+                        this.confirmID = res.data.id;
+                        this.confirmDateCount = res.data.confirmDateCount;
+                        this.originalConfirmDateCount = this.confirmDateCount
+                    })
+            },
             getData() {
-                let self = this;
-                var option = '?page=' + (self.pageNo - 1) + '&size=' + self.size
-                var sortStr = ''
-                if (self.sortBy.length != 0) {
-                    for (var s in self.sortBy) {
-                        sortStr = sortStr + '&sort=' + self.sortBy[s]
+                let option = '?page=' + (this.pageNo - 1) + '&size=' + this.size;
+                let sortStr = '';
+                if (this.search_title.length != 0) {
+                    option = option + '&title=' + this.search_title
+                }
+                if (this.sortBy.length != 0) {
+                    for (var s in this.sortBy) {
+                        sortStr = sortStr + '&sort=' + this.sortBy[s]
                     }
-                }
-                if (self.search_title.length != 0) {
-                    option = option + '&title=' + self.search_title
-                }
-                if (sortStr.length != 0) {
                     option = option + sortStr
                 }
-                self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-                self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                self.$axios.get(GET_JOB_LIST + option)
+                axios.get(GET_JOB_LIST + option)
                     .then(res => {
-                        self.pagesize = parseInt(self.size)
-                        self.totalElements = parseInt(res.data.totalElements)
-                        self.tableData = res.data.content
+                        this.pagesize = parseInt(this.size);
+                        this.totalElements = parseInt(res.data.totalElements);
+                        this.tableData = res.data.content
                     })
             },
             setSort() {
                 this.$nextTick(() => {
-                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0]
+                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0];
                     this.sortable = Sortable.create(el, {
                         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
                         setData: dataTransfer => dataTransfer.setData('Text', '')
@@ -237,8 +268,43 @@
         color: white;
         background-color: #42b983;
     }
+
+    .confirm {
+        font-size: 14px;
+        box-shadow: unset;
+        border-radius: unset;
+    }
+
+    div + .setConfirm {
+        margin-left: 15px;
+    }
+
+    .setConfirm {
+        padding: 2px 5px;
+        font-size: 14px;
+    }
+
+    .inputCount {
+        width: 50px;
+        margin-right: 5px;
+    }
 </style>
 <style>
+    .inputCount.el-input-number.is-without-controls input.el-input__inner {
+        height: 24px;
+        font-size: 14px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .el-card.confirm div.el-card__body {
+        padding: 15px;
+    }
+
+    .el-button.setConfirm span {
+        margin-left: unset;
+    }
+
     #jdlist.el-table .cell, #jdlist.el-table th div {
         color: #333;
         padding: 0 10px;

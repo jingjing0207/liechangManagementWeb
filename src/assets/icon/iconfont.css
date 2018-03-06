@@ -15,6 +15,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.el-icon-rencaizhongxin {
+    position: relative;
+    top: 3px;
+}
+
 .el-icon-unie657:before { content: "\e705"; }
 
 .el-icon-04:before { content: "\e64c"; }
