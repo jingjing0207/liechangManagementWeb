@@ -31,6 +31,9 @@ const SET_COMMISSION_COMFIRM = `${ONLINEBASEURL}/api/commissionConfirmConfig/set
 const GETALLCOMPANIES = `${ONLINEBASEURL}/api/operatorCompany/companies`
 const SENDSYSTEMMSG=`${ONLINEBASEURL}/api/operatorMessage/sendMessage`
 const GETSENDLIST=`${ONLINEBASEURL}/api/operatorMessage/getMessageLogs`
+const GETCOMPANYMONTHSTATISTICS=`${ONLINEBASEURL}/api/operatorStatistics/getCompanyMonthStatistics`
+const GETHRSTATISTICS=`${ONLINEBASEURL}/api/operatorStatistics/getHRStatistics`
+const GETUSERSTATISTICS=`${ONLINEBASEURL}/api/operatorStatistics/getUserStatistics`
 ///api/operatorCompany/companies
 module.exports = {
     LOGINURL: LOGINURL,
@@ -62,5 +65,8 @@ module.exports = {
     GET_COMMISSION_COMFIRM:GET_COMMISSION_COMFIRM,
     SET_COMMISSION_COMFIRM:SET_COMMISSION_COMFIRM,
     SENDSYSTEMMSG:SENDSYSTEMMSG,
-    GETSENDLIST:GETSENDLIST
+    GETSENDLIST:GETSENDLIST,
+    GETCOMPANYMONTHSTATISTICS:GETCOMPANYMONTHSTATISTICS,
+    GETHRSTATISTICS:GETHRSTATISTICS,
+    GETUSERSTATISTICS:GETUSERSTATISTICS
 }

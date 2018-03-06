@@ -316,7 +316,6 @@
     table{
         width:100%;
         height:auto;
-        border-radius:12px;
         border:1px solid #eee;
         cursor: default;
     }
@@ -329,7 +328,7 @@
     }
     .tr-header th{
         font-size: 14px;
-        color: #000;
+        color: #333;
         background:#eef1f6;
         padding: 13px 10px!important;
     }

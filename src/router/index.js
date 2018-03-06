@@ -96,6 +96,22 @@ export default new Router({
                 {
                     path: '/SystemMsageManage',
                     component: resolve => require(['../components/page/SystemMsageManage.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/companyCountReport',
+                    component: resolve => require(['../components/page/companyCountReport.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/companyPaymentSettlement',
+                    component: resolve => require(['../components/page/companyPaymentSettlement.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/registerCountReport',
+                    component: resolve => require(['../components/page/getUserStatistics.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/companyHrCountReport',
+                    component: resolve => require(['../components/page/companyHrCountReport.vue'], resolve)   //编辑简历
                 }
             ]
         },

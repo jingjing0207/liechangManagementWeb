@@ -123,7 +123,7 @@
                 <el-row>
                     <el-row :span="6" style="float: left;text-indent: 50px;margin-top:20px;">
                         <el-button style="margin-left:100px;" type="primary" @click="submitForm">提交</el-button>
-                        <el-button style="margin-left:70px;">取消</el-button>
+                        <el-button style="margin-left:70px;" @click="giveupSubmit">取消</el-button>
                     </el-row>
                 </el-row>
             </el-card>
@@ -145,7 +145,7 @@
         data() {
             return {
                 currentRow: null,
-                value10:new Date(),
+                value10:'',
                 pageSize:5,
                 currentPage:1,
                 totalNumber:0,
@@ -295,12 +295,25 @@
                             })
                             this.description=''
                             this.selectedUserId=''
+                            this.value10=''
+                            this.currentCpmpany=''
                         }
                     })
                 }else{
                     self.$message.error('输入不可为空，请检查并重新输入')
                 }
 
+            },
+            giveupSubmit(){
+                this.$message({
+                    showClose: true,
+                    message: '取消发送',
+                    type: 'warning'
+                });
+                this.description=''
+                this.selectedUserId=''
+                this.value10=''
+                this.currentCpmpany=''
             }
         },
         filters: {

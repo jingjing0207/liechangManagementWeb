@@ -99,6 +99,29 @@
                                 title: '系统消息列表管理'
                             }
                         ]
+                    },
+                    {
+                        icon: 'el-icon-04',
+                        index: '7',
+                        title: '报表',
+                        subs: [
+                            {
+                                index: 'companyCountReport',
+                                title: '企业统计报表'
+                            },
+                            {
+                                index: 'companyPaymentSettlement',
+                                title: '企业结算报表'
+                            },
+                            {
+                                index: 'companyHrCountReport',
+                                title: '企业HR统计报表'
+                            },
+                            {
+                                index: 'registerCountReport',
+                                title: '注册统计报表'
+                            }
+                        ]
                     }
                 ]
             }
