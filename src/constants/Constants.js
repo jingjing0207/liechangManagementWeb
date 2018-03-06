@@ -26,6 +26,8 @@ const GET_RESUME_DETAIL = `${ONLINEBASEURL}/api/operatorHuman/resume/`
 const MODIFY_RESUME = `${ONLINEBASEURL}/api/operatorHuman/modify`
 const DELETE_RESUME = `${ONLINEBASEURL}/api/operatorHuman/delete/`
 const IMPORT_RESUME = `${ONLINEBASEURL}/api/operatorHuman/importResume`
+const GET_COMMISSION_COMFIRM = `${ONLINEBASEURL}/api/commissionConfirmConfig/getConfig`
+const SET_COMMISSION_COMFIRM = `${ONLINEBASEURL}/api/commissionConfirmConfig/setCommissionConfirmConfig`
 const GETALLCOMPANIES = `${ONLINEBASEURL}/api/operatorCompany/companies`
 const SENDSYSTEMMSG=`${ONLINEBASEURL}/api/operatorMessage/sendMessage`
 const GETSENDLIST=`${ONLINEBASEURL}/api/operatorMessage/getMessageLogs`
@@ -57,6 +59,8 @@ module.exports = {
     MODIFY_RESUME:MODIFY_RESUME,
     DELETE_RESUME:DELETE_RESUME,
     IMPORT_RESUME:IMPORT_RESUME,
+    GET_COMMISSION_COMFIRM:GET_COMMISSION_COMFIRM,
+    SET_COMMISSION_COMFIRM:SET_COMMISSION_COMFIRM,
     SENDSYSTEMMSG:SENDSYSTEMMSG,
     GETSENDLIST:GETSENDLIST
 }
