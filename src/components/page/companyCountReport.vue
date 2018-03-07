@@ -12,7 +12,7 @@
                     <el-date-picker
                         v-model="value4"
                         type="month"
-                        placeholder="选择月">
+                        placeholder="选择月份">
                     </el-date-picker>
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
