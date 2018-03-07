@@ -9,20 +9,20 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <div class="handle-title">
-                        <el-date-picker
-                            v-model="value10"
-                            type="date"
-                            placeholder="选择日期"
-                            format="yyyy 年 MM 月 dd 日"
-                            value-format="timestamp">
-                        </el-date-picker>
-                        <el-date-picker
-                            v-model="value9"
-                            type="date"
-                            placeholder="选择日期"
-                            format="yyyy 年 MM 月 dd 日"
-                            value-format="timestamp">
-                        </el-date-picker>
+                    <el-date-picker
+                        v-model="value10"
+                        type="date"
+                        placeholder="选择开始日期"
+                        format="yyyy 年 MM 月 dd 日"
+                        value-format="timestamp">
+                    </el-date-picker>
+                    <el-date-picker
+                        v-model="value9"
+                        type="date"
+                        placeholder="选择结束日期"
+                        format="yyyy 年 MM 月 dd 日"
+                        value-format="timestamp">
+                    </el-date-picker>
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>

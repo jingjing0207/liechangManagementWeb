@@ -2,16 +2,16 @@
     <div class="table">
         <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
             <el-form :model="form"style="font-size:17px;color:black;">
-                <el-form-item label="头像:" :label-width="formLabelWidth">
+                <el-form-item label="头 像" :label-width="formLabelWidth">
                     <el-input v-model="newHeadpic" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
-                <el-form-item label="密码:" :label-width="formLabelWidth">
+                <el-form-item label="密 码" :label-width="formLabelWidth">
                     <el-input v-model="newPassword" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
-                <el-form-item label="角色:" :label-width="formLabelWidth">
+                <el-form-item label="角 色" :label-width="formLabelWidth">
                     <el-input v-model="newRole" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
-                <el-form-item label="用户名:" :label-width="formLabelWidth">
+                <el-form-item label="用户名" :label-width="formLabelWidth">
                     <el-input v-model="newUsername" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
             </el-form>

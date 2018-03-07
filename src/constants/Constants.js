@@ -4,7 +4,6 @@ const ONLINEBASEURL = 'http://120.78.184.120:9002'
 const LOGINURL = `${ONLINEBASEURL}/api/authOperator/login`
 const LOGINOUTTOKEN = `${ONLINEBASEURL}/api/authOperator/signOut`
 const MANAGEMENTPLATFORM = `${ONLINEBASEURL}/api/operator/getOperators`
-// const SEARCHID = `${ONLINEBASEURL}/api/operator/getOperator`
 const DELETEMANAGE = `${ONLINEBASEURL}/api/operator/deleteOperator/`
 const MODIFYMANAGE = `${ONLINEBASEURL}/api/operator/modifyOperator`
 const CREATEMANAGE = `${ONLINEBASEURL}/api/operator/createOperator`
@@ -34,12 +33,12 @@ const GETSENDLIST=`${ONLINEBASEURL}/api/operatorMessage/getMessageLogs`
 const GETCOMPANYMONTHSTATISTICS=`${ONLINEBASEURL}/api/operatorStatistics/getCompanyMonthStatistics`
 const GETHRSTATISTICS=`${ONLINEBASEURL}/api/operatorStatistics/getHRStatistics`
 const GETUSERSTATISTICS=`${ONLINEBASEURL}/api/operatorStatistics/getUserStatistics`
-///api/operatorCompany/companies
+
+
 module.exports = {
     LOGINURL: LOGINURL,
     LOGINOUTTOKEN: LOGINOUTTOKEN,
     MANAGEMENTPLATFORM:MANAGEMENTPLATFORM,
-    // SEARCHID:SEARCHID,
     DELETEMANAGE:DELETEMANAGE,
     MODIFYMANAGE:MODIFYMANAGE,
     CREATEMANAGE:CREATEMANAGE,

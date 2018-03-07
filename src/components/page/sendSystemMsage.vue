@@ -285,7 +285,7 @@
                     sendFlag: false,
                     sendType: this.sendType
                 }
-                if(this.description!='' || this.value10!=''){
+                if(this.description!='' && this.value10!=''){
                     self.$axios.post(self.url,sendMsageContent).then((response) => {
                         console.log(response)
                         if(response.data==''){

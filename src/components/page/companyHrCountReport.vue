@@ -9,7 +9,7 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <div class="handle-title">
-                    <el-select style="width:178px;" clearable v-model="currentCpmpany" placeholder="请选公司名称" class="currentSelect">
+                    <el-select style="width:178px;" clearable v-model="currentCpmpany" placeholder="选择公司名称" class="currentSelect">
                         <el-option
                             v-for="item in allCompanies"
                             :key="item.id"
@@ -21,14 +21,14 @@
                         <el-date-picker
                             v-model="value10"
                             type="date"
-                            placeholder="选择日期"
+                            placeholder="选择开始日期"
                             format="yyyy 年 MM 月 dd 日"
                             value-format="timestamp">
                         </el-date-picker>
                         <el-date-picker
                             v-model="value9"
                             type="date"
-                            placeholder="选择日期"
+                            placeholder="选择结束日期"
                             format="yyyy 年 MM 月 dd 日"
                             value-format="timestamp">
                         </el-date-picker>

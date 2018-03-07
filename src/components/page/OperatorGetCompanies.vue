@@ -2,10 +2,10 @@
     <div class="table">
         <el-dialog title="重置平台服务费" :visible.sync="dialogFormVisible">
             <el-form :model="form">
-                <el-form-item label="原服务费：" :label-width="formLabelWidth">
+                <el-form-item label="原服务费" :label-width="formLabelWidth">
                     <el-input disabled="disabled" v-model="form.oldPercentageServiceFee" auto-complete="off" style="width:70%;border:none;"></el-input>
                 </el-form-item>
-                <el-form-item label="新服务费：" :label-width="formLabelWidth">
+                <el-form-item label="新服务费" :label-width="formLabelWidth">
                     <el-input v-model="form.percentageServiceFee" auto-complete="off" style="width:70%;"></el-input>
                 </el-form-item>
             </el-form>
@@ -93,9 +93,9 @@
                     <td class="contents">{{hrInfo.username}}</td>
                 </tr>
                 <tr class="tr-header hrInfo">
-                    <td><strong>类型:</strong></td>
+                    <td><strong>类  型:</strong></td>
                     <td>{{hrInfo.type=="HR_MANAGER"?"HR管理员":"其他"}}</td>
-                    <td><strong>工号:</strong></td>
+                    <td><strong>工  号:</strong></td>
                     <td>{{hrInfo.jobNumber}}</td>
                 </tr>
                 <tr class="tr-header hrInfo">
@@ -144,13 +144,13 @@
                     <el-form-item label="用户名" :label-width="formLabelWidth">
                         <el-input  v-model="resetForm.resetUsername" auto-complete="off" style="width:70%;"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" :label-width="formLabelWidth">
+                    <el-form-item label="密  码" :label-width="formLabelWidth">
                         <el-input type="password"  v-model="resetForm.resetPassword" auto-complete="off" style="width:70%;"></el-input>
                     </el-form-item>
                     <el-form-item label="身份证号" :label-width="formLabelWidth">
                         <el-input v-model="resetForm.resetIdCardNumber" auto-complete="off" style="width:70%;"></el-input>
                     </el-form-item>
-                    <el-form-item label="工号" :label-width="formLabelWidth">
+                    <el-form-item label="工  号" :label-width="formLabelWidth">
                         <el-input  v-model="resetForm.resetJobNumber" auto-complete="off" style="width:70%;"></el-input>
                     </el-form-item>
                 </el-form>
