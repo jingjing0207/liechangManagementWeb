@@ -172,13 +172,13 @@
                 if (sortStr.length != 0) {
                     option = option + sortStr
                 }
-                self.$axios.get(GETHRSTATISTICS + option)
-                    .then(res => {
-                        console.log(res)
-                        self.pagesize = parseInt(self.size)
-                        self.totalElements = parseInt(res.data.length)
-                        self.tableData = res.data
-                    })
+                // self.$axios.get(GETHRSTATISTICS + option)
+                //     .then(res => {
+                //         console.log(res)
+                //         self.pagesize = parseInt(self.size)
+                //         self.totalElements = parseInt(res.data.length)
+                //         self.tableData = res.data
+                //     })
             },
             setSort() {
                 this.$nextTick(() => {

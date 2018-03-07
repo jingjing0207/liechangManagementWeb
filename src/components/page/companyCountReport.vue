@@ -16,6 +16,8 @@
                     </el-date-picker>
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
+                <!--<el-button type="text" style="float: right">导出</el-button>-->
+                <!--<el-button type="success" style="float: right" size="medium">导出</el-button>-->
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
                 <div class="sortItem" v-for="item of sortGroup">
@@ -106,7 +108,19 @@
         },
         filters: {
             priceFormat(val) {
-                return (val) + '元';
+                function addCommas(nStr){
+                    nStr += '';
+                    let  x = nStr.split('.');
+                    let x1 = x[0];
+                    let x2 = x[1];
+                    var rgx = /(\d+)(\d{3})/;
+                    while (rgx.test(x1)) {
+                        x1 = x1.replace(rgx, '$1,$2');
+                    }
+                    return x1 + ' ' + (x2 ? x2.replace(/(\d{3})(?=[^$])/g,'$1,') : '');
+                }
+
+                return (addCommas(val)) + '元';
             }
         },
         methods: {
@@ -141,23 +155,7 @@
                     return v.substring(v.length - 2, v.length)
                 }
                 if (time == null) return;
-                return time.getFullYear() + '年' + (time.getMonth() + 1)+'月'
-            },
-            stateFormat(row, column) {
-                var v = (row.state + '').toString().toLowerCase()
-                if (v == 'submit') {
-                    return '提交'
-                } else if (v == 'wait_audit') {
-                    return '待审核'
-                } else if (v == 'audit_failed') {
-                    return '已驳回'
-                } else if (v == 'publish') {
-                    return '发布'
-                } else if (v == 'completed') {
-                    return '已完结'
-                } else {
-                    return '未知'
-                }
+                return time.getFullYear() + ' 年 ' + (time.getMonth() + 1)+' 月'
             },
             getData() {
                 let self = this;

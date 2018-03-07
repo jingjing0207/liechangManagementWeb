@@ -452,6 +452,7 @@
         border-top: 1px solid #eee;
         border-right: 1px solid #ebeef5;
         font-size: 13px;
+        color: #333;
     }
     .last-td{
         border-right:none!important;
@@ -463,9 +464,6 @@
         max-width: 115px;
         overflow-x: auto;
     }
-    /*::-webkit-scrollbar{*/
-         /*display: none;*/
-    /*}*/
 </style>
 
 <style scoped>

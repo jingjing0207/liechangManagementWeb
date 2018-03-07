@@ -364,7 +364,7 @@
         border-right: 1px solid #ebeef5;
         border-top: 1px solid #ebeef5;
         font-size: 13px;
-        color: #606266;
+        color: #333;
     }
     .last-td{
         border-right:none!important;

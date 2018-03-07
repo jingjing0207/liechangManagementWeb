@@ -187,10 +187,18 @@
                 self.$axios.get(GETUSERSTATISTICS + option)
                     .then(res => {
                         console.log(res)
-                        self.pagesize = parseInt(self.size)
-                        self.totalElements = parseInt(res.data.length)
-                        self.tableData = res.data
-                        console.log(self.tableData)
+                        if(res!=''){
+                            self.pagesize = parseInt(self.size)
+                            self.totalElements = parseInt(res.data.length)
+                            self.tableData = res.data
+                            console.log(self.tableData)
+                        }else{
+                            this.noData=true
+                            this.isData=false
+                        }
+                    }).catch(() => {
+                        this.noData=true
+                        this.isData=false
                     })
             },
             setSort() {
