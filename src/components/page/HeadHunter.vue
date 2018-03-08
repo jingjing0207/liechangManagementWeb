@@ -141,7 +141,7 @@
                 pro:'',
                 is_search: false,
                 totalNumber:0,
-                pagesize:8,
+                pagesize:10,
                 checked:false,
                 deleteId:'',
                 modifyId:'',
