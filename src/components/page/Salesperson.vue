@@ -203,6 +203,18 @@
                     }
                 })
                 this.cur_page = 1;
+                let option
+                if(this.searchName!=''){
+                    option = '?page='+parseInt(self.cur_page-1)+'&size='+this.pagesize+'&type=PLATFORM_MARKECTER&username='+this.searchName
+                }else{
+                    option = '?page='+parseInt(self.cur_page-1)+'&size='+this.pagesize+'&type=PLATFORM_MARKECTER'
+                }
+                self.$axios.get(GETAUDITEDHES+option).then((response) => {
+                    console.log(response)
+                    this.totalNumber=parseInt(response.data.totalElements)
+                    this.hr_list=response.data.content
+                    console.log(this.hr_list)
+                })
                 this.getData();
             },
             getData(){

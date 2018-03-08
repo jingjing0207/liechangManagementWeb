@@ -244,7 +244,7 @@
                 })
                 let option='?page='+(self.cur_page - 1)+'&size='+self.pagesize+'&type=HR';
                 if(this.searchUserId!=''){
-                    option=option+'&name='+this.searchUserId
+                    option=option+'&username='+this.searchUserId
                 }
                 if(this.currentCpmpany!=''){
                     option=option+'&company.id='+this.currentCpmpany
