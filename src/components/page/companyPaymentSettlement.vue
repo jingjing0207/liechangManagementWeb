@@ -9,12 +9,18 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <div class="handle-title">
-                    <el-select style="width:178px;" clearable v-model="currentCpmpany" placeholder="选择公司名称" class="currentSelect">
+                    <el-select clearable v-model="currentCpmpany"
+                               filterable
+                               remote
+                               reserve-keyword
+                               placeholder="请输入公司名称"
+                               :remote-method="remoteMethod"
+                               :loading="loading">
                         <el-option
-                            v-for="item in allCompanies"
+                            v-for="item in options4"
                             :key="item.id"
                             :label="item.name"
-                            :value="item.name">
+                            :value="item.id">
                         </el-option>
                     </el-select>
                     <!--<div class="selectTime">-->
@@ -48,21 +54,45 @@
             </el-collapse-item>
         </el-collapse>
         <el-table :data="tableData" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center">
-            <el-table-column header-align="center" prop="companyName" label="公司名称"></el-table-column>
-            <el-table-column header-align="center" prop="hrCount" label="HR总数"></el-table-column>
-            <el-table-column header-align="center" prop="auditingCount" label="审批中HR数量"></el-table-column>
-            <el-table-column header-align="center" prop="enableCount" label="启用状态HR数量 "></el-table-column>
-            <el-table-column header-align="center" prop="disableCount" label="停用状态HR数量 "></el-table-column>
+            <el-table-column header-align="center" prop="title" label="JD名称">
+            </el-table-column>
+            <el-table-column header-align="center" prop="recruitedNumber" label="已招聘人数">
+            </el-table-column>
+            <el-table-column header-align="center" prop="recruitingNumber" label="职位招聘人数">
+            </el-table-column>
+            <el-table-column header-align="center" prop="refundFee" label="赏金退回金额 ">
+                <template slot-scope="scope">
+                    <template>
+                        <span>{{ scope.row.refundFee | priceFormat }}</span>
+                    </template>
+                </template>
+            </el-table-column>
+            <el-table-column header-align="center" prop="totalFee" label="赏金支出金额 ">
+                <template slot-scope="scope">
+                    <template>
+                        <span>{{ scope.row.totalFee | priceFormat }}</span>
+                    </template>
+                </template>
+            </el-table-column>
+            <el-table-column header-align="center" prop="serialNumber" label="JD编号 ">
+            </el-table-column>
+            <el-table-column header-align="center" prop="platformFee" label="平台收费金额 ">
+                <template slot-scope="scope">
+                    <template>
+                        <span>{{ scope.row.platformFee | priceFormat }}</span>
+                    </template>
+                </template>
+            </el-table-column>
         </el-table>
         <div class="pagination">
             <el-pagination
                 @size-change="sizeChange"
                 @current-change="handleCurrentChange"
                 layout="total, sizes, prev, pager, next, jumper"
-                :current-page.sync="pageNo"
+                :current-page.sync="currentPage"
                 :page-sizes="[5,10,15,20,25,30]"
-                :page-size="pagesize"
-                :total="totalElements">
+                :page-size="pageSize"
+                :total="numberOfElements">
             </el-pagination>
         </div>
     </div>
@@ -70,7 +100,7 @@
 
 <script>
     import Sortable from 'sortablejs'
-    import { GETHRSTATISTICS,GETALLCOMPANIES } from '../../constants/Constants'
+    import { GETJDSTATISTICS,GETALLCOMPANIES } from '../../constants/Constants'
     import axios from 'axios';
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
     axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
@@ -79,13 +109,17 @@
         name: '',
         data() {
             return {
+                options4: [],
+                value7:[],
+                list: [],
+                loading: false,
+                state2:'',
                 value9:'',
                 value4:'',
                 value10:'',
-                totalElements: 0,
-                pageNo: 1,
-                pagesize: 10,
-                size: 10,
+                numberOfElements: 0,
+                pageSize: 10,
+                currentPage:1,
                 search_title: '',
                 sortBy: [],
                 sortGroup: [
@@ -106,7 +140,8 @@
                 searchMonth:'',
                 allCompanies:[],
                 searchCompany:'',
-                currentCpmpany:''
+                currentCpmpany:[],
+                companiesArr:[]
             }
         },
         created() {
@@ -114,12 +149,28 @@
             this.setSort();
         },
         computed: {
-            data() {
 
-            }
         },
         filters: {
-
+            priceFormat(val) {
+                function addCommas(nStr){
+                    nStr += '';
+                    let  x = nStr.split('.');
+                    let x1 = x[0];
+                    let x2 = x[1];
+                    var rgx = /(\d+)(\d{3})/;
+                    while (rgx.test(x1)) {
+                        x1 = x1.replace(rgx, '$1,$2');
+                    }
+                    return x1 + (x2 ? '.' +x2.replace(/(\d{3})(?=[^$])/g,'$1,') : ' ');
+                }
+                return (addCommas(val)) + '元';
+            }
+        },
+        updated(){
+            this.list = this.allCompanies.map(item => {
+                return { id:item.id, name:item.name };
+            });
         },
         methods: {
             getCompaniesSelect(){
@@ -131,6 +182,22 @@
                 }).catch((error) => {
                     console.log(error)
                 })
+            },
+            remoteMethod(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    // console.log('显示this.list')
+                    // console.log(this.list)
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.options4 = this.list.filter(item => {
+                            return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                                item.id.toLowerCase().indexOf(query.toLowerCase()) > -1
+                        });
+                    }, 100);
+                } else {
+                    this.options4 = [];
+                }
             },
             search() {
                 const self = this
@@ -150,8 +217,9 @@
                 this.getData();
             },
             sizeChange(val) {
-                this.size = val
                 this.search()
+                this.pageSize=val
+                this.getData();
             },
             handleCurrentChange(val) {
                 this.getData();
@@ -159,7 +227,9 @@
             getData() {
                 let self = this;
                 console.log(this.searchMonth)
-                var option = '?companyName='+this.currentCpmpany+'&startTime='+this.value10+'&endTime='+this.value9
+                var option = '?companyId='+this.currentCpmpany+'&startTime='
+                    +this.value10+'&endTime='+this.value9+'&size='+this.pageSize+'&page='+(this.currentPage-1)
+
                 var sortStr = ''
                 if (self.sortBy.length != 0) {
                     for (var s in self.sortBy) {
@@ -172,13 +242,18 @@
                 if (sortStr.length != 0) {
                     option = option + sortStr
                 }
-                // self.$axios.get(GETHRSTATISTICS + option)
-                //     .then(res => {
-                //         console.log(res)
-                //         self.pagesize = parseInt(self.size)
-                //         self.totalElements = parseInt(res.data.length)
-                //         self.tableData = res.data
-                //     })
+                self.$axios.get(GETJDSTATISTICS + option)
+                    .then(res => {
+                        console.log(res)
+                        self.pageSizeize = parseInt(self.size)
+                        self.numberOfElements = parseInt(res.data.totalElements)
+                        self.tableData = res.data.content.map(v => {
+                            this.$set(v, 'refundFee', parseFloat(v['refundFee'])/100)
+                            this.$set(v, 'totalFee', parseFloat(v['totalFee']) / 100)
+                            this.$set(v, 'platformFee', parseFloat(v['platformFee']) / 100)
+                            return v
+                        })
+                    })
             },
             setSort() {
                 this.$nextTick(() => {

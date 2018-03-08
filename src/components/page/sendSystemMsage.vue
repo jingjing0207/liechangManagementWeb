@@ -52,8 +52,8 @@
                             <el-col :span="6">
                                 <el-radio v-model="radio" label="2">
                                     <h4 class="labelFont font_inner">用 户</h4>
-                                    <el-input v-model="selectedUserId" placeholder="请选择用户" class="" disabled size="small" style="vertical-align: middle;"></el-input>
-                                    <el-button type="primary" size="small" @click="showTabel" >查询</el-button>
+                                    <el-input v-model="selectedUserId" placeholder="请选择用户" class="" disabled style="vertical-align: middle;"></el-input>
+                                    <el-button type="primary" @click="showTabel" >查询</el-button>
                                 </el-radio>
                             </el-col>
                         </el-row>
@@ -61,9 +61,24 @@
                             <el-col :span="6">
                                 <el-radio v-model="radio" label="3">
                                     <h4 class="labelFont font_inner">公 司</h4>
-                                    <el-select style="width:178px;" size="small" clearable v-model="currentCpmpany" placeholder="请选公司名称" class="currentSelect">
+                                    <!--<el-select style="width:178px;" size="small" clearable v-model="currentCpmpany" placeholder="请选公司名称" class="currentSelect">-->
+                                        <!--<el-option-->
+                                            <!--v-for="item in allCompanies"-->
+                                            <!--:key="item.id"-->
+                                            <!--:label="item.name"-->
+                                            <!--:value="item.id">-->
+                                        <!--</el-option>-->
+                                    <!--</el-select>-->
+                                    <el-select clearable v-model="currentCpmpany"
+                                               style="width:178px;"
+                                               filterable
+                                               remote
+                                               reserve-keyword
+                                               placeholder="请输入公司名称"
+                                               :remote-method="remoteMethod"
+                                               :loading="loading">
                                         <el-option
-                                            v-for="item in allCompanies"
+                                            v-for="item in options4"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.id">
@@ -144,6 +159,11 @@
         name: "",
         data() {
             return {
+                options4: [],
+                value7:[],
+                list: [],
+                loading: false,
+                companiesArr:[],
                 currentRow: null,
                 value10:'',
                 pageSize:5,
@@ -186,11 +206,16 @@
         components: {
 
         },
+        created() {
+            this.getCompaniesSelect();
+        },
         mounted(){
             this.getData()
         },
-        created() {
-            this.getCompaniesSelect();
+        updated(){
+            this.list = this.allCompanies.map(item => {
+                return { id:item.id, name:item.name };
+            });
         },
         methods: {
             getCompaniesSelect(){
@@ -202,6 +227,23 @@
                 }).catch((error) => {
                     console.log(error)
                 })
+            },
+            remoteMethod(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    // console.log('显示this.list')
+                    // console.log(this.list)
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.options4 = this.list.filter(item => {
+                            console.log(item.name)
+                            return item.name.toLowerCase()
+                                .indexOf(query.toLowerCase()) > -1;
+                        });
+                    }, 100);
+                } else {
+                    this.options4 = [];
+                }
             },
             getData(){
                 let self = this;
@@ -285,7 +327,7 @@
                     sendFlag: false,
                     sendType: this.sendType
                 }
-                if(this.description!='' && this.value10!=''){
+                if(this.description!='' || this.value10!=''){
                     self.$axios.post(self.url,sendMsageContent).then((response) => {
                         console.log(response)
                         if(response.data==''){
@@ -430,7 +472,7 @@
         /*margin-bottom: 10px;*/
     /*}*/
     .el-row{
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         padding-left:15px;
     }
     .detailInfo {

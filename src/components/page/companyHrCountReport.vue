@@ -9,15 +9,20 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <div class="handle-title">
-                    <el-select style="width:178px;" clearable v-model="currentCpmpany" placeholder="选择公司名称" class="currentSelect">
-                        <el-option
-                            v-for="item in allCompanies"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.name">
-                        </el-option>
-                    </el-select>
-                    <!--<div class="selectTime">-->
+                        <el-select clearable v-model="currentCpmpany"
+                            filterable
+                            remote
+                            reserve-keyword
+                            placeholder="请输入公司名称"
+                            :remote-method="remoteMethod"
+                            :loading="loading">
+                            <el-option
+                                v-for="item in options4"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.name">
+                            </el-option>
+                        </el-select>
                         <el-date-picker
                             v-model="value10"
                             type="date"
@@ -32,7 +37,6 @@
                             format="yyyy 年 MM 月 dd 日"
                             value-format="timestamp">
                         </el-date-picker>
-                    <!--</div>-->
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
@@ -79,6 +83,11 @@
         name: '',
         data() {
             return {
+                options4: [],
+                value7:[],
+                list: [],
+                loading: false,
+                state2:'',
                 value9:'',
                 value4:'',
                 value10:'',
@@ -106,7 +115,8 @@
                 searchMonth:'',
                 allCompanies:[],
                 searchCompany:'',
-                currentCpmpany:''
+                currentCpmpany:[],
+                companiesArr:[]
             }
         },
         created() {
@@ -121,16 +131,45 @@
         filters: {
 
         },
+        mounted() {
+
+        },
+        updated(){
+            this.list = this.companiesArr.map(item => {
+                return { name: item };
+            });
+        },
         methods: {
             getCompaniesSelect(){
                 let self = this;
                 self.url = GETALLCOMPANIES;
                 self.$axios.get(self.url).then((response) => {
-                    console.log(response)
                     this.allCompanies=response.data
+                    console.log(this.allCompanies)
+                    for(let i=0;i<this.allCompanies.length;i++){
+                        this.companiesArr.push(this.allCompanies[i].name)
+                    }
+                    // console.log(this.companiesArr)
                 }).catch((error) => {
                     console.log(error)
                 })
+            },
+            remoteMethod(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    // console.log('显示this.list')
+                    // console.log(this.list)
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.options4 = this.list.filter(item => {
+                            console.log(item.name)
+                            return item.name.toLowerCase()
+                                .indexOf(query.toLowerCase()) > -1;
+                        });
+                    }, 100);
+                } else {
+                    this.options4 = [];
+                }
             },
             search() {
                 const self = this
