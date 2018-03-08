@@ -126,10 +126,10 @@
                     {value: '0', name: 'title', display: 'JD名称'},
                     {value: '0', name: 'recruitedNumber', display: '已招聘人数'},
                     {value: '0', name: 'recruitingNumber', display: '职位招聘人数'},
-                    {value: '0', name: 'refundFee', display: '赏金退回金额'},
-                    {value: '0', name: 'totalFee', display: '赏金支出金额'},
+                    // {value: '0', name: 'refundFee', display: '赏金退回金额'},
+                    // {value: '0', name: 'totalFee', display: '赏金支出金额'},
                     {value: '0', name: 'serialNumber', display: 'JD编号'},
-                    {value: '0', name: 'platformFee', display: '平台收费金额'}
+                    // {value: '0', name: 'platformFee', display: '平台收费金额'}
                 ],
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
