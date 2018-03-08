@@ -125,7 +125,7 @@
                         <h4 class="labelFont" style="width:auto;">输入发送内容:</h4>
                     </el-row>
                     <el-row>
-                        <el-col :span="9" style="height:90px;">
+                        <el-col :span="10" style="height:90px;">
                             <el-input
                                 type="textarea"
                                 :autosize="{ minRows: 4, maxRows: 4}"
@@ -137,7 +137,7 @@
                 </el-row>
                 <el-row>
                     <el-row :span="6" style="float: left;text-indent: 50px;margin-top:20px;">
-                        <el-button style="margin-left:100px;" type="primary" @click="submitForm">提交</el-button>
+                        <el-button style="margin-left: 153px;" type="primary" @click="submitForm">提交</el-button>
                         <el-button style="margin-left:70px;" @click="giveupSubmit">取消</el-button>
                     </el-row>
                 </el-row>
@@ -468,9 +468,9 @@
 </style>
 
 <style>
-    /*.postInfo-container .el-row {*/
-        /*margin-bottom: 10px;*/
-    /*}*/
+    .el-textarea__inner{
+        margin-left: 15px;
+    }
     .el-row{
         margin-bottom: 20px;
         padding-left:15px;

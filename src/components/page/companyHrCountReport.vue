@@ -13,7 +13,7 @@
                             filterable
                             remote
                             reserve-keyword
-                            placeholder="请输入公司名称"
+                            placeholder="输入公司名称"
                             :remote-method="remoteMethod"
                             :loading="loading">
                             <el-option
@@ -40,16 +40,16 @@
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
-            <el-collapse-item title="排序选项" class="sortOption">
-                <div class="sortItem" v-for="item of sortGroup">
-                    <span>{{ item.display }}</span>
-                    <el-select v-model="item.value" :name="item.name" ref="sel" size="small">
-                        <el-option v-for="option in sortOptions" :label="option.label" :value="option.value"
-                                   :key="option.value">
-                        </el-option>
-                    </el-select>
-                </div>
-            </el-collapse-item>
+            <!--<el-collapse-item title="排序选项" class="sortOption">-->
+                <!--<div class="sortItem" v-for="item of sortGroup">-->
+                    <!--<span>{{ item.display }}</span>-->
+                    <!--<el-select v-model="item.value" :name="item.name" ref="sel" size="small">-->
+                        <!--<el-option v-for="option in sortOptions" :label="option.label" :value="option.value"-->
+                                   <!--:key="option.value">-->
+                        <!--</el-option>-->
+                    <!--</el-select>-->
+                <!--</div>-->
+            <!--</el-collapse-item>-->
         </el-collapse>
         <el-table :data="tableData" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center">
             <el-table-column header-align="center" prop="companyName" label="公司名称"></el-table-column>
@@ -172,19 +172,19 @@
                 }
             },
             search() {
-                const self = this
-                var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = this.$refs.sel
-                var map = {}
-                self.sortBy = []
-                el.forEach(obj => {
-                    return map[obj.$options.propsData.name] = obj.$options.propsData.value
-                })
-                Array.prototype.map.call(list, obj => {
-                    if (map[obj.name] != '0') {
-                        self.sortBy.push(obj.name + ',' + map[obj.name])
-                    }
-                })
+                // const self = this
+                // var list = document.querySelectorAll('.sortOption .el-input__inner')
+                // var el = this.$refs.sel
+                // var map = {}
+                // self.sortBy = []
+                // el.forEach(obj => {
+                //     return map[obj.$options.propsData.name] = obj.$options.propsData.value
+                // })
+                // Array.prototype.map.call(list, obj => {
+                //     if (map[obj.name] != '0') {
+                //         self.sortBy.push(obj.name + ',' + map[obj.name])
+                //     }
+                // })
 
                 this.getData();
             },
@@ -246,7 +246,7 @@
 
     .search {
         padding: 10px 15px;
-        border-bottom: 1px solid #dfe6ec;
+        /*border-bottom: 1px solid #dfe6ec;*/
     }
 
     .handle-box {
