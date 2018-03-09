@@ -60,7 +60,7 @@
                     {{pro.contactNumber==null?"":pro.contactNumber}}
                 </td>
                 <td class="currentState" @click="changeState(pro.id,pro.state,idx)">
-                    <el-button type="primary" plain style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>
+                    <el-button type="primary" plain round style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>
                     <!--<el-button type="text" plain style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>-->
                 </td>
                 <td>{{pro.taxNumber==''?"":pro.taxNumber}}</td>

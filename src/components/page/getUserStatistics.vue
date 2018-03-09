@@ -128,7 +128,7 @@
             }
         },
         created() {
-            this.setSort();
+            // this.setSort();
         },
         computed: {
             data() {
