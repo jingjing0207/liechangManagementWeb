@@ -109,7 +109,7 @@
                                 </el-radio>
                             </el-col>
                         </el-row>
-                        <p style="font-size:12px;line-height:20px;color:red;margin-left:20px;" v-if="selectSendTime == 2">{{failMessag}}</p>
+                        <p style="font-size:12px;line-height:20px;color:red;margin-left:20px;" v-if="selectSendTime == 2 && value10 == ''">{{failMessag}}</p>
                     </div>
                 </el-row>
                 <el-row style="height:auto;">

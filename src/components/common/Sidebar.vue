@@ -86,8 +86,16 @@
                         ]
                     },
                     {
-                        icon: 'el-icon-news',
+                        icon: 'el-icon-peizhiguanli',
                         index: '6',
+                        title: '管理配置',
+                        subs: [
+
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-news',
+                        index: '7',
                         title: '系统消息管理',
                         subs: [
                             {
@@ -102,7 +110,7 @@
                     },
                     {
                         icon: 'el-icon-04',
-                        index: '7',
+                        index: '8',
                         title: '报表',
                         subs: [
                             {
