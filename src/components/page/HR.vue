@@ -23,10 +23,17 @@
 
         <el-collapse class="handle-box">
             <div class="search">
-                <el-input v-model="searchUserId" placeholder="输入用户名" class="handle-title"></el-input>
-                <el-select clearable @change="searchCompany" v-model="currentCpmpany" placeholder="请选公司名称" class="currentSelect">
+                <el-input clearable v-model="searchUserId" placeholder="输入用户名" class="handle-title"></el-input>
+                <el-select clearable v-model="currentCpmpany"
+                           style="width:178px;"
+                           filterable
+                           remote
+                           reserve-keyword
+                           placeholder="请输入公司名称"
+                           :remote-method="remoteMethod"
+                           :loading="loading">
                     <el-option
-                        v-for="item in allCompanies"
+                        v-for="item in options4"
                         :key="item.id"
                         :label="item.name"
                         :value="item.id">
@@ -108,6 +115,11 @@
         },
         data() {
             return {
+                options4: [],
+                value7:[],
+                list: [],
+                loading: false,
+                companiesArr:[],
                 username:{
                     title:'username',
                     label:'用户名'
@@ -179,9 +191,15 @@
         created(){
             this.getData();
             this.setSort();
+            this.getCompaniesSelect();
         },
         mounted(){
-            this.getCompaniesSelect();
+
+        },
+        updated(){
+            this.list = this.allCompanies.map(item => {
+                return { id:item.id, name:item.name };
+            });
         },
         methods: {
             setSort() {
@@ -274,7 +292,23 @@
                     console.log(error)
                 })
             },
+            remoteMethod(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.options4 = this.list.filter(item => {
+                            console.log(item.name)
+                            return item.name.toLowerCase()
+                                .indexOf(query.toLowerCase()) > -1;
+                        });
+                    }, 100);
+                } else {
+                    this.options4 = [];
+                }
+            },
             searchCompany(){
+
             },
             deleteHR(id){
                 this.deleteId=id

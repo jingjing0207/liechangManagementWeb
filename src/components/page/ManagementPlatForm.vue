@@ -44,7 +44,7 @@
             <div class="search">
                 <div style="display: inline-block;">
                     <el-button type="info" plain class="addInnfo" @click="addUserManagement" style="float: left;margin-right:10px;">+ 新增</el-button>
-                    <el-input v-model="searchName" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
+                    <el-input clearable v-model="searchName" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
                     <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
                 </div>
             </div>

@@ -22,7 +22,7 @@
         </div>
         <el-collapse class="handle-box">
             <div class="search">
-                <el-input v-model="searchName" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
+                <el-input clearable v-model="searchName" size="medium" placeholder="搜索用户名" class="handle-title"></el-input>
                 <el-button type="primary" size="medium"  icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
@@ -43,7 +43,6 @@
                 <th>{{lastLoginTime.label}}</th>
                 <th>{{type.label}}</th>
                 <th>{{state.label}}</th>
-                <th>{{companyName.label}}</th>
                 <th>{{operation.label}}</th>
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
@@ -53,7 +52,6 @@
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
                 <td>{{pro.type=="HEADHUNTER"?"猎头":"其他"}}</td>
                 <td class="currentState">{{pro.state | stateFormat}}</td>
-                <td>{{pro.companyName==null?"":pro.companyName}}</td>
                 <td class="last-td">
                     <el-button v-if="pro.state != 'Disabled'" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
                     <el-button v-if="pro.state != 'Disabled'" type="info" plain @click="deleteHR(pro.id)">删除</el-button>

@@ -61,14 +61,6 @@
                             <el-col :span="6">
                                 <el-radio v-model="radio" label="3">
                                     <h4 class="labelFont font_inner">公 司</h4>
-                                    <!--<el-select style="width:178px;" size="small" clearable v-model="currentCpmpany" placeholder="请选公司名称" class="currentSelect">-->
-                                        <!--<el-option-->
-                                            <!--v-for="item in allCompanies"-->
-                                            <!--:key="item.id"-->
-                                            <!--:label="item.name"-->
-                                            <!--:value="item.id">-->
-                                        <!--</el-option>-->
-                                    <!--</el-select>-->
                                     <el-select clearable v-model="currentCpmpany"
                                                style="width:178px;"
                                                filterable
@@ -327,7 +319,7 @@
                     sendFlag: false,
                     sendType: this.sendType
                 }
-                if(this.description!='' || this.value10!=''){
+                if(this.description!='' && this.value10!=''){
                     self.$axios.post(self.url,sendMsageContent).then((response) => {
                         console.log(response)
                         if(response.data==''){
