@@ -94,7 +94,7 @@
                             </el-col>
                         </el-row>
                         <el-row>
-                            <el-col :span="6" style="height:26px;">
+                            <el-col :span="10" style="height:26px;">
                                 <el-radio v-model="selectSendTime" label="2">
                                     <h4 class="labelFont font_inner">指定时间发送</h4>
                                     <div class="block" style="display: inline-block;">
@@ -107,9 +107,9 @@
                                         </div>
                                     </div>
                                 </el-radio>
-                                <!--<p style="font-size:12px;line-height:30px;color:red;" v-show="successorfail">{{failMessag}}</p>-->
                             </el-col>
                         </el-row>
+                        <p style="font-size:12px;line-height:20px;color:red;margin-left:20px;" v-if="selectSendTime == 2">{{failMessag}}</p>
                     </div>
                 </el-row>
                 <el-row style="height:auto;">
@@ -191,8 +191,7 @@
                 messageType:'',
                 sendType:'',
                 getHour:'',
-                failMessag:'用户名或密码有误，请重新输入！',
-                successorfail:true,
+                failMessag:'请选择指定日期时间！',
                 id:''
             }
         },
@@ -303,7 +302,7 @@
                     this.scheduleTime=this.createTime
                     this.sendType='SEND_NOW'
                 }else if(this.selectSendTime==2){
-                    this.scheduleTime=this.value10
+                    this.scheduleTime=this.value10==''?'':this.value10
                     this.sendType='SEND_SCHEDULE'
                 }
                 console.log(this.messageType)
@@ -321,7 +320,7 @@
                     sendFlag: false,
                     sendType: this.sendType
                 }
-                if(this.description!='' && this.value10!=''){
+                if(this.description!='' && this.value10!='') {
                     self.$axios.post(self.url,sendMsageContent).then((response) => {
                         console.log(response)
                         if(response.data==''){
@@ -333,9 +332,10 @@
                             this.selectedUserId=''
                             this.value10=''
                             this.currentCpmpany=''
+                            this.selectSendTime='1'
                         }
                     })
-                }else{
+                }else if((this.description=='' && this.value10!='') || (this.description!='' && this.value10=='')){
                     self.$message.error('输入不可为空，请检查并重新输入')
                 }
 
@@ -353,8 +353,7 @@
             }
         },
         filters: {
-
-        },
+        }
     }
 </script>
 

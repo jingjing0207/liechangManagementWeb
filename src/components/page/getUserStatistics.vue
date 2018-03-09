@@ -26,16 +26,6 @@
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
-            <!--<el-collapse-item title="排序选项" class="sortOption">-->
-                <!--<div class="sortItem" v-for="item of sortGroup">-->
-                    <!--<span>{{ item.display }}</span>-->
-                    <!--<el-select v-model="item.value" :name="item.name" ref="sel" size="small">-->
-                        <!--<el-option v-for="option in sortOptions" :label="option.label" :value="option.value"-->
-                                   <!--:key="option.value">-->
-                        <!--</el-option>-->
-                    <!--</el-select>-->
-                <!--</div>-->
-            <!--</el-collapse-item>-->
         </el-collapse>
         <table class="table table-bordered"cellpadding="0" cellspacing="0" >
             <tr class="tr-header">
@@ -54,17 +44,6 @@
                 <td colspan="4" style="color:#909399;">暂无数据</td>
             </tr>
         </table>
-        <!--<div class="pagination">-->
-            <!--<el-pagination-->
-                <!--@size-change="sizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--layout="total, sizes, prev, pager, next, jumper"-->
-                <!--:current-page.sync="pageNo"-->
-                <!--:page-sizes="[5,10,15,20,25,30]"-->
-                <!--:page-size="pagesize"-->
-                <!--:total="totalElements">-->
-            <!--</el-pagination>-->
-        <!--</div>-->
     </div>
 </template>
 
