@@ -357,9 +357,6 @@
 </script>
 
 <style scoped>
-.crumbs {
-    /*margin-bottom: 50px!important;*/
-}
 .el-table thead {
     color: #000!important;
 }

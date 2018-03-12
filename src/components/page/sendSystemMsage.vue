@@ -129,12 +129,11 @@
                 </el-row>
                 <el-row>
                     <el-row :span="6" style="float: left;text-indent: 50px;margin-top:20px;">
-                        <el-button style="margin-left: 153px;" type="primary" @click="submitForm">提交</el-button>
+                        <el-button style="margin-left: 153px;" type="primary" @click="submitForm">发送</el-button>
                         <el-button style="margin-left:70px;" @click="giveupSubmit">取消</el-button>
                     </el-row>
                 </el-row>
             </el-card>
-
         </div>
     </div>
 </template>
@@ -223,8 +222,6 @@
             remoteMethod(query) {
                 if (query !== '') {
                     this.loading = true;
-                    // console.log('显示this.list')
-                    // console.log(this.list)
                     setTimeout(() => {
                         this.loading = false;
                         this.options4 = this.list.filter(item => {
@@ -353,6 +350,7 @@
             }
         },
         filters: {
+
         }
     }
 </script>

@@ -90,6 +90,14 @@ export default new Router({
                     component: resolve => require(['../components/page/HumanImport.vue'], resolve)   //编辑简历
                 },
                 {
+                    path: '/resumeTemplateConfigure',
+                    component: resolve => require(['../components/page/resumeTemplateConfigure.vue'], resolve)   //电子offer模板配置
+                },
+                {
+                    path: '/sendOfferConfigure',
+                    component: resolve => require(['../components/page/sendOfferConfigure.vue'], resolve)   //电子offer模板配置
+                },
+                {
                     path: '/sendSystemMsage',
                     component: resolve => require(['../components/page/sendSystemMsage.vue'], resolve)   //简历详情
                 },

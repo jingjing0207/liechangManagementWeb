@@ -90,6 +90,14 @@
                         index: '6',
                         title: '管理配置',
                         subs: [
+                            {
+                                index: 'resumeTemplateConfigure',
+                                title: '简历模板配置'
+                            },
+                            {
+                                index: 'sendOfferConfigure',
+                                title: '电子Offer模板管理配置'
+                            }
 
                         ]
                     },
