@@ -91,15 +91,15 @@ export default new Router({
                 },
                 {
                     path: '/resumeTemplateConfigure',
-                    component: resolve => require(['../components/page/resumeTemplateConfigure.vue'], resolve)   //电子offer模板配置
+                    component: resolve => require(['../components/page/ResumeTemplateConfigure.vue'], resolve)   //电子offer模板配置
                 },
                 {
                     path: '/sendOfferConfigure',
-                    component: resolve => require(['../components/page/sendOfferConfigure.vue'], resolve)   //电子offer模板配置
+                    component: resolve => require(['../components/page/SendOfferConfigure.vue'], resolve)   //电子offer模板配置
                 },
                 {
                     path: '/sendSystemMsage',
-                    component: resolve => require(['../components/page/sendSystemMsage.vue'], resolve)   //简历详情
+                    component: resolve => require(['../components/page/SendSystemMsage.vue'], resolve)   //简历详情
                 },
                 {
                     path: '/SystemMsageManage',
@@ -107,19 +107,19 @@ export default new Router({
                 },
                 {
                     path: '/companyCountReport',
-                    component: resolve => require(['../components/page/companyCountReport.vue'], resolve)   //编辑简历
+                    component: resolve => require(['../components/page/CompanyCountReport.vue'], resolve)   //编辑简历
                 },
                 {
                     path: '/companyPaymentSettlement',
-                    component: resolve => require(['../components/page/companyPaymentSettlement.vue'], resolve)   //编辑简历
+                    component: resolve => require(['../components/page/CompanyPaymentSettlement.vue'], resolve)   //编辑简历
                 },
                 {
                     path: '/registerCountReport',
-                    component: resolve => require(['../components/page/getUserStatistics.vue'], resolve)   //编辑简历
+                    component: resolve => require(['../components/page/GetUserStatistics.vue'], resolve)   //编辑简历
                 },
                 {
                     path: '/companyHrCountReport',
-                    component: resolve => require(['../components/page/companyHrCountReport.vue'], resolve)   //编辑简历
+                    component: resolve => require(['../components/page/CompanyHrCountReport.vue'], resolve)   //编辑简历
                 }
             ]
         },
