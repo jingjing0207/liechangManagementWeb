@@ -8,7 +8,8 @@ import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 import '../static/js/jquery-1.8.3.min.js';
 import "babel-polyfill";
-// import '../static/css/public.css'
+import '../static/js/jquery.qrcode.js';
+import '../static/js/qrcode.js';
 
 Vue.use(ElementUI);
 Vue.use(uploader);

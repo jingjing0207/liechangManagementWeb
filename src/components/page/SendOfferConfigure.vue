@@ -8,12 +8,26 @@
         </div>
         <div>
             <div class="h-button">
-                <el-input size="medium" placeholder="搜索公司名称" style="width:300px;"/>
+                <!--<el-input size="medium" placeholder="搜索公司名称" style="width:300px;"/>-->
+                <!--<el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>-->
+                <el-select clearable v-model="currentCpmpany"
+                           style="width:178px;"
+                           filterable
+                           remote
+                           reserve-keyword
+                           placeholder="请输入公司名称"
+                           :remote-method="remoteMethod"
+                           :loading="loading">
+                    <el-option
+                        v-for="item in options4"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                    </el-option>
+                </el-select>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
                 <div style="float: right">
                     <el-button plain type="primary" size="medium" @click="editClick">修改</el-button>
-                    <el-button plain type="primary" size="medium" @click="saveClick">保存</el-button>
-                    <el-button plain type="primary" size="medium" @click="cancelClick">取消</el-button>
                 </div>
             </div>
             <el-card class="offer-box">
@@ -69,17 +83,23 @@
                     <el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input>
                     这个大家庭
                 </h5>
-                <h5>祝您工作愉快</h5>
-                <p class="footer">请扫描二维码</p>
-                <p class="footer">中软国际科技服务有限公司</p>
-                <p class="footer">人力资源部</p>
-                <p class="footer">二零一七年十二月十三日</p>
+                <h5>祝您工作愉快!</h5>
+                <!--<p class="footer">请扫描二维码</p>-->
+                <p class="footer"><el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input></p>
+                <p class="footer"><el-input :style="{width:'calc(' + relativeCompany.dbLength() + 'em + 12px)'}" v-model="relativeCompany"></el-input></p>
+                <p class="footer"><el-input :style="{width:'calc(' + TimeData.dbLength() + 'em + 12px)'}" v-model="TimeData"></el-input></p>
             </el-card>
         </div>
+            <div style="float: right;margin-top:15px;">
+                <el-button  type="primary" size="medium" @click="saveClick">保存</el-button>
+                <el-button  type="primary" size="medium" @click="cancelClick">取消</el-button>
+            </div>
     </div>
 </template>
 
 <script>
+    import axios from 'axios';
+    import { GETALLCOMPANIES } from '../../constants/Constants'
     String.prototype.dbLength = function () {
         let str = this, leg = str.length;
         for (let i in str) {
@@ -93,6 +113,13 @@
     export default {
         data() {
             return {
+                allCompanies:[],
+                currentCpmpany:'',
+                options4: [],
+                value7:[],
+                list: [],
+                loading: false,
+                companiesArr:[],
                 value1: '',
                 name: '',
                 cl: ["学历学位证明原件及复印件2份", "身份证原件及复印件6份", "蓝底一寸照片3张", "个人具备资质认证书复印件1份"],
@@ -100,8 +127,18 @@
                     '如您向公司提供任何虚假资料，一经发现，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件',
                     '薪酬保密制度是公司管理的重要原则，请不要向别人打探薪酬情况，也不要告诉别人您的薪酬情况，如果违反薪酬保密制度，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件'
                 ],
-                inp: '中软国际科技服务有限公司',
+                inp: '',
+                relativeCompany:'',
+                TimeData:''
             }
+        },
+        created() {
+            this.getCompaniesSelect();
+        },
+        updated(){
+            this.list = this.allCompanies.map(item => {
+                return { id:item.id, name:item.name };
+            });
         },
         methods: {
             search() {
@@ -126,7 +163,32 @@
             },
             addShenming() {
                 this.sm.push('')
-            }
+            },
+            getCompaniesSelect(){
+                let self = this;
+                self.url = GETALLCOMPANIES;
+                self.$axios.get(self.url).then((response) => {
+                    console.log(response)
+                    this.allCompanies=response.data
+                }).catch((error) => {
+                    console.log(error)
+                })
+            },
+            remoteMethod(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.options4 = this.list.filter(item => {
+                            console.log(item.name)
+                            return item.name.toLowerCase()
+                                .indexOf(query.toLowerCase()) > -1;
+                        });
+                    }, 100);
+                } else {
+                    this.options4 = [];
+                }
+            },
         }
     }
 </script>

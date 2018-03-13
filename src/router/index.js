@@ -13,10 +13,6 @@ export default new Router({
             path: '/basetable',
             component: resolve => require(['../components/common/Home.vue'], resolve),
             children:[
-                // {
-                //     path: '/',
-                //     component: resolve => require(['../components/page/Readme.vue'], resolve)
-                // },
                 {
                     path: '/',
                     component: resolve => require(['../components/page/HR.vue'], resolve)
@@ -120,6 +116,14 @@ export default new Router({
                 {
                     path: '/companyHrCountReport',
                     component: resolve => require(['../components/page/CompanyHrCountReport.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/edit',
+                    component: resolve => require(['../components/page/VueEditor.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/Markdown',
+                    component: resolve => require(['../components/page/Markdown.vue'], resolve)   //编辑简历
                 }
             ]
         },

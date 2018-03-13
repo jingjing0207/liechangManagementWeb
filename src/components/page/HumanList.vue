@@ -27,9 +27,10 @@
                 </div>
             </el-collapse-item>
         </el-collapse>
-        <el-table :data="data" border id="hlist" style="width: 100%;font-size: 13px;text-align: center"
+        <el-table :data="data"
+                  border id="hlist"
+                  style="width: 100%;font-size: 13px;text-align: center"
                   row-class-name="hlist-row">
-            <!--<el-table-column type="selection" width="55"></el-table-column>-->
             <el-table-column header-align="center" prop="avatar" label="人员" width="210px" align="center"
                              :resizable="false" show-overflow-tooltip>
                 <template slot-scope="scope" prop="avatar">
@@ -124,7 +125,7 @@
                 return val + '元';
             },
             stateFormat(val) {
-                var v = (val + '').toString().toLowerCase()
+                let v = (val + '').toString().toLowerCase()
                 if (v == 'using') {
                     return '启用'
                 } else if (v == 'disabled') {
@@ -144,7 +145,7 @@
                 let userForm = {
                     id: row.id,
                     price: Math.ceil(row.price * 1000 / 10)
-                }
+                };
                 this.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
                 this.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
                 this.$axios.post(SET_PRICE, userForm)
@@ -159,7 +160,7 @@
                     })
             },
             editCancel(row) {
-                row.price = row.originalPrice
+                row.price = row.originalPrice;
                 row.edit = false
             },
             view(row) {
@@ -180,15 +181,15 @@
                     })
             },
             sizeChange(val) {
-                this.size = val
+                this.size = val;
                 this.search()
             },
             search() {
-                const self = this
-                var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = this.$refs.sel
-                var map = {}
-                self.sortBy = []
+                const self = this;
+                let list = document.querySelectorAll('.sortOption .el-input__inner')
+                let el = this.$refs.sel
+                let map = {};
+                self.sortBy = [];
                 el.forEach(obj => {
                     return map[obj.$options.propsData.name] = obj.$options.propsData.value
                 })
@@ -208,8 +209,8 @@
             },
             getData() {
                 let self = this;
-                var option = '?page=' + (self.pageNo - 1) + '&size=' + self.size
-                var sortStr = ''
+                let option = '?page=' + (self.pageNo - 1) + '&size=' + self.size
+                let sortStr = ''
                 if (self.sortBy.length != 0) {
                     for (var s in self.sortBy) {
                         sortStr = sortStr + '&sort=' + self.sortBy[s]
