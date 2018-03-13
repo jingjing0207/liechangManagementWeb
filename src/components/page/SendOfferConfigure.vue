@@ -21,7 +21,9 @@
                     <h3>录用通知书</h3>
                 </div>
                 <div>
-                    <p>请您携带以下材料到人力资源部
+                    <p>请您携带以下材料到
+                        <el-input style="width:14em;"/>
+                        部
                         <el-input style="width:8em;"/>
                         处报到，并请于报到前两个工作日邮件通知公司
                     </p>
@@ -63,7 +65,10 @@
                 <el-button size="mini" icon="el-icon-plus" class="add-button" @click="addShenming"/>
             </el-card>
             <el-card class="offer-box">
-                <h5>非常欢迎您加入<el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input>这个大家庭</h5>
+                <h5>非常欢迎您加入
+                    <el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input>
+                    这个大家庭
+                </h5>
                 <h5>祝您工作愉快</h5>
                 <p class="footer">请扫描二维码</p>
                 <p class="footer">中软国际科技服务有限公司</p>
@@ -75,7 +80,7 @@
 </template>
 
 <script>
-    String.prototype.dbLength = function() {
+    String.prototype.dbLength = function () {
         let str = this, leg = str.length;
         for (let i in str) {
             if (str.hasOwnProperty(i)) {
@@ -83,7 +88,7 @@
                 if (db) leg += 1;
             }
         }
-        return leg/2;
+        return leg / 2;
     };
     export default {
         data() {
@@ -109,11 +114,11 @@
 
             },
             removeItem1(index) {
-                this.cl.splice(index,1)
+                this.cl.splice(index, 1)
                 console.info(this.cl)
             },
             removeItem2(index) {
-                this.sm.splice(index,1)
+                this.sm.splice(index, 1)
                 console.info(this.sm)
             },
             addCailiao() {
