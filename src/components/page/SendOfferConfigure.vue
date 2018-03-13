@@ -16,43 +16,68 @@
                     <h3>录用通知书</h3>
                 </div>
                 <div>
-                    <p class="name"><el-input style="width:6em;"></el-input>女士/先生：</p>
+                    <p class="name">
+                        <el-input style="width:6em;"/>
+                        女士/先生：
+                    </p>
                     <p>您好！</p>
                     <p>感谢您应聘我公司的相关职位，经过认真筛选和选拔，现非常荣幸的通知您，您已被我司录取。</p>
-                    <p>您的工作部门是：<el-input style="width:100px;"></el-input></p>
-                    <p>职位是：<el-input style="width:100px;"></el-input></p>
-                    <p>您的工作地点是：<el-input style="width:100px;"></el-input>并根据工作需要服从安排</p>
-                    <p>您的直接上级是：<el-input style="width:100px;"></el-input></p>
-                    <p>您的工资是：<el-input style="width:100px;"></el-input></p>
-                    <p>试用期工资是：<el-input style="width:100px;"></el-input></p>
-                    <p>您的工作起始时间是：<el-input style="width:100px;"></el-input></p>
-                    <p>您的合同年限是：<el-input style="width:100px;"></el-input></p>
-                    <p>试用期：<el-input style="width:100px;"></el-input></p>
-                    <p>请您携带以下材料到人力资源部<el-input style="width:100px;"></el-input>处报到，并请于报到前两个工作日邮件通知公司</p>
-                    <p>如有任何问题可与<el-input style="width:100px;"></el-input>电话或邮件联系</p>
-                    <p>电话：<el-input style="width:100px;"></el-input></p>
-                    <p>邮箱地址：<el-input style="width:100px;"></el-input></p>
+                    <p>您的工作部门是：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>职位是：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>您的工作地点是：
+                        <el-input style="width:100px;"/>
+                        并根据工作需要服从安排
+                    </p>
+                    <p>您的直接上级是：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>您的工资是：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>试用期工资是：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>您的工作起始时间是：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>您的合同年限是：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>试用期：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>请您携带以下材料到人力资源部
+                        <el-input style="width:100px;"/>
+                        处报到，并请于报到前两个工作日邮件通知公司
+                    </p>
+                    <p>如有任何问题可与
+                        <el-input style="width:100px;"/>
+                        电话或邮件联系
+                    </p>
+                    <p>电话：
+                        <el-input style="width:100px;"/>
+                    </p>
+                    <p>邮箱地址：
+                        <el-input style="width:100px;"/>
+                    </p>
                 </div>
             </el-card>
             <el-card class="offer-box">
                 <div slot="header" class="clearfix">
                     <h4>报到时请携带以下材料</h4>
                 </div>
-                <ul>
-                    <li>学历学位证明原件及复印件2份</li>
-                    <li>身份证原件及复印件6份</li>
-                    <li>蓝底一寸照片3张</li>
-                    <li>个人具备资质认证书复印件1份</li>
-                    <li>原单位离职证明原件</li>
-                    <li>公立二级以上医院的体检报告一份</li>
-                    <li>员工背景调查表一份</li>
-                    <li>学历证明一份</li>
-                    <li>新员工面试评价表</li>
-                    <li>工资卡公司统一办理</li>
-                    <li><el-input type="textarea"></el-input></li>
+                <ul class="cailiao">
+                    <li v-for="(item, index) in cl">
+                        <i class="el-icon-error remove-button" @click="removeItem(index)"></i>
+                        <el-input v-model="cl[index]"/>
+                    </li>
                 </ul>
-                <el-button size="mini" icon="el-icon-plus" class="add-button"></el-button>
-                <div class="cailiao">请务必在报到前整理齐全所有资料，以免影响入职手续办理</div>
+                <el-button size="mini" icon="el-icon-plus" class="add-button" @click="addCailiao"/>
+                <div class="wubi">请务必在报到前整理齐全所有资料，以免影响入职手续办理</div>
             </el-card>
             <el-card class="offer-box">
                 <div slot="header" class="clearfix">
@@ -65,7 +90,7 @@
                     <li>请您收到录用通知书两日内回复，否则此录用通知书将自动失效</li>
                     <li>请您在收到录用通知书两日内回复并在约定的时间内报到。如果不能按时报到，请务必事先得到我公司的同意，后延时间不能超过我公司设定的期限，否则此录用通知将自动失效</li>
                 </ul>
-                <el-button size="mini" icon="el-icon-plus" class="add-button"></el-button>
+                <el-button size="mini" icon="el-icon-plus" class="add-button"/>
             </el-card>
             <el-card class="offer-box">
                 <h5>非常欢迎您加入中软国际科技服务有限公司这个大家庭</h5>
@@ -83,7 +108,8 @@
     export default {
         data() {
             return {
-                name: ''
+                name: '',
+                cl: ["学历学位证明原件及复印件2份", "身份证原件及复印件6份", "蓝底一寸照片3张", "个人具备资质认证书复印件1份"]
             }
         },
         methods: {
@@ -92,6 +118,13 @@
             },
             cancelClick() {
 
+            },
+            removeItem(index) {
+                this.cl.splice(index,1)
+                alert(this.cl)
+            },
+            addCailiao() {
+                this.cl.push('')
             }
         }
     }
@@ -111,7 +144,7 @@
         margin-bottom: 15px;
     }
 
-    h3,h5 {
+    h3, h5 {
         text-align: center;
     }
 
@@ -124,20 +157,25 @@
         line-height: 2em;
     }
 
-    .cailiao {
+    .wubi {
         text-align: center;
         margin-top: 15px;
     }
 
-    .el-card__body p,li{
+    .el-card__body p, li {
         text-indent: 2em;
     }
 
     ul {
-        list-style-position: inside;
         list-style-type: decimal;
         font-size: 14px;
         line-height: 2em;
+        margin-left: 4em;
+    }
+
+    ul li {
+        position: relative;
+        text-indent: unset;
     }
 
     .el-card__body .footer {
@@ -155,11 +193,22 @@
     }
 
     .add-button {
-        margin:10px 0 0 30px;
+        font-size: 14px;
+        margin: 10px 0 0 4em;
+    }
+
+    .remove-button {
+        cursor: pointer;
+        color: #f56c6c;
+        padding: 0;
+        margin: unset;
+        position: absolute;
+        left: -3.5em;
+        top: 7px;
     }
 </style>
 <style>
-    .offer-box .el-input .el-input__inner {
+    .offer-box .el-input .el-input__inner, .cailiao .el-input .el-input__inner {
         height: 20px;
         padding: 0 5px;
         border-top: none;
