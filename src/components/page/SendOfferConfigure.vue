@@ -23,46 +23,46 @@
                     <p>您好！</p>
                     <p>感谢您应聘我公司的相关职位，经过认真筛选和选拔，现非常荣幸的通知您，您已被我司录取。</p>
                     <p>您的工作部门是：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:20em;"/>
                     </p>
                     <p>职位是：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:24em;"/>
                     </p>
                     <p>您的工作地点是：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:20em;"/>
                         并根据工作需要服从安排
                     </p>
                     <p>您的直接上级是：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:10em;"/>
                     </p>
                     <p>您的工资是：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:12em;"/>
                     </p>
                     <p>试用期工资是：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:11em;"/>
                     </p>
                     <p>您的工作起始时间是：
-                        <el-input style="width:100px;"/>
+                        <el-date-picker style="width:8em;" prefix-icon="none" type="date" v-model="value1"/>
                     </p>
                     <p>您的合同年限是：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:10em;"/>
                     </p>
                     <p>试用期：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:14em;"/>
                     </p>
                     <p>请您携带以下材料到人力资源部
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:10em;"/>
                         处报到，并请于报到前两个工作日邮件通知公司
                     </p>
                     <p>如有任何问题可与
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:8em;"/>
                         电话或邮件联系
                     </p>
                     <p>电话：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:20em;"/>
                     </p>
                     <p>邮箱地址：
-                        <el-input style="width:100px;"/>
+                        <el-input style="width:18em;"/>
                     </p>
                 </div>
             </el-card>
@@ -72,7 +72,7 @@
                 </div>
                 <ul class="cailiao">
                     <li v-for="(item, index) in cl">
-                        <i class="el-icon-error remove-button" @click="removeItem(index)"></i>
+                        <i class="el-icon-error remove-button" @click="removeItem1(index)"></i>
                         <el-input v-model="cl[index]"/>
                     </li>
                 </ul>
@@ -83,14 +83,13 @@
                 <div slot="header" class="clearfix">
                     <h4>申明</h4>
                 </div>
-                <ul>
-                    <li>如您向公司提供任何虚假资料，一经发现，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件</li>
-                    <li>薪酬保密制度是公司管理的重要原则，请不要向别人打探薪酬情况，也不要告诉别人您的薪酬情况，如果违反薪酬保密制度，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件</li>
-                    <li>需双方重新沟通</li>
-                    <li>请您收到录用通知书两日内回复，否则此录用通知书将自动失效</li>
-                    <li>请您在收到录用通知书两日内回复并在约定的时间内报到。如果不能按时报到，请务必事先得到我公司的同意，后延时间不能超过我公司设定的期限，否则此录用通知将自动失效</li>
+                <ul class="shenming">
+                    <li v-for="(item, index) in sm">
+                        <i class="el-icon-error remove-button" @click="removeItem2(index)"></i>
+                        <el-input autosize type="textarea" style="width:100%;" resize="none" v-model="sm[index]"/>
+                    </li>
                 </ul>
-                <el-button size="mini" icon="el-icon-plus" class="add-button"/>
+                <el-button size="mini" icon="el-icon-plus" class="add-button" @click="addShenming"/>
             </el-card>
             <el-card class="offer-box">
                 <h5>非常欢迎您加入中软国际科技服务有限公司这个大家庭</h5>
@@ -108,8 +107,13 @@
     export default {
         data() {
             return {
+                value1: '',
                 name: '',
-                cl: ["学历学位证明原件及复印件2份", "身份证原件及复印件6份", "蓝底一寸照片3张", "个人具备资质认证书复印件1份"]
+                cl: ["学历学位证明原件及复印件2份", "身份证原件及复印件6份", "蓝底一寸照片3张", "个人具备资质认证书复印件1份"],
+                sm: [
+                    '如您向公司提供任何虚假资料，一经发现，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件',
+                    '薪酬保密制度是公司管理的重要原则，请不要向别人打探薪酬情况，也不要告诉别人您的薪酬情况，如果违反薪酬保密制度，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件'
+                ]
             }
         },
         methods: {
@@ -119,12 +123,19 @@
             cancelClick() {
 
             },
-            removeItem(index) {
+            removeItem1(index) {
                 this.cl.splice(index,1)
-                alert(this.cl)
+                console.info(this.cl)
+            },
+            removeItem2(index) {
+                this.sm.splice(index,1)
+                console.info(this.sm)
             },
             addCailiao() {
                 this.cl.push('')
+            },
+            addShenming() {
+                this.sm.push('')
             }
         }
     }
