@@ -22,7 +22,7 @@
             return {
                 content: '<p>Hello BBK</p>',
                 editorOption: {
-                    // something config
+
                 }
             }
         },

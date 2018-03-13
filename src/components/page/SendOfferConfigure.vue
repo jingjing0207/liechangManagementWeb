@@ -7,17 +7,17 @@
             </el-breadcrumb>
         </div>
         <div>
-            <div class="h-button">
-                <!--<el-input size="medium" placeholder="搜索公司名称" style="width:300px;"/>-->
-                <!--<el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>-->
-                <el-select clearable v-model="currentCpmpany"
-                           style="width:178px;"
-                           filterable
-                           remote
-                           reserve-keyword
-                           placeholder="请输入公司名称"
-                           :remote-method="remoteMethod"
-                           :loading="loading">
+            <div class="h-button" >
+                <el-select
+                    clearable
+                    v-model="currentCpmpany"
+                    style="width:178px;"
+                    filterable
+                    remote
+                    reserve-keyword
+                    placeholder="请输入公司名称"
+                    :remote-method="remoteMethod"
+                    :loading="loading">
                     <el-option
                         v-for="item in options4"
                         :key="item.id"
@@ -26,8 +26,6 @@
                     </el-option>
                 </el-select>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
-                <div style="float: right">
-                </div>
             </div>
             <el-card class="offer-box">
                 <div slot="header" class="clearfix">
@@ -35,9 +33,9 @@
                 </div>
                 <div>
                     <p>请您携带以下材料到
-                        <el-input style="width:14em;"/>
+                        <el-input style="width:10em;"/>
                         部
-                        <el-input style="width:8em;"/>
+                        <el-input style="width:10em;"/>
                         处报到，并请于报到前两个工作日邮件通知公司
                     </p>
                     <p>如有任何问题可与
@@ -119,14 +117,13 @@
                 value7:[],
                 list: [],
                 loading: false,
-                companiesArr:[],
                 value1: '',
                 name: '',
                 cl: ["学历学位证明原件及复印件2份", "身份证原件及复印件6份", "蓝底一寸照片3张", "个人具备资质认证书复印件1份"],
                 sm: [
-                    '如您向公司提供任何虚假资料，一经发现，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件',
-                    '薪酬保密制度是公司管理的重要原则，请不要向别人打探薪酬情况，也不要告诉别人您的薪酬情况，如果违反薪酬保密制度，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件'
-                ],
+                        '如您向公司提供任何虚假资料，一经发现，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件',
+                        '薪酬保密制度是公司管理的重要原则，请不要向别人打探薪酬情况，也不要告诉别人您的薪酬情况，如果违反薪酬保密制度，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件'
+                    ],
                 inp: '中软国际技术服务有限公司',
                 relativeCompany:'人力资源部',
                 TimeData:'二零一八年三月十三日'
@@ -141,32 +138,6 @@
             });
         },
         methods: {
-            search() {
-
-            },
-            saveClick() {
-
-            },
-            cancelClick() {
-
-            },
-            editClick(){
-
-            },
-            removeItem1(index) {
-                this.cl.splice(index, 1)
-                console.info(this.cl)
-            },
-            removeItem2(index) {
-                this.sm.splice(index, 1)
-                console.info(this.sm)
-            },
-            addCailiao() {
-                this.cl.push('')
-            },
-            addShenming() {
-                this.sm.push('')
-            },
             getCompaniesSelect(){
                 let self = this;
                 self.url = GETALLCOMPANIES;
@@ -192,6 +163,32 @@
                     this.options4 = [];
                 }
             },
+            search() {
+
+            },
+            saveClick() {
+
+            },
+            cancelClick() {
+
+            },
+            editClick(){
+
+            },
+            removeItem1(index) {
+                this.cl.splice(index, 1)
+                console.info(this.cl)
+            },
+            removeItem2(index) {
+                this.sm.splice(index, 1)
+                console.info(this.sm)
+            },
+            addCailiao() {
+                this.cl.push('')
+            },
+            addShenming() {
+                this.sm.push('')
+            }
         }
     }
 </script>

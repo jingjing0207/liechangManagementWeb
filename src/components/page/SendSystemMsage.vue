@@ -61,14 +61,16 @@
                             <el-col :span="6">
                                 <el-radio v-model="radio" label="3">
                                     <h4 class="labelFont font_inner">公 司</h4>
-                                    <el-select clearable v-model="currentCpmpany"
-                                               style="width:178px;"
-                                               filterable
-                                               remote
-                                               reserve-keyword
-                                               placeholder="请输入公司名称"
-                                               :remote-method="remoteMethod"
-                                               :loading="loading">
+                                    <el-select
+                                        clearable
+                                        v-model="currentCpmpany"
+                                        style="width:178px;"
+                                        filterable
+                                        remote
+                                        reserve-keyword
+                                        placeholder="请输入公司名称"
+                                        :remote-method="remoteMethod"
+                                        :loading="loading">
                                         <el-option
                                             v-for="item in options4"
                                             :key="item.id"
@@ -145,7 +147,7 @@
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
     // axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
     axios.defaults.headers['X-OperatorToken'] = '9cee02c6a9f848eeba3119b8a828c66d'
-    //
+
     export default {
         name: "",
         data() {
