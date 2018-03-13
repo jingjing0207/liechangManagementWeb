@@ -27,7 +27,6 @@
                 </el-select>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
                 <div style="float: right">
-                    <el-button plain type="primary" size="medium" @click="editClick">修改</el-button>
                 </div>
             </div>
             <el-card class="offer-box">
@@ -91,8 +90,9 @@
             </el-card>
         </div>
             <div style="float: right;margin-top:15px;">
-                <el-button  type="primary" size="medium" @click="saveClick">保存</el-button>
-                <el-button  type="primary" size="medium" @click="cancelClick">取消</el-button>
+                <el-button plain type="primary" size="medium" @click="editClick">修改</el-button>
+                <el-button plain type="primary" size="medium" @click="saveClick">保存</el-button>
+                <el-button plain type="primary" size="medium" @click="cancelClick">取消</el-button>
             </div>
     </div>
 </template>
@@ -127,9 +127,9 @@
                     '如您向公司提供任何虚假资料，一经发现，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件',
                     '薪酬保密制度是公司管理的重要原则，请不要向别人打探薪酬情况，也不要告诉别人您的薪酬情况，如果违反薪酬保密制度，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件'
                 ],
-                inp: '',
-                relativeCompany:'',
-                TimeData:''
+                inp: '中软国际技术服务有限公司',
+                relativeCompany:'人力资源部',
+                TimeData:'二零一八年三月十三日'
             }
         },
         created() {
@@ -148,6 +148,9 @@
 
             },
             cancelClick() {
+
+            },
+            editClick(){
 
             },
             removeItem1(index) {
@@ -278,5 +281,8 @@
         border-left: none;
         border-right: none;
         border-radius: unset;
+    }
+    .el-card{
+        margin-top:0;
     }
 </style>
