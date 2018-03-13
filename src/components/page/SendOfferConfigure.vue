@@ -8,50 +8,21 @@
         </div>
         <div>
             <div class="h-button">
-                <el-button type="primary" size="medium" @click="saveClick">保存</el-button>
-                <el-button type="primary" size="medium" @click="cancelClick">取消</el-button>
+                <el-input size="medium" placeholder="搜索公司名称" style="width:300px;"/>
+                <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
+                <div style="float: right">
+                    <el-button plain type="primary" size="medium" @click="editClick">修改</el-button>
+                    <el-button plain type="primary" size="medium" @click="saveClick">保存</el-button>
+                    <el-button plain type="primary" size="medium" @click="cancelClick">取消</el-button>
+                </div>
             </div>
             <el-card class="offer-box">
                 <div slot="header" class="clearfix">
                     <h3>录用通知书</h3>
                 </div>
                 <div>
-                    <p class="name">
-                        <el-input style="width:6em;"/>
-                        女士/先生：
-                    </p>
-                    <p>您好！</p>
-                    <p>感谢您应聘我公司的相关职位，经过认真筛选和选拔，现非常荣幸的通知您，您已被我司录取。</p>
-                    <p>您的工作部门是：
-                        <el-input style="width:20em;"/>
-                    </p>
-                    <p>职位是：
-                        <el-input style="width:24em;"/>
-                    </p>
-                    <p>您的工作地点是：
-                        <el-input style="width:20em;"/>
-                        并根据工作需要服从安排
-                    </p>
-                    <p>您的直接上级是：
-                        <el-input style="width:10em;"/>
-                    </p>
-                    <p>您的工资是：
-                        <el-input style="width:12em;"/>
-                    </p>
-                    <p>试用期工资是：
-                        <el-input style="width:11em;"/>
-                    </p>
-                    <p>您的工作起始时间是：
-                        <el-date-picker style="width:8em;" prefix-icon="none" type="date" v-model="value1"/>
-                    </p>
-                    <p>您的合同年限是：
-                        <el-input style="width:10em;"/>
-                    </p>
-                    <p>试用期：
-                        <el-input style="width:14em;"/>
-                    </p>
                     <p>请您携带以下材料到人力资源部
-                        <el-input style="width:10em;"/>
+                        <el-input style="width:8em;"/>
                         处报到，并请于报到前两个工作日邮件通知公司
                     </p>
                     <p>如有任何问题可与
@@ -92,7 +63,7 @@
                 <el-button size="mini" icon="el-icon-plus" class="add-button" @click="addShenming"/>
             </el-card>
             <el-card class="offer-box">
-                <h5>非常欢迎您加入中软国际科技服务有限公司这个大家庭</h5>
+                <h5>非常欢迎您加入<el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input>这个大家庭</h5>
                 <h5>祝您工作愉快</h5>
                 <p class="footer">请扫描二维码</p>
                 <p class="footer">中软国际科技服务有限公司</p>
@@ -104,6 +75,16 @@
 </template>
 
 <script>
+    String.prototype.dbLength = function() {
+        let str = this, leg = str.length;
+        for (let i in str) {
+            if (str.hasOwnProperty(i)) {
+                const db = str[i].charCodeAt(0).toString(16).length === 4;
+                if (db) leg += 1;
+            }
+        }
+        return leg/2;
+    };
     export default {
         data() {
             return {
@@ -113,10 +94,14 @@
                 sm: [
                     '如您向公司提供任何虚假资料，一经发现，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件',
                     '薪酬保密制度是公司管理的重要原则，请不要向别人打探薪酬情况，也不要告诉别人您的薪酬情况，如果违反薪酬保密制度，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件'
-                ]
+                ],
+                inp: '中软国际科技服务有限公司',
             }
         },
         methods: {
+            search() {
+
+            },
             saveClick() {
 
             },
