@@ -76,11 +76,11 @@
                     <td>{{pro.role}}</td>
                     <td>{{pro.state=="ENABLED"?"启用":"禁用"}}</td>
                     <td class="last-td">
-                        <el-button v-if="pro.state != 'DISABLED' && pro.username!='admin'"  type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
-                        <el-button v-if="pro.state != 'DISABLED' && pro.username!='admin'"  type="info" plain @click="deleteManage(pro.id)">删除</el-button>
+                        <el-button v-if="pro.state != 'DISABLED' && pro.username!='admin'"  type="primary" @click="modifyManageplatform(pro.id)">修改</el-button>
+                        <el-button v-if="pro.state != 'DISABLED' && pro.username!='admin'"  type="info" @click="deleteManage(pro.id)">删除</el-button>
 
-                        <el-button v-if="pro.state == 'DISABLED' || pro.username=='admin'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
-                        <el-button v-if="pro.state == 'DISABLED' || pro.username=='admin'" disabled="disabled" type="info" plain @click="deleteManage(pro.id)">删除</el-button>
+                        <el-button v-if="pro.state == 'DISABLED' || pro.username=='admin'" disabled="disabled"  type="primary" @click="modifyManageplatform(pro.id)">修改</el-button>
+                        <el-button v-if="pro.state == 'DISABLED' || pro.username=='admin'" disabled="disabled" type="info" @click="deleteManage(pro.id)">删除</el-button>
                     </td>
                 </tr>
             </table>

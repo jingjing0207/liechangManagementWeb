@@ -23,7 +23,7 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <div class="">
-                    <el-input v-model="searchName" size="medium" placeholder="输入企业名称" class="handle-title"></el-input>
+                    <el-input v-model="searchName" clearable size="medium" placeholder="输入企业名称" class="handle-title"></el-input>
                     <el-button type="primary" size="medium" icon="el-icon-search" @click="searchCompany">查询</el-button>
                 </div>
             </div>
@@ -44,14 +44,14 @@
                 <th>{{settleType.label}}</th>
                 <th>{{contacts.label}}</th>
                 <th>{{contactNumber.label}}</th>
-                <th>{{state.label}}</th>
                 <th>{{taxNumber.label}}</th>
                 <th>{{address.label}}</th>
+                <th>{{state.label}}</th>
                 <th>{{setCompanyServiceFee.label}}</th>
                 <th>{{gethrManager.label}}</th>
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
-                <td style="max-width:78px;">{{pro.name}}</td>
+                <td style="max-width:78px;" @click="showOffer(pro.id,pro.name)">{{pro.name}}</td>
                 <td>{{pro.settleType| stateFormat}}</td>
                 <td>
                     {{pro.contacts==null?"":pro.contacts}}
@@ -59,18 +59,19 @@
                 <td>
                     {{pro.contactNumber==null?"":pro.contactNumber}}
                 </td>
-                <td class="currentState" @click="changeState(pro.id,pro.state,idx)">
-                    <el-button type="primary" plain round style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>
-                    <!--<el-button type="text" plain style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>-->
-                </td>
                 <td>{{pro.taxNumber==''?"":pro.taxNumber}}</td>
                 <td style="max-width:78px;">{{pro.address==null?"":pro.address}}</td>
+                <td class="currentState" @click="changeState(pro.id,pro.state,idx)">
+                    <el-button v-if="pro.state != 'OFF'" type="primary"  round style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>
+                    <el-button v-if="pro.state=='OFF'" type="info"  round style="padding: 4px 10px!important;background-color: #c8c9cc;border-color: #c8c9cc;">{{pro.state| stateChange}}</el-button>
+                </td>
                 <td>
-                    <el-button v-if="pro.state != 'OFF'" type="primary" plain @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
-                    <el-button v-if="pro.state == 'OFF'" disabled="disabled"  type="primary" plain @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
+                    <el-button v-if="pro.state != 'OFF'" type="primary"  @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
+                    <el-button v-if="pro.state == 'OFF'" disabled="disabled"  type="info">重置平台服务费</el-button>
                 </td>
                 <td class="last-td">
-                    <el-button type="info" plain @click="getHRManager(pro.id)">获取HR管理员信息</el-button>
+                    <el-button v-if="pro.state != 'OFF'" type="primary"  @click="getHRManager(pro.id)" >查看HR管理员信息</el-button>
+                    <el-button v-if="pro.state == 'OFF'" disabled="disabled" type="info">查看HR管理员信息</el-button>
                 </td>
             </tr>
         </table>
@@ -499,6 +500,10 @@
                     self.hr_list[idx].state=response.data.state
                     console.log(self.hr_list.state)
                 })
+            },
+            showOffer(id,name){
+                sessionStorage.setItem("companyName",name)
+                this.$router.push({path: '/OfferConfig', query: {id : id }})
             }
         }
     }

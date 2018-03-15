@@ -179,7 +179,8 @@
                     var hours = time.getHours();
                     var minutes = time.getMinutes();
                     var seconds = time.getSeconds();
-                    return year + '-' + rightTwo(month) + '-' + rightTwo(date) + ' ' + rightTwo(hours) + ':' + rightTwo(minutes) /*+ ':' + rightTwo(seconds)*/;
+                    //return year + '-' + rightTwo(month) + '-' + rightTwo(date) + ' ' + rightTwo(hours) + ':' + rightTwo(minutes) /*+ ':' + rightTwo(seconds)*/;
+                    return new Date(time).toLocaleString()
                 }
             }
         },

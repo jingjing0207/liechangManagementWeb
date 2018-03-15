@@ -52,11 +52,11 @@
                 <td>{{pro.type=="PLATFORM_MARKECTER"?"平台销售":"其他"}}</td>
                 <td class="currentState">{{pro.state | stateFormat}}</td>
                 <td class="last-td">
-                    <el-button v-if="pro.state != 'Disabled'" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
-                    <el-button v-if="pro.state != 'Disabled'" type="info" plain @click="deleteHR(pro.id)">删除</el-button>
+                    <el-button v-if="pro.state != 'Disabled'" type="primary" @click="modifyManageplatform(pro.id)">修改</el-button>
+                    <el-button v-if="pro.state != 'Disabled'" type="info" @click="deleteHR(pro.id)">删除</el-button>
 
-                    <el-button v-if="pro.state == 'Disabled'" disabled="disabled" type="primary" plain @click="modifyManageplatform(pro.id)">修改</el-button>
-                    <el-button v-if="pro.state == 'Disabled'" disabled="disabled" type="info" plain @click="deleteHR(pro.id)">删除</el-button>
+                    <el-button v-if="pro.state == 'Disabled'" disabled="disabled" type="primary" @click="modifyManageplatform(pro.id)">修改</el-button>
+                    <el-button v-if="pro.state == 'Disabled'" disabled="disabled" type="info" @click="deleteHR(pro.id)">删除</el-button>
                 </td>
             </tr>
         </table>

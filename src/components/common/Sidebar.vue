@@ -35,6 +35,10 @@
                                 title: 'HR注册'
                             },
                             {
+                                index: 'hrManagerInfolist',
+                                title: 'HR管理员注册'
+                            },
+                            {
                                 index: 'vuetable',
                                 title: '猎头注册'
                             },

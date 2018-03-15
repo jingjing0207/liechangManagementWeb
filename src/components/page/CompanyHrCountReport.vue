@@ -40,16 +40,6 @@
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
-            <!--<el-collapse-item title="排序选项" class="sortOption">-->
-                <!--<div class="sortItem" v-for="item of sortGroup">-->
-                    <!--<span>{{ item.display }}</span>-->
-                    <!--<el-select v-model="item.value" :name="item.name" ref="sel" size="small">-->
-                        <!--<el-option v-for="option in sortOptions" :label="option.label" :value="option.value"-->
-                                   <!--:key="option.value">-->
-                        <!--</el-option>-->
-                    <!--</el-select>-->
-                <!--</div>-->
-            <!--</el-collapse-item>-->
         </el-collapse>
         <el-table :data="tableData" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center">
             <el-table-column header-align="center" prop="companyName" label="公司名称"></el-table-column>
@@ -121,7 +111,7 @@
         },
         created() {
             this.getCompaniesSelect()
-            this.setSort();
+            // this.setSort();
         },
         computed: {
             data() {

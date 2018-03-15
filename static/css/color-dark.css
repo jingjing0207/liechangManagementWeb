@@ -1,5 +1,6 @@
 .header{
-    background-color: #242f42;
+    /*background-color: #242f42;*/
+    background-color: #409EFF;
 }
 .login-wrap{
     background: #324157;
@@ -16,3 +17,35 @@
 .pure-button{
     background: #20a0ff;
 }
+/*.el-button--primary {*/
+    /*color: #fff!important;*/
+    /*background-color: #242f42!important;*/
+    /*border-color: #242f42!important;*/
+/*}*/
+/*.el-button--info {*/
+    /*color: #fff!important;*/
+    /*background-color: #c8c9cc!important;*/
+    /*border-color: #c8c9cc!important;*/
+/*}*/
+/*.el-menu-item.is-active {*/
+    /*color: #e61a1c!important;*/
+/*}*/
+/*.el-radio__input.is-checked .el-radio__inner {*/
+    /*border-color: #e61a1c!important;*/
+    /*background: #e61a1c!important;*/
+/*}*/
+/*.el-pager li.active {*/
+    /*color: #e61a1c!important;*/
+    /*cursor: default;*/
+/*}*/
+/*.el-pager li:hover {*/
+    /*color: #e61a1c!important;*/
+/*}*/
+/*.el-button--text {*/
+    /*color: #e61a1c!important;*/
+/*}*/
+/*.el-button--warning {*/
+    /*color: #fff;*/
+    /*background-color: #e61a1c!important;*/
+    /*border-color: #e61a1c!important;*/
+/*}*/

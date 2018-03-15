@@ -10,12 +10,12 @@
             <div class="h-button" >
                 <el-select
                     clearable
-                    v-model="currentCpmpany"
+                    v-model="currentCompany"
                     style="width:178px;"
                     filterable
                     remote
                     reserve-keyword
-                    placeholder="请输入公司名称"
+                    placeholder="输入公司名称"
                     :remote-method="remoteMethod"
                     :loading="loading">
                     <el-option
@@ -26,6 +26,7 @@
                     </el-option>
                 </el-select>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
+                <el-button type="primary" plain  style="float: right;" size="medium" @click="modifyClick">编辑</el-button>
             </div>
             <el-card class="offer-box">
                 <div slot="header" class="clearfix">
@@ -60,6 +61,7 @@
                         <el-input v-model="cl[index]"/>
                     </li>
                 </ul>
+                <div v-show="isShow" style="width:100%;height:100%;background:rgba(220,222,226,.1);position: absolute;left:0;top:0;cursor: not-allowed"></div>
                 <el-button size="mini" icon="el-icon-plus" class="add-button" @click="addCailiao"/>
                 <div class="wubi">请务必在报到前整理齐全所有资料，以免影响入职手续办理</div>
             </el-card>
@@ -73,31 +75,34 @@
                         <el-input autosize type="textarea" style="width:100%;" resize="none" v-model="sm[index]"/>
                     </li>
                 </ul>
+                <div v-show="isShow" style="width:100%;height:100%;background:rgba(220,222,226,.1);position: absolute;left:0;top:0;cursor: not-allowed"></div>
                 <el-button size="mini" icon="el-icon-plus" class="add-button" @click="addShenming"/>
             </el-card>
-            <el-card class="offer-box">
-                <h5>非常欢迎您加入
-                    <el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input>
-                    这个大家庭
-                </h5>
-                <h5>祝您工作愉快!</h5>
-                <!--<p class="footer">请扫描二维码</p>-->
-                <p class="footer"><el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input></p>
-                <p class="footer"><el-input :style="{width:'calc(' + relativeCompany.dbLength() + 'em + 12px)'}" v-model="relativeCompany"></el-input></p>
-                <p class="footer"><el-input :style="{width:'calc(' + TimeData.dbLength() + 'em + 12px)'}" v-model="TimeData"></el-input></p>
-            </el-card>
+            <!--<el-card class="offer-box">-->
+                <!--<h5>非常欢迎您加入-->
+                    <!--<el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input>-->
+                    <!--这个大家庭-->
+                <!--</h5>-->
+                <!--<h5>祝您工作愉快!</h5>-->
+                <!--&lt;!&ndash;<p class="footer">请扫描二维码</p>&ndash;&gt;-->
+                <!--<p class="footer"><el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input></p>-->
+                <!--<p class="footer"><el-input :style="{width:'calc(' + relativeCompany.dbLength() + 'em + 12px)'}" v-model="relativeCompany"></el-input></p>-->
+                <!--<p class="footer"><el-input :style="{width:'calc(' + TimeData.dbLength() + 'em + 12px)'}" v-model="TimeData"></el-input></p>-->
+            <!--</el-card>-->
         </div>
-            <div style="float: right;margin-top:15px;">
-                <el-button plain type="primary" size="medium" @click="editClick">修改</el-button>
-                <el-button plain type="primary" size="medium" @click="saveClick">保存</el-button>
-                <el-button plain type="primary" size="medium" @click="cancelClick">取消</el-button>
-            </div>
+        <div style="float: right;margin-top:15px;">
+            <el-button type="primary" size="medium" @click="saveClick">创建</el-button>
+            <el-button type="primary" size="medium" @click="editClick">更新</el-button>
+            <el-button type="primary" size="medium" @click="cancelClick">取消</el-button>
+        </div>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
-    import { GETALLCOMPANIES } from '../../constants/Constants'
+    axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
+    axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
+    import { GETALLCOMPANIES,GETOFFERCONFIGS,CREATEOFFERCONFIG,UPDATEOFFERCONFIG } from '../../constants/Constants'
     String.prototype.dbLength = function () {
         let str = this, leg = str.length;
         for (let i in str) {
@@ -111,22 +116,23 @@
     export default {
         data() {
             return {
+                isShow:false,
+                disable:true,
+                description:'',
+                preparation:'',
                 allCompanies:[],
-                currentCpmpany:'',
+                currentCompany:'',
                 options4: [],
                 value7:[],
                 list: [],
                 loading: false,
                 value1: '',
                 name: '',
-                cl: ["学历学位证明原件及复印件2份", "身份证原件及复印件6份", "蓝底一寸照片3张", "个人具备资质认证书复印件1份"],
-                sm: [
-                        '如您向公司提供任何虚假资料，一经发现，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件',
-                        '薪酬保密制度是公司管理的重要原则，请不要向别人打探薪酬情况，也不要告诉别人您的薪酬情况，如果违反薪酬保密制度，公司有权单方面解除此录用通知书，个人不得向公司提出任何补偿条件'
-                    ],
-                inp: '中软国际技术服务有限公司',
-                relativeCompany:'人力资源部',
-                TimeData:'二零一八年三月十三日'
+                cl: [],
+                sm: [],
+                inp: '',
+                relativeCompany:'',
+                TimeData:'',
             }
         },
         created() {
@@ -151,6 +157,7 @@
             remoteMethod(query) {
                 if (query !== '') {
                     this.loading = true;
+                    console.log(this.list)
                     setTimeout(() => {
                         this.loading = false;
                         this.options4 = this.list.filter(item => {
@@ -164,16 +171,93 @@
                 }
             },
             search() {
+                let self = this;
+                this.cl=[]
+                this.sm=[]
+                let option='?company='+this.currentCompany
+                self.url = GETOFFERCONFIGS;
+                if(this.currentCompany!=''){
+                    self.$axios.get(self.url+option).then((response) => {
+                        if(response.data.content!=''){
+                            console.log(response)
+                            this.isShow=true
+                            let desc=response.data.content[0].descriptions
+                            for(let i=0;i<desc.length;i++){
+                                this.cl.push(desc[i].description)
+                            }
+                            console.log(this.cl)
+                            let pre=response.data.content[0].preparations
+                            for(let i=0;i<pre.length;i++){
+                                this.sm.push(pre[i].description)
+                            }
+                            console.log(this.sm)
+                            sessionStorage.setItem('offerId',response.data.content[0].id)
+                        }else{
+                            this.cl=[]
+                            this.sm=[]
+                            self.$message.error('暂无数据！')
+                        }
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }else{
+                    this.cl=[]
+                    this.sm=[]
+                }
 
             },
             saveClick() {
+                let saveData={
+                    company: this.currentCompany,
+                    descriptionList: this.cl,
+                    preparationList: this.sm
+                }
+                console.log(saveData)
+                let self = this;
+                self.url = CREATEOFFERCONFIG;
+                self.$axios.post(self.url,saveData).then((response) => {
+                    console.log(response)
+                    if(response.status==200){
+                        this.$message({
+                            type: 'success',
+                            message: '创建成功！'
+                        })
+                        this.isShow=true
+                    }
 
+                }).catch((error) => {
+                    console.log(error)
+                })
             },
             cancelClick() {
-
+                this.search()
+            },
+            modifyClick(){
+                this.isShow=false
             },
             editClick(){
+                let editData={
+                    company: this.currentCompany,
+                    descriptionList: this.cl,
+                    id:sessionStorage.getItem('offerId'),
+                    preparationList: this.sm
+                }
+                console.log(editData)
+                let self = this;
+                self.url = UPDATEOFFERCONFIG;
+                self.$axios.post(self.url,editData).then((response) => {
+                    console.log(response)
+                    if(response.status==200){
+                        this.isShow=true
+                        this.$message({
+                            type: 'success',
+                            message: '更新成功！'
+                        })
+                    }
 
+                }).catch((error) => {
+                    console.log(error)
+                })
             },
             removeItem1(index) {
                 this.cl.splice(index, 1)
@@ -194,6 +278,12 @@
 </script>
 
 <style scoped>
+    .remove-button[data-v-3457857d] {
+        color: #409EFF!important;
+    }
+    body{
+        margin:0;
+    }
     .offer-box {
         box-shadow: unset;
         border-radius: unset;
@@ -247,7 +337,6 @@
     }
 
     .el-textarea {
-        width: 800px;
         vertical-align: text-top;
     }
 
@@ -280,6 +369,19 @@
         border-radius: unset;
     }
     .el-card{
-        margin-top:0;
+        margin-top:0!important;
+    }
+    .el-textarea__inner {
+        color: #000;
+        font-size: 14px!important;
+        line-height: 1.5em!important;
+        font-family: "Helvetica Neue",Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif!important;
+    }
+    .el-card__body {
+        position: relative;
     }
 </style>
+
+
+
+

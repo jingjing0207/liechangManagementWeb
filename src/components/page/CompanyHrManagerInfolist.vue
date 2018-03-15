@@ -97,7 +97,7 @@
 <script>
     import Sortable from 'sortablejs'
     import axios from 'axios';
-    import { GETAUDITEDHES,DELETEHR,MODIEFYHRPASSWORD,GETALLCOMPANIES } from '../../constants/Constants'
+    import { GETAUDITEDHES,DELETEHR,MODIEFYHRPASSWORD,GETALLCOMPANIES,GETHRMANAGER } from '../../constants/Constants'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
     axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     export default {
@@ -223,7 +223,7 @@
             },
             getData(){
                 let self = this;
-                var option = '?page=' + (self.cur_page - 1) + '&size=' + self.pagesize+'&type=HR'
+                var option = '?page=' + (self.cur_page - 1) + '&size=' + self.pagesize+'&type=HR_MANAGER'
                 var sortStr = ''
                 if (self.sortBy.length != 0) {
                     for (var s in self.sortBy) {
@@ -246,7 +246,6 @@
                 })
             },
             search() {
-                // this.pagesize='';
                 const self = this
                 var list = document.querySelectorAll('.sortOption .el-input__inner')
                 var el = this.$refs.sel
@@ -260,7 +259,7 @@
                         self.sortBy.push(obj.name + ',' + map[obj.name])
                     }
                 })
-                let option='?page='+(self.cur_page - 1)+'&size='+self.pagesize+'&type=HR';
+                let option='?page='+(self.cur_page - 1)+'&size='+self.pagesize+'&type=HR_MANAGER';
                 if(this.searchUserId!=''){
                     option=option+'&username='+this.searchUserId
                 }
@@ -275,7 +274,6 @@
                         self.totalNumber=parseInt(response.data.totalElements)
                         self.hr_list=response.data.content
                         console.log(this.hr_list)
-                        // this.handleSizeChange()
                     }else{
                         self.$message.error('暂无数据！')
                     }
@@ -357,107 +355,107 @@
 </script>
 
 <style scoped>
-.el-table thead {
-    color: #000!important;
-}
-.handle-box{
-    margin-bottom: 20px;
-}
-.el-button{
-    padding:10px 16px!important;
-}
-.handle-select{
-    width: 120px;
-}
-.handle-input{
-    width: 300px;
-    display: inline-block;
-}
+    .el-table thead {
+        color: #000!important;
+    }
+    .handle-box{
+        margin-bottom: 20px;
+    }
+    .el-button{
+        padding:10px 16px!important;
+    }
+    .handle-select{
+        width: 120px;
+    }
+    .handle-input{
+        width: 300px;
+        display: inline-block;
+    }
 
-.el-input__inner{
-    width: 60%!important;
-}
-.el-form-item__label {
-    font-size: 17px!important;
-    color: black!important;
-}
-.el-message-box__message p span{
-    display: block;
-    font-size:16px;
-    color:black;
-    margin-top:8px;
-}
-.el-message-box .el-message-box__header{
-    padding: 20px 21px 23px!important;
-    background: #242424!important;
-}
-.el-message-box__title{
-    font-size: 18px!important;
-}
-.el-message-box__message p span{
-    font-size:18px;
-    color:black;
-}
-.modifyPassword{
-    /*display: none;*/
-}
-.handle-input{
-    width:70%;
-    margin-left:2%;
-}
-.plugins-tips{
-    overflow: hidden;
-    padding: 12px 21px!important;
-}
-.addInnfo{
-    /*float: right;*/
-}
-.content-table-list{
-    width:100%;
-    border-radius:12px!important;
-}
-table{
-    width:100%;
-    height:auto;
-    border:1px solid #eee;
-    cursor: default;
-}
-table tr:hover{
-    cursor: pointer;
-    background:#f5f7f596;
-}
-.tr-header{
-    border-bottom: 1px solid #73D6ED;
-}
-.tr-header th{
-    font-size: 14px;
-    color: #333;
-    background:#eef1f6;
-    padding: 13px 10px!important;
-}
-.tr-con td,.lastTd td{
-    text-align: center;
-    padding:12px 10px!important;
-}
-.tr-con:first-child{
-    border-top:none!important;
-}
-.tr-con td{
-    border-top: 1px solid #ebeef5;
-    border-right: 1px solid #ebeef5;
-    font-size: 13px;
-    color: #606266;
-}
-.last-td{
-    border-right:none!important;
-}
-.lastTd td{
-    padding: 20px!important;
-}
-.passwordTitle{
-    max-width: 115px;
-    overflow-x: auto;
-}
+    .el-input__inner{
+        width: 60%!important;
+    }
+    .el-form-item__label {
+        font-size: 17px!important;
+        color: black!important;
+    }
+    .el-message-box__message p span{
+        display: block;
+        font-size:16px;
+        color:black;
+        margin-top:8px;
+    }
+    .el-message-box .el-message-box__header{
+        padding: 20px 21px 23px!important;
+        background: #242424!important;
+    }
+    .el-message-box__title{
+        font-size: 18px!important;
+    }
+    .el-message-box__message p span{
+        font-size:18px;
+        color:black;
+    }
+    .modifyPassword{
+        /*display: none;*/
+    }
+    .handle-input{
+        width:70%;
+        margin-left:2%;
+    }
+    .plugins-tips{
+        overflow: hidden;
+        padding: 12px 21px!important;
+    }
+    .addInnfo{
+        /*float: right;*/
+    }
+    .content-table-list{
+        width:100%;
+        border-radius:12px!important;
+    }
+    table{
+        width:100%;
+        height:auto;
+        border:1px solid #eee;
+        cursor: default;
+    }
+    table tr:hover{
+        cursor: pointer;
+        background:#f5f7f596;
+    }
+    .tr-header{
+        border-bottom: 1px solid #73D6ED;
+    }
+    .tr-header th{
+        font-size: 14px;
+        color: #333;
+        background:#eef1f6;
+        padding: 13px 10px!important;
+    }
+    .tr-con td,.lastTd td{
+        text-align: center;
+        padding:12px 10px!important;
+    }
+    .tr-con:first-child{
+        border-top:none!important;
+    }
+    .tr-con td{
+        border-top: 1px solid #ebeef5;
+        border-right: 1px solid #ebeef5;
+        font-size: 13px;
+        color: #606266;
+    }
+    .last-td{
+        border-right:none!important;
+    }
+    .lastTd td{
+        padding: 20px!important;
+    }
+    .passwordTitle{
+        max-width: 115px;
+        overflow-x: auto;
+    }
 
 </style>
 <style scoped>

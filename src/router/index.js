@@ -122,8 +122,12 @@ export default new Router({
                     component: resolve => require(['../components/page/VueEditor.vue'], resolve)   //编辑简历
                 },
                 {
-                    path: '/Markdown',
-                    component: resolve => require(['../components/page/Markdown.vue'], resolve)   //编辑简历
+                    path: '/OfferConfig',
+                    component: resolve => require(['../components/page/OfferConfig.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/hrManagerInfolist',
+                    component: resolve => require(['../components/page/CompanyHrManagerInfolist.vue'], resolve)   //编辑简历
                 }
             ]
         },

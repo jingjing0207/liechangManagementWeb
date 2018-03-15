@@ -241,7 +241,7 @@
     }
 
     .handle-title {
-        width: 370px;
+        width: 170px;
     }
 
     .handle-size {
