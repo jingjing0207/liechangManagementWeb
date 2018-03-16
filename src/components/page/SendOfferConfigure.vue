@@ -61,7 +61,7 @@
                         <el-input v-model="cl[index]"/>
                     </li>
                 </ul>
-                <div v-show="isShow" style="width:100%;height:100%;background:rgba(220,222,226,.1);position: absolute;left:0;top:0;cursor: not-allowed"></div>
+                <div v-show="isShow" style="width:100%;height:100%;background:rgba(220,222,226,.1);position: absolute;left:0;top:0;cursor: not-allowed;z-index:999;"></div>
                 <el-button size="mini" icon="el-icon-plus" class="add-button" @click="addCailiao"/>
                 <div class="wubi">请务必在报到前整理齐全所有资料，以免影响入职手续办理</div>
             </el-card>
@@ -75,20 +75,20 @@
                         <el-input autosize type="textarea" style="width:100%;" resize="none" v-model="sm[index]"/>
                     </li>
                 </ul>
-                <div v-show="isShow" style="width:100%;height:100%;background:rgba(220,222,226,.1);position: absolute;left:0;top:0;cursor: not-allowed"></div>
+                <div v-show="isShow" style="width:100%;height:100%;background:rgba(220,222,226,.1);position: absolute;left:0;top:0;cursor: not-allowed;z-index:999;"></div>
                 <el-button size="mini" icon="el-icon-plus" class="add-button" @click="addShenming"/>
             </el-card>
-            <!--<el-card class="offer-box">-->
-                <!--<h5>非常欢迎您加入-->
-                    <!--<el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input>-->
-                    <!--这个大家庭-->
-                <!--</h5>-->
-                <!--<h5>祝您工作愉快!</h5>-->
-                <!--&lt;!&ndash;<p class="footer">请扫描二维码</p>&ndash;&gt;-->
-                <!--<p class="footer"><el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input></p>-->
-                <!--<p class="footer"><el-input :style="{width:'calc(' + relativeCompany.dbLength() + 'em + 12px)'}" v-model="relativeCompany"></el-input></p>-->
-                <!--<p class="footer"><el-input :style="{width:'calc(' + TimeData.dbLength() + 'em + 12px)'}" v-model="TimeData"></el-input></p>-->
-            <!--</el-card>-->
+            <el-card class="offer-box">
+                <h5>非常欢迎您加入
+                    <el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input>
+                    这个大家庭
+                </h5>
+                <h5>祝您工作愉快!</h5>
+                <!--<p class="footer">请扫描二维码</p>-->
+                <p class="footer"><el-input :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></el-input></p>
+                <p class="footer"><el-input :style="{width:'calc(' + relativeCompany.dbLength() + 'em + 12px)'}" v-model="relativeCompany"></el-input></p>
+                <p class="footer"><el-input :style="{width:'calc(' + TimeData.dbLength() + 'em + 12px)'}" v-model="TimeData"></el-input></p>
+            </el-card>
         </div>
         <div style="float: right;margin-top:15px;">
             <el-button type="primary" size="medium" @click="saveClick">创建</el-button>

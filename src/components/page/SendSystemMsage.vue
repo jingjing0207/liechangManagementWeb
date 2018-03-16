@@ -319,23 +319,44 @@
                     sendFlag: false,
                     sendType: this.sendType
                 }
-                if(this.description!='' && this.value10!='') {
-                    self.$axios.post(self.url,sendMsageContent).then((response) => {
-                        console.log(response)
-                        if(response.data==''){
-                            this.$message({
-                                type: 'success',
-                                message: '消息发送成功'
-                            })
-                            this.description=''
-                            this.selectedUserId=''
-                            this.value10=''
-                            this.currentCpmpany=''
-                            this.selectSendTime='1'
-                        }
-                    })
-                }else if((this.description=='' && this.value10!='') || (this.description!='' && this.value10=='')){
-                    self.$message.error('输入不可为空，请检查并重新输入')
+                if(this.selectSendTime==2){
+                    if(this.description!='' && this.value10!='') {
+                        self.$axios.post(self.url,sendMsageContent).then((response) => {
+                            console.log(response)
+                            if(response.data==''){
+                                this.$message({
+                                    type: 'success',
+                                    message: '消息发送成功'
+                                })
+                                this.description=''
+                                this.selectedUserId=''
+                                this.value10=''
+                                this.currentCpmpany=''
+                                this.selectSendTime='1'
+                            }
+                        })
+                    }else if((this.description=='' && this.value10!='') || (this.description!='' && this.value10=='')){
+                        self.$message.error('输入不可为空，请检查并重新输入')
+                    }
+                }else{
+                    if(this.description!='') {
+                        self.$axios.post(self.url,sendMsageContent).then((response) => {
+                            console.log(response)
+                            if(response.data==''){
+                                this.$message({
+                                    type: 'success',
+                                    message: '消息发送成功'
+                                })
+                                this.description=''
+                                this.selectedUserId=''
+                                this.value10=''
+                                this.currentCpmpany=''
+                                this.selectSendTime='1'
+                            }
+                        })
+                    }else{
+                        self.$message.error('输入不可为空，请检查并重新输入')
+                    }
                 }
 
             },

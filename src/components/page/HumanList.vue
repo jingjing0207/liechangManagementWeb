@@ -9,7 +9,7 @@
         <el-collapse class="handle-box">
             <div class="search">
                 <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
-                <el-input v-model="search_name" size="medium" placeholder="搜索姓名" class="handle-title"></el-input>
+                <el-input clearable v-model="search_name" size="medium" placeholder="搜索姓名" class="handle-title"></el-input>
                 <!--<el-input-number v-model="size" size="medium" :min="1" :controls="false" class="handle-size">-->
                     <!--<template slot="prepend">每页</template>-->
                     <!--<template slot="append">条</template>-->

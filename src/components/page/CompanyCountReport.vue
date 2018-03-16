@@ -16,37 +16,26 @@
                     </el-date-picker>
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
-                <!--<el-button type="text" style="float: right">导出</el-button>-->
-                <!--<el-button type="success" style="float: right" size="medium">导出</el-button>-->
             </div>
-            <!--<el-collapse-item title="排序选项" class="sortOption">-->
-                <!--<div class="sortItem" v-for="item of sortGroup">-->
-                    <!--<span>{{ item.display }}</span>-->
-                    <!--<el-select v-model="item.value" :name="item.name" ref="sel" size="small">-->
-                        <!--<el-option v-for="option in sortOptions" :label="option.label" :value="option.value"-->
-                                   <!--:key="option.value">-->
-                        <!--</el-option>-->
-                    <!--</el-select>-->
-                <!--</div>-->
-            <!--</el-collapse-item>-->
         </el-collapse>
         <el-table :data="tableData" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center">
             <el-table-column header-align="center" prop="companyName" label="公司名称"></el-table-column>
-            <el-table-column header-align="center" prop="income" label="进款">
+            <el-table-column header-align="center" prop="income" label="进款 (元)">
                 <template slot-scope="scope">
                     <template>
                         <span>{{ scope.row.income | priceFormat }}</span>
                     </template>
                 </template>
             </el-table-column>
-            <el-table-column header-align="center" prop="month" label="月份" :formatter="dateTimeFormat"></el-table-column>
-            <el-table-column header-align="center" prop="outlay" label="经费">
+            <el-table-column header-align="center" prop="outlay" label="经费 (元)">
                 <template slot-scope="scope">
                     <template>
                         <span>{{ scope.row.outlay | priceFormat }}</span>
                     </template>
                 </template>
             </el-table-column>
+            <el-table-column header-align="center" prop="month" label="月份" :formatter="dateTimeFormat"></el-table-column>
+
         </el-table>
         <div class="pagination">
             <el-pagination
@@ -99,7 +88,7 @@
             }
         },
         created() {
-            // this.setSort();
+
         },
         computed: {
             data() {
@@ -120,25 +109,11 @@
                     return x1 + ' ' + (x2 ? x2.replace(/(\d{3})(?=[^$])/g,'$1,') : '');
                 }
 
-                return (addCommas(val)) + '元';
+                return addCommas(val);
             }
         },
         methods: {
             search() {
-                // const self = this
-                // var list = document.querySelectorAll('.sortOption .el-input__inner')
-                // var el = this.$refs.sel
-                // var map = {}
-                // self.sortBy = []
-                // el.forEach(obj => {
-                //     return map[obj.$options.propsData.name] = obj.$options.propsData.value
-                // })
-                // Array.prototype.map.call(list, obj => {
-                //     if (map[obj.name] != '0') {
-                //         self.sortBy.push(obj.name + ',' + map[obj.name])
-                //     }
-                // })
-
                 this.getData();
             },
             sizeChange(val) {
@@ -186,15 +161,6 @@
                             return v
                         })
                     })
-            },
-            setSort() {
-                this.$nextTick(() => {
-                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0]
-                    this.sortable = Sortable.create(el, {
-                        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
-                        setData: dataTransfer => dataTransfer.setData('Text', '')
-                    })
-                })
             }
         }
     }
@@ -253,7 +219,7 @@
     #jdlist.el-table .cell, #jdlist.el-table th div {
         color: #333;
         padding: 0 10px;
-        max-width: 242px;
+        max-width: 100%!important;
     }
 
     .jdlist-row {

@@ -8,7 +8,7 @@
         </div>
         <el-collapse class="handle-box">
             <div class="search">
-                <el-input v-model="search_title" size="medium" placeholder="筛选标题" class="handle-title"/>
+                <el-input clearable v-model="search_title" size="medium" placeholder="输入标题" class="handle-title"/>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">

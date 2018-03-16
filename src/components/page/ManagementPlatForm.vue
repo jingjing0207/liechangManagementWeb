@@ -6,7 +6,7 @@
                     <el-input v-model="newHeadpic" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
                 <el-form-item label="密 码" :label-width="formLabelWidth">
-                    <el-input v-model="newPassword" auto-complete="off"style="width:80%;"></el-input>
+                    <el-input type="password" v-model="newPassword" auto-complete="off"style="width:80%;"></el-input>
                 </el-form-item>
                 <el-form-item label="角 色" :label-width="formLabelWidth">
                     <el-input v-model="newRole" auto-complete="off"style="width:80%;"></el-input>
@@ -304,19 +304,20 @@
                 this.dialogFormVisible=true
             },
             createOperation(){
-                this.dialogFormVisible=false
                 let createOperationPrams={
                     headPic:this.newHeadpic,
                     password:this.newPassword,
                     role:this.newRole,
                     username:this.newUsername
                 }
-                axios.post(CREATEMANAGE,createOperationPrams)
+                if(this.newHeadpic!=='' && this.newPassword!=='' && this.newRole!=='' && this.newUsername !==''){
+                    axios.post(CREATEMANAGE,createOperationPrams)
                     .then((response) => {
                         this.requestFlowData()
+                        this.dialogFormVisible=false
                         this.$message({
                             type: 'success',
-                            message: '成功新增',
+                            message: '新增成功',
                             showInput:false
                         }).then(({ value }) => {
 
@@ -330,6 +331,13 @@
                     .catch((error) => {
                         console.log(error)
                     })
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: '输入不可为空！'
+                    })
+                }
+
             },
             username() {
                 let resultMessage = sessionStorage.getItem('username')

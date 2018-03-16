@@ -54,29 +54,29 @@
             </el-collapse-item>
         </el-collapse>
         <el-table :data="tableData" border fit id="jdlist" style="width: 100%;font-size: 13px;text-align: center">
+            <el-table-column header-align="center" prop="serialNumber" label="JD编号 " width="180px">
+            </el-table-column>
             <el-table-column header-align="center" prop="title" label="JD名称">
             </el-table-column>
             <el-table-column header-align="center" prop="recruitedNumber" label="已招聘人数">
             </el-table-column>
             <el-table-column header-align="center" prop="recruitingNumber" label="职位招聘人数">
             </el-table-column>
-            <el-table-column header-align="center" prop="refundFee" label="赏金退回金额 ">
+            <el-table-column header-align="center" prop="refundFee" label="赏金退回金额 (元) ">
                 <template slot-scope="scope">
                     <template>
                         <span>{{ scope.row.refundFee | priceFormat }}</span>
                     </template>
                 </template>
             </el-table-column>
-            <el-table-column header-align="center" prop="totalFee" label="赏金支出金额 ">
+            <el-table-column header-align="center" prop="totalFee" label="赏金支出金额 (元) ">
                 <template slot-scope="scope">
                     <template>
                         <span>{{ scope.row.totalFee | priceFormat }}</span>
                     </template>
                 </template>
             </el-table-column>
-            <el-table-column header-align="center" prop="serialNumber" label="JD编号 ">
-            </el-table-column>
-            <el-table-column header-align="center" prop="platformFee" label="平台收费金额 ">
+            <el-table-column header-align="center" prop="platformFee" label="平台收费金额 (元)">
                 <template slot-scope="scope">
                     <template>
                         <span>{{ scope.row.platformFee | priceFormat }}</span>
@@ -126,10 +126,10 @@
                     {value: '0', name: 'title', display: 'JD名称'},
                     {value: '0', name: 'recruitedNumber', display: '已招聘人数'},
                     {value: '0', name: 'recruitingNumber', display: '职位招聘人数'},
-                    // {value: '0', name: 'refundFee', display: '赏金退回金额'},
-                    // {value: '0', name: 'totalFee', display: '赏金支出金额'},
+                    {value: '0', name: 'refundFee', display: '赏金退回金额'},
+                    {value: '0', name: 'totalFee', display: '赏金支出金额'},
                     {value: '0', name: 'serialNumber', display: 'JD编号'},
-                    // {value: '0', name: 'platformFee', display: '平台收费金额'}
+                    {value: '0', name: 'platformFee', display: '平台收费金额'}
                 ],
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
@@ -162,7 +162,7 @@
                     }
                     return x1 + (x2 ? '.' +x2.replace(/(\d{3})(?=[^$])/g,'$1,') : ' ');
                 }
-                return (addCommas(val)) + '元';
+                return addCommas(val);
             }
         },
         updated(){
@@ -321,12 +321,16 @@
 <style>
     #jdlist.el-table .cell, #jdlist.el-table th div {
         color: #333;
-        padding: 0 10px;
+        /*padding: 0 10px;*/
     }
 
     .jdlist-row {
         cursor: pointer;
     }
+    .cell{
+        white-space: nowrap;
+    }
+
 
     #jdlist th {
         background-color: #eef1f6;

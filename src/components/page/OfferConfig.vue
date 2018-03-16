@@ -3,7 +3,11 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-menu"></i> 管理配置</el-breadcrumb-item>
-                <el-breadcrumb-item to="/companieslist">企业列表管理</el-breadcrumb-item>
+                <el-breadcrumb-item>
+                    <template>
+                        <span @click="changePage()">企业列表管理</span>
+                    </template>
+                </el-breadcrumb-item>
                 <el-breadcrumb-item>Offer详情</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -108,6 +112,10 @@
                         }
                         self.info = res.data
                     })
+            },
+            changePage(){
+                // history.go(-1)
+                history.back(-1)
             }
         }
     }
