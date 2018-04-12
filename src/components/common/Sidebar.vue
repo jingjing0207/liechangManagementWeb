@@ -1,17 +1,22 @@
 <template>
     <div class="sidebar">
-        <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router>
+        <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" :collapse="isCollapse" unique-opened router>
             <template v-for="item in items">
                 <template v-if="item.subs">
                     <el-submenu :index="item.index">
-                        <template slot="title"><i :class="item.icon" class="fontFamily sideIcon"></i>{{ item.title }}</template>
-                        <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">{{ subItem.title }}
+                        <template slot="title">
+                            <i :class="item.icon" class="fontFamily sideIcon"></i>
+                            {{ item.title }}
+                        </template>
+                        <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">
+                            {{ subItem.title }}
                         </el-menu-item>
                     </el-submenu>
                 </template>
                 <template v-else>
                     <el-menu-item :index="item.index">
-                        <i :class="item.icon"></i>{{ item.title }}
+                        <i :class="item.icon"></i>
+                        {{ item.title }}
                     </el-menu-item>
                 </template>
             </template>
@@ -24,6 +29,7 @@
     export default {
         data() {
             return {
+                isCollapse: false,
                 items: [
                     {
                         icon: 'el-icon-yonghuguanli',
@@ -163,9 +169,32 @@
         top: 70px;
         bottom:0;
         background: #2E363F;
+        /*height: 500px;*/
+        box-sizing: border-box;
+        overflow: visible;
+        visibility: visible;
     }
     .sidebar > ul {
         height:100%;
+        box-sizing: border-box;
+        overflow: scroll;
+        overflow-x: visible;
+    }
+    ::-webkit-scrollbar{
+        width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+        /*height: 5px;*/
+        background: #eee;
+    }
+    ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 3px #eeeeee;
+        border-radius: 10px;
+        background: #eef1f6;
+
+    }
+    ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 5px #eeeeee;
+        background: #ccc;
     }
     .sideIcon {
         margin-left: 10px;

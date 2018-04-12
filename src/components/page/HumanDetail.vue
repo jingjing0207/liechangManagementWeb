@@ -165,6 +165,9 @@
     import icon_mail from './iconmail'
     import icon_tel from './icontel'
     import icon_address from './iconaddress'
+    import axios from 'axios';
+    axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
+    axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
 
     export default {
         name: "human-detail",
@@ -199,8 +202,6 @@
             },
             getData() {
                 let self = this;
-                self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-                self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
                 self.$axios.get(GET_RESUME_DETAIL + self.human_id)
                     .then((res) => {
                         self.info = res.data

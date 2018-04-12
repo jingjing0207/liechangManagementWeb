@@ -8,12 +8,7 @@
         </div>
         <el-collapse class="handle-box">
             <div class="search">
-                <!--<el-button type="primary" icon="delete" class="handle-del mr10">批量删除</el-button>-->
                 <el-input clearable v-model="search_name" size="medium" placeholder="搜索姓名" class="handle-title"></el-input>
-                <!--<el-input-number v-model="size" size="medium" :min="1" :controls="false" class="handle-size">-->
-                    <!--<template slot="prepend">每页</template>-->
-                    <!--<template slot="append">条</template>-->
-                <!--</el-input-number>-->
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>
             <el-collapse-item title="排序选项" class="sortOption">
@@ -103,153 +98,15 @@
 <script>
     import Sortable from 'sortablejs'
     import {GET_RESUME_LIST, SET_PRICE, DELETE_RESUME} from '../../constants/Constants'
+    import axios from 'axios';
+    axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
+    axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     import icon_female from './iconfemale'
     import icon_male from './iconmale'
     import human_import from './HumanImport'
 
     export default {
         name: "human-list",
-        computed: {
-            data() {
-                const self = this;
-                return self.tableData
-            }
-        },
-        components: {
-            icon_female: icon_female,
-            icon_male: icon_male,
-            human_import: human_import
-        },
-        filters: {
-            priceFormat(val) {
-                return val + '元';
-            },
-            stateFormat(val) {
-                let v = (val + '').toString().toLowerCase()
-                if (v == 'using') {
-                    return '启用'
-                } else if (v == 'disabled') {
-                    return '禁用'
-                } else {
-                    return '未知'
-                }
-            },
-        },
-        methods: {
-            editClick(row) {
-                row.edit = true
-                console.info(row.edit)
-            },
-            editOK(row) {
-                row.originalPrice = row.price
-                let userForm = {
-                    id: row.id,
-                    price: Math.ceil(row.price * 1000 / 10)
-                };
-                this.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-                this.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                this.$axios.post(SET_PRICE, userForm)
-                    .then(res => {
-                        row.edit = false
-                    })
-                    .catch((error) => {
-                        this.$message({
-                            message: '修改失败',
-                            type: 'error'
-                        })
-                    })
-            },
-            editCancel(row) {
-                row.price = row.originalPrice;
-                row.edit = false
-            },
-            view(row) {
-                this.$router.push({path: '/humandetail', query: {id: row.id}})
-            },
-            del(row) {
-                this.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-                this.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                this.$axios.delete(DELETE_RESUME + row.id)
-                    .then(res => {
-                        this.getData()
-                    })
-                    .catch((error) => {
-                        this.$message({
-                            message: '删除失败',
-                            type: 'error'
-                        })
-                    })
-            },
-            sizeChange(val) {
-                this.size = val;
-                this.search()
-            },
-            search() {
-                const self = this;
-                let list = document.querySelectorAll('.sortOption .el-input__inner')
-                let el = this.$refs.sel
-                let map = {};
-                self.sortBy = [];
-                el.forEach(obj => {
-                    return map[obj.$options.propsData.name] = obj.$options.propsData.value
-                })
-                Array.prototype.map.call(list, obj => {
-                    if (map[obj.name] != '0') {
-                        self.sortBy.push(obj.name + ',' + map[obj.name])
-                    }
-                })
-                this.pageNo = 1;
-                this.getData();
-            },
-            handleCurrentChange(val) {
-                this.getData();
-            },
-            openDetails(row) {
-                this.$router.push({path: '/job', query: {id: row.id}})
-            },
-            getData() {
-                let self = this;
-                let option = '?page=' + (self.pageNo - 1) + '&size=' + self.size
-                let sortStr = ''
-                if (self.sortBy.length != 0) {
-                    for (var s in self.sortBy) {
-                        sortStr = sortStr + '&sort=' + self.sortBy[s]
-                    }
-                }
-                if (self.search_name.length != 0) {
-                    option = option + '&name=' + self.search_name
-                }
-                if (sortStr.length != 0) {
-                    option = option + sortStr
-                }
-                self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-                self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-                self.$axios.get(GET_RESUME_LIST + option)
-                    .then(res => {
-                        self.pagesize = parseInt(self.size)
-                        self.totalElements = parseInt(res.data.totalElements)
-                        self.tableData = res.data.content.map(v => {
-                            this.$set(v, 'price', parseFloat(v['price']) / 100)
-                            this.$set(v, 'edit', false)
-                            this.$set(v, 'originalPrice', v['price'])
-                            return v
-                        })
-                    })
-            },
-            setSort() {
-                this.$nextTick(() => {
-                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0]
-                    this.sortable = Sortable.create(el, {
-                        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
-                        setData: dataTransfer => dataTransfer.setData('Text', '')
-                    })
-                })
-            }
-        },
-        created() {
-            this.getData();
-            this.setSort();
-        },
         data() {
             return {
                 totalElements: 0,
@@ -273,6 +130,143 @@
                     {value: 'asc', label: '升序'},
                     {value: 'desc', label: '降序'}],
                 tableData: []
+            }
+        },
+        computed: {
+            data() {
+                const self = this;
+                return self.tableData
+            }
+        },
+        components: {
+            icon_female: icon_female,
+            icon_male: icon_male,
+            human_import: human_import
+        },
+        created() {
+            this.setSort();
+        },
+        mounted(){
+            this.getData();
+        },
+        filters: {
+            priceFormat(val) {
+                return val + '元';
+            },
+            stateFormat(val) {
+                let v = (val + '').toString().toLowerCase()
+                if (v == 'using') {
+                    return '启用'
+                } else if (v == 'disabled') {
+                    return '禁用'
+                } else {
+                    return '未知'
+                }
+            },
+        },
+        methods: {
+            editClick(row) {
+                row.edit = true;
+                console.info(row.edit)
+            },
+            editOK(row) {
+                row.originalPrice = row.price;
+                let userForm = {
+                    id: row.id,
+                    price: Math.ceil(row.price * 1000 / 10)
+                };
+                this.$axios.post(SET_PRICE, userForm).then(res => {
+                    console.log(res)
+                    row.edit = false
+                })
+                .catch((error) => {
+                    this.$message({
+                        message: '修改失败',
+                        type: 'error'
+                    })
+                })
+            },
+            editCancel(row) {
+                row.price = row.originalPrice;
+                row.edit = false
+            },
+            view(row) {
+                this.$router.push({path: '/humandetail', query: {id: row.id}})
+            },
+            del(row) {
+                this.$axios.delete(DELETE_RESUME + row.id)
+                    .then(res => {
+                        this.getData()
+                    })
+                    .catch((error) => {
+                        this.$message({
+                            message: '删除失败',
+                            type: 'error'
+                        })
+                    })
+            },
+            sizeChange(val) {
+                this.size = val;
+                this.search()
+            },
+            search() {
+                const self = this;
+                let list = document.querySelectorAll('.sortOption .el-input__inner');
+                let el = this.$refs.sel;
+                let map = {};
+                self.sortBy = [];
+                el.forEach(obj => {
+                    return map[obj.$options.propsData.name] = obj.$options.propsData.value
+                })
+                Array.prototype.map.call(list, obj => {
+                    if (map[obj.name] != '0') {
+                        self.sortBy.push(obj.name + ',' + map[obj.name])
+                    }
+                });
+                this.pageNo = 1;
+                this.getData()
+            },
+            handleCurrentChange(val) {
+                this.getData();
+            },
+            openDetails(row) {
+                this.$router.push({path: '/job', query: {id: row.id}})
+            },
+            getData() {
+                let self = this;
+                let option = '?page=' + (self.pageNo - 1) + '&size=' + self.size;
+                let sortStr = '';
+                if (self.sortBy.length != 0) {
+                    for (var s in self.sortBy) {
+                        sortStr = sortStr + '&sort=' + self.sortBy[s]
+                    }
+                }
+                if (self.search_name.length != 0) {
+                    option = option + '&name=' + self.search_name
+                }
+                if (sortStr.length != 0) {
+                    option = option + sortStr
+                }
+                self.$axios.get(GET_RESUME_LIST + option)
+                    .then(res => {
+                        self.pagesize = parseInt(self.size);
+                        self.totalElements = parseInt(res.data.totalElements);
+                        self.tableData = res.data.content.map(v => {
+                            this.$set(v, 'price', parseFloat(v['price']) / 100);
+                            this.$set(v, 'edit', false);
+                            this.$set(v, 'originalPrice', v['price']);
+                            return v
+                        })
+                    })
+            },
+            setSort() {
+                this.$nextTick(() => {
+                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0]
+                    this.sortable = Sortable.create(el, {
+                        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+                        setData: dataTransfer => dataTransfer.setData('Text', '')
+                    })
+                })
             }
         }
     }

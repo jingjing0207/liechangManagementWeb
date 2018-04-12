@@ -17,12 +17,24 @@
                 highlight-current-row
                 @current-change="handleSelectionChange"
                 style="width: 100%;font-size: 12px;text-align: center">
-                <el-table-column header-align="center" type="index" width="40"></el-table-column>
-                <el-table-column header-align="center" property="username" label="用户名" width=""></el-table-column>
-                <el-table-column header-align="center" property="createTime" label="创建时间" width=""></el-table-column>
-                <el-table-column header-align="center" property="type" label="类型" width=""></el-table-column>
-                <el-table-column header-align="center" property="state" label="状态" width="100px"></el-table-column>
-                <el-table-column header-align="center" property="companyName" label="公司名称"></el-table-column>
+                <el-table-column header-align="center" type="index" width="40">
+
+                </el-table-column>
+                <el-table-column header-align="center" property="username" label="用户名" width="">
+
+                </el-table-column>
+                <el-table-column :formatter="dateTimeFormat" width="170" header-align="center" property="createTime" label="创建时间">
+
+                </el-table-column>
+                <el-table-column header-align="center" property="type" label="类型" :formatter="typeFormat" width="">
+
+                </el-table-column>
+                <el-table-column header-align="center" property="state"  :formatter="stateFormat" label="状态" width="100px">
+
+                </el-table-column>
+                <el-table-column header-align="center" property="companyName" label="公司名称">
+
+                </el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -145,8 +157,7 @@
     import axios from 'axios';
     import { GETALLCOMPANIES,GETAUDITEDHES,SENDSYSTEMMSG } from '../../constants/Constants'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-    // axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
-    axios.defaults.headers['X-OperatorToken'] = '9cee02c6a9f848eeba3119b8a828c66d'
+    axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
 
     export default {
         name: "",
@@ -200,10 +211,10 @@
 
         },
         created() {
-            this.getCompaniesSelect();
         },
         mounted(){
             this.getData()
+            this.getCompaniesSelect();
         },
         updated(){
             this.list = this.allCompanies.map(item => {
@@ -211,6 +222,35 @@
             });
         },
         methods: {
+            stateFormat(row, column) {
+                var v = (row.state + '').toString().toLowerCase()
+                if (v == 'using') {
+                    return '启用'
+                } else if (v == 'disabled') {
+                    return '禁用'
+                } else {
+                    return '未知'
+                }
+            },
+            typeFormat(row, column) {
+                var v = row.type + ''
+                if (v == 'PLATFORM_MARKECTER') {
+                    return '销售员'
+                } else if (v == 'HR_MANAGER') {
+                    return 'HR管理员'
+                } else if (v == 'HR') {
+                    return 'HR'
+                } else if (v == 'HEADHUNTER') {
+                    return '猎头'
+                }  else {
+                    return '其他'
+                }
+            },
+            dateTimeFormat(row, column) {
+                let time = new Date(+row.createTime);
+                if (time == null) return;
+                return new Date(time).toLocaleString()
+            },
             getCompaniesSelect(){
                 let self = this;
                 self.url = GETALLCOMPANIES;
@@ -373,8 +413,17 @@
             }
         },
         filters: {
-
-        }
+            stateFormat(val) {
+                let v = (val + '').toString().toLowerCase()
+                if (v == 'using') {
+                    return '启用'
+                } else if (v == 'disabled') {
+                    return '禁用'
+                } else {
+                    return '未知'
+                }
+            },
+        },
     }
 </script>
 

@@ -91,7 +91,7 @@ export default new Router({
                 },
                 {
                     path: '/sendOfferConfigure',
-                    component: resolve => require(['../components/page/SendOfferConfigure.vue'], resolve)   //电子offer模板配置
+                    component: resolve => require(['../components/page/ModuleConfig.vue'], resolve)   //电子offer模板配置
                 },
                 {
                     path: '/sendSystemMsage',
@@ -119,7 +119,7 @@ export default new Router({
                 },
                 {
                     path: '/edit',
-                    component: resolve => require(['../components/page/VueEditor.vue'], resolve)   //编辑简历
+                    component: resolve => require(['../components/page/editor.vue'], resolve)   //编辑简历
                 },
                 {
                     path: '/OfferConfig',
@@ -128,6 +128,10 @@ export default new Router({
                 {
                     path: '/hrManagerInfolist',
                     component: resolve => require(['../components/page/CompanyHrManagerInfolist.vue'], resolve)   //编辑简历
+                },
+                {
+                    path: '/moduleconfig',
+                    component: resolve => require(['../components/page/AllContent.vue'], resolve)   //编辑简历
                 }
             ]
         },

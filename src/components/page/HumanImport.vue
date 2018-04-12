@@ -26,6 +26,9 @@
 
 <script>
     import {IMPORT_RESUME} from '../../constants/Constants'
+    import axios from 'axios';
+    // axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
+    // axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     export default {
         name: "human-import",
         methods: {
@@ -46,7 +49,7 @@
                     target: IMPORT_RESUME,
                     testChunks: false,
                     headers: {
-                        'X-OperatorToken': sessionStorage.getItem('userName')
+                        'X-OperatorToken': sessionStorage.getItem('resultMessage')
                     }
                 },
                 fileStatusText: {

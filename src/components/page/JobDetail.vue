@@ -11,7 +11,7 @@
             <div class="block">
                 <h2>{{ info.title }}</h2>
                 <el-tag color="white" size="small" type="success">{{ info.creatorCompanyName }}</el-tag>
-                <el-tag color="white" size="small" type="success">支付方式：{{ info.payType | payTypeFormat}}</el-tag>
+                <el-tag color="white" size="small" type="success">支付方式：{{ info.paymentPlatform | payTypeFormat}}</el-tag>
                 <el-tag color="white" size="small" type="success">状态：{{ info.state | stateFormat}}</el-tag>
             </div>
             <el-card class="box-card">
@@ -124,18 +124,19 @@
             this.getData()
         },
         filters: {
-            payTypeFormat(val) {
-                var v = (val + '').toString().toLowerCase()
-                if (v == 'wechatpay') {
+            payTypeFormat(v) {
+                if (v == 'WECHAT') {
                     return '微信'
-                } else if (v == 'alipay'){
+                } else if (v == 'ALI_PAY'){
                     return '支付宝'
-                } else if (v == 'alipay'){
-                    return '支付宝'
-                } else if (v == 'bank'){
+                } else if (v == 'BALANCE'){
+                    return '余额支付'
+                } else if (v == 'BANK'){
                     return '银行卡'
-                } else if (v == 'companypay'){
-                    return '企业结算'
+                } else if (v == 'CompanyPay'){
+                    return '企业支付'
+                } else if (v == 'PLATFORM'){
+                    return '平台支付'
                 } else {
                     return '未知'
                 }
@@ -188,9 +189,10 @@
             getData() {
                 let self = this;
                 self.$axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-                self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
+                self.$axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
                 self.$axios.get(GET_JOB_DETAIL + self.jd_id)
                     .then((res) => {
+                        console.log(res)
                         self.info = res.data
                     })
             }

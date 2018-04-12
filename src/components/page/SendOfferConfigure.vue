@@ -101,7 +101,7 @@
 <script>
     import axios from 'axios';
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
-    axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('userName')
+    axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     import { GETALLCOMPANIES,GETOFFERCONFIGS,CREATEOFFERCONFIG,UPDATEOFFERCONFIG } from '../../constants/Constants'
     String.prototype.dbLength = function () {
         let str = this, leg = str.length;
@@ -138,10 +138,13 @@
         created() {
             this.getCompaniesSelect();
         },
+        mounted(){
+
+        },
         updated(){
             this.list = this.allCompanies.map(item => {
-                return { id:item.id, name:item.name };
-            });
+                return { id:item.id, name:item.name }
+            })
         },
         methods: {
             getCompaniesSelect(){
@@ -161,13 +164,12 @@
                     setTimeout(() => {
                         this.loading = false;
                         this.options4 = this.list.filter(item => {
-                            console.log(item.name)
                             return item.name.toLowerCase()
-                                .indexOf(query.toLowerCase()) > -1;
-                        });
-                    }, 100);
+                                .indexOf(query.toLowerCase()) > -1
+                        })
+                    }, 100)
                 } else {
-                    this.options4 = [];
+                    this.options4 = []
                 }
             },
             search() {
@@ -192,10 +194,13 @@
                             }
                             console.log(this.sm)
                             sessionStorage.setItem('offerId',response.data.content[0].id)
+                            console.log("打印出offerId")
+                            console.log(sessionStorage.getItem('offerId'))
                         }else{
+                            this.isShow=false
                             this.cl=[]
                             this.sm=[]
-                            self.$message.error('暂无数据！')
+                            self.$message.error('暂无数据,可创建！')
                         }
                     }).catch((error) => {
                         console.log(error)
@@ -218,11 +223,11 @@
                 self.$axios.post(self.url,saveData).then((response) => {
                     console.log(response)
                     if(response.status==200){
-                        this.$message({
+                        self.$message({
                             type: 'success',
                             message: '创建成功！'
                         })
-                        this.isShow=true
+                        self.isShow=true
                     }
 
                 }).catch((error) => {
@@ -278,7 +283,7 @@
 </script>
 
 <style scoped>
-    .remove-button[data-v-3457857d] {
+    .remove-button{
         color: #409EFF!important;
     }
     body{

@@ -70,7 +70,7 @@
                     <el-button v-if="pro.state == 'OFF'" disabled="disabled"  type="info">重置平台服务费</el-button>
                 </td>
                 <td class="last-td">
-                    <el-button v-if="pro.state != 'OFF'" type="primary"  @click="getHRManager(pro.id)" >查看HR管理员信息</el-button>
+                    <el-button v-if="pro.state != 'OFF'" type="primary"  @click="getHRManager(pro.id,pro.name)" >查看HR管理员信息</el-button>
                     <el-button v-if="pro.state == 'OFF'" disabled="disabled" type="info">查看HR管理员信息</el-button>
                 </td>
             </tr>
@@ -88,11 +88,11 @@
                 </el-pagination>
             </div>
         </div>
-        <el-dialog title="该企业HR管理员信息" :visible.sync="outerVisible">
+        <el-dialog :title="'HR管理员信息 — '+currentCompanyName" :visible.sync="outerVisible">
             <table style="padding:0 5px;" class="table table-bordered" cellpadding="0" cellspacing="0" >
                 <tr class="tr-header hrInfo">
                     <td><strong>用户名:</strong></td>
-                    <td class="contents">{{hrInfo.username}}</td>
+                    <td class="contents" colspan="3">{{hrInfo.username}}</td>
                 </tr>
                 <tr class="tr-header hrInfo">
                     <td><strong>类  型:</strong></td>
@@ -301,6 +301,7 @@
                 sortOptions: [{value: '0', label: '默认'},
                     {value: 'asc', label: '升序'},
                     {value: 'desc', label: '降序'}],
+                currentCompanyName:''
             }
         },
         created(){
@@ -392,8 +393,9 @@
                 this.form.percentageServiceFee=''
                 this.dialogFormVisible=true
             },
-            getHRManager(id){
+            getHRManager(id,name){
                 this.currentCompany=id
+                this.currentCompanyName=name
                 sessionStorage.setItem('companyId',this.currentCompany)
                 let self = this;
                 self.url = GETHRMANAGER;
@@ -493,17 +495,27 @@
                     id:this.changeCompanyId,
                     state: this.changestate
                 }
-                self.url = CHANGECOMPANYSTATE;
-                self.$axios.post(self.url,changedState).then((response) => {
-                    console.log(response)
-                    console.log(response.data.state)
-                    self.hr_list[idx].state=response.data.state
-                    console.log(self.hr_list.state)
-                })
-            },
-            showOffer(id,name){
-                sessionStorage.setItem("companyName",name)
-                this.$router.push({path: '/OfferConfig', query: {id : id }})
+                this.$confirm('您确认要变更企业状态吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    self.url = CHANGECOMPANYSTATE;
+                    self.$axios.post(self.url,changedState).then((response) => {
+                        console.log(response)
+                        console.log(response.data.state)
+                        self.hr_list[idx].state=response.data.state
+                        this.$message({
+                            type: 'success',
+                            message: '变更成功!'
+                        });
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消变更企业状态！'
+                    });
+                });
             }
         }
     }
@@ -619,8 +631,6 @@
         max-width: 115px;
         overflow-x: auto;
     }
-</style>
-<style scoped>
     .sortable-ghost {
         opacity: .7;
     }

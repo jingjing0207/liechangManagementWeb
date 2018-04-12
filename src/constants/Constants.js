@@ -1,5 +1,6 @@
 // const DEVBASEURL = 'http://120.78.184.120:9002'
-const ONLINEBASEURL = 'http://120.78.184.120:9002'
+const ONLINEBASEURL = 'https://www.hunterai.cn'
+
 
 const LOGINURL = `${ONLINEBASEURL}/api/authOperator/login`
 const LOGINOUTTOKEN = `${ONLINEBASEURL}/api/authOperator/signOut`

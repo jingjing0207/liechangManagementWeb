@@ -55,6 +55,7 @@
         <table class="table table-bordered"cellpadding="0" cellspacing="0" >
             <tr class="tr-header">
                 <th>{{username.label}}</th>
+                <th>{{jobNumber.label}}</th>
                 <th>{{createTime.label}}</th>
                 <th>{{lastLoginTime.label}}</th>
                 <th>{{type.label}}</th>
@@ -64,6 +65,7 @@
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
                 <td>{{pro.username}}</td>
+                <td>{{pro.jobNumber}}</td>
                 <td>{{new Date(pro.createTime).toLocaleString()}}</td>
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
                 <td>{{pro.type}}</td>
@@ -103,10 +105,10 @@
     export default {
         filters: {
             stateFormat(val) {
-                var v = (val + '').toString().toLowerCase()
-                if (v == 'using') {
+                let v = (val + '').toString().toLowerCase();
+                if (v ==='using') {
                     return '启用'
-                } else if (v == 'auditing') {
+                } else if (v ==='auditing') {
                     return '审核'
                 } else {
                     return '禁用'
@@ -135,6 +137,10 @@
                 type:{
                     title:'type',
                     label:'类型'
+                },
+                jobNumber:{
+                    title:'jobNumber',
+                    label:'工号'
                 },
                 state:{
                     title:'state',
@@ -175,6 +181,7 @@
                 sortBy: [],
                 sortGroup: [
                     {value: '0', name: 'username', display: '用户名'},
+                    {value: '0', name: 'jobNumber', display: '工号'},
                     {value: '0', name: 'createTime', display: '创建时间'},
                     {value: '0', name: 'companyName', display: '公司名称'},
                     {value: '0', name: 'state', display: '状态'},
@@ -212,19 +219,18 @@
                 })
             },
             handleSizeChange(val){
-                this.pagesize=parseInt(val)
+                this.pagesize=parseInt(val);
                 this.getData();
 
             },
             handleCurrentChange(val){
                 this.cur_page = val;
-                // this.getData();
                 this.search()
             },
             getData(){
                 let self = this;
-                var option = '?page=' + (self.cur_page - 1) + '&size=' + self.pagesize+'&type=HR'
-                var sortStr = ''
+                let option = '?page=' + (self.cur_page - 1) + '&size=' + self.pagesize+'&type=HR'
+                let sortStr = '';
                 if (self.sortBy.length != 0) {
                     for (var s in self.sortBy) {
                         sortStr = sortStr + '&sort=' + self.sortBy[s]
@@ -236,9 +242,9 @@
                 self.url = GETAUDITEDHES;
                 self.$axios.get(self.url+option).then((response) => {
                     if(response.data.content!=''){
-                        console.log(response.data.totalElements)
+                        console.log(response.data.totalElements);
                         self.totalNumber=parseInt(response.data.totalElements)
-                        self.hr_list=response.data.content
+                        self.hr_list=response.data.content;
                         console.log(this.hr_list)
                     }else{
                         self.$message.error('暂无数据！')
@@ -246,12 +252,11 @@
                 })
             },
             search() {
-                // this.pagesize='';
-                const self = this
-                var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = this.$refs.sel
-                var map = {}
-                self.sortBy = []
+                const self = this;
+                let list = document.querySelectorAll('.sortOption .el-input__inner');
+                let el = this.$refs.sel;
+                let map = {};
+                self.sortBy = [];
                 el.forEach(obj => {
                     return map[obj.$options.propsData.name] = obj.$options.propsData.value
                 })
@@ -267,15 +272,14 @@
                 if(this.currentCpmpany!=''){
                     option=option+'&company.id='+this.currentCpmpany
                 }
-                console.log(this.currentCpmpany)
+                console.log(this.currentCpmpany);
                 self.url = GETAUDITEDHES;
                 self.$axios.get(self.url+option).then((response) => {
                     if(response.data.content!=''){
-                        console.log(response)
+                        console.log(response);
                         self.totalNumber=parseInt(response.data.totalElements)
-                        self.hr_list=response.data.content
+                        self.hr_list=response.data.content;
                         console.log(this.hr_list)
-                        // this.handleSizeChange()
                     }else{
                         self.$message.error('暂无数据！')
                     }
@@ -286,7 +290,7 @@
                 let self = this;
                 self.url = GETALLCOMPANIES;
                 self.$axios.get(self.url).then((response) => {
-                    console.log(response)
+                    console.log(response);
                     this.allCompanies=response.data
                 }).catch((error) => {
                     console.log(error)
@@ -298,7 +302,7 @@
                     setTimeout(() => {
                         this.loading = false;
                         this.options4 = this.list.filter(item => {
-                            console.log(item.name)
+                            console.log(item.name);
                             return item.name.toLowerCase()
                                 .indexOf(query.toLowerCase()) > -1;
                         });
@@ -311,41 +315,41 @@
 
             },
             deleteHR(id){
-                this.deleteId=id
+                this.deleteId=id;
                 let self = this;
                 self.url = DELETEHR;
                 self.$axios.delete(self.url+this.deleteId).then((response) => {
-                    console.log(response)
-                    if(response.data==''){
-                        this.getData()
+                    console.log(response);
+                    if(response.data == ''){
+                        this.getData();
                         self.$message.error('删除成功！')
                     }
                 })
             },
             modifyManageplatform(id){
-                this.modifyId=id
-                this.form.newPass=''
-                this.form.password=''
+                this.modifyId=id;
+                this.form.newPass='';
+                this.form.password='';
                 this.dialogFormVisible=true
             },
             modifyPassword(){
-                let self = this
+                let self = this;
                 if((self.form.password!='' && self.form.newPass!='') && (self.form.newPass == self.form.password)){
                     let newModify={
                         id:this.modifyId,
                         password:this.form.newPass
-                    }
+                    };
                     self.url = MODIEFYHRPASSWORD;
                     self.$axios.post(self.url,newModify).then((response) => {
-                        console.log(response)
-                        this.dialogFormVisible=false
+                        console.log(response);
+                        this.dialogFormVisible=false;
                         this.$message({
                             type: 'success',
                             message: '密码修改成功'
                         })
                     })
                 }else{
-                    if(self.form.password=='' || self.form.newPass==''){
+                    if(self.form.password == '' || self.form.newPass == ''){
                         self.$message.error('密码输入为空，无效！')
                     }else if (self.form.newPass != self.form.password){
                         self.$message.error('两次密码不一致，请重新输入！')

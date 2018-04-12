@@ -48,7 +48,6 @@
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
                 <td>{{pro.username}}</td>
                 <td>{{new Date(pro.createTime).toLocaleString()}}</td>
-                <!--<td>{{pro.headPic}}</td>-->
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
                 <td>{{pro.type=="HEADHUNTER"?"猎头":"其他"}}</td>
                 <td class="currentState">{{pro.state | stateFormat}}</td>
@@ -87,10 +86,10 @@
     export default {
         filters: {
             stateFormat(val) {
-                var v = (val + '').toString().toLowerCase()
-                if (v == 'using') {
+                let v = (val + '').toString().toLowerCase();
+                if (v ==='using') {
                     return '启用'
-                } else if (v == 'auditing') {
+                } else if (v ==='auditing') {
                     return '审核'
                 } else {
                     return '禁用'
@@ -103,6 +102,10 @@
                 username:{
                     title:'username',
                     label:'用户名'
+                },
+                jobNumber:{
+                    title:'jobNumber',
+                    label:'工号'
                 },
                 createTime:{
                     title:'createTime',
@@ -149,8 +152,6 @@
                     newPass:''
                 },
                 formLabelWidth: '120px',
-
-
                 search_title: '',
                 sortBy: [],
                 sortGroup: [
@@ -171,7 +172,7 @@
         },
         methods: {
             handleSizeChange(val){
-                this.pagesize=val
+                this.pagesize=val;
                 this.getData();
                 this.search()
             },
@@ -181,7 +182,7 @@
             },
             setSort() {
                 this.$nextTick(() => {
-                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0]
+                    const el = document.querySelectorAll('.sortOption .el-collapse-item__content')[0];
                     this.sortable = Sortable.create(el, {
                         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
                         setData: dataTransfer => dataTransfer.setData('Text', '')
@@ -189,21 +190,21 @@
                 })
             },
             search() {
-                const self = this
-                var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = this.$refs.sel
-                var map = {}
-                self.sortBy = []
+                const self = this;
+                let list = document.querySelectorAll('.sortOption .el-input__inner');
+                let el = this.$refs.sel;
+                let map = {};
+                self.sortBy = [];
                 el.forEach(obj => {
                     return map[obj.$options.propsData.name] = obj.$options.propsData.value
-                })
+                });
                 Array.prototype.map.call(list, obj => {
                     if (map[obj.name] != '0') {
                         self.sortBy.push(obj.name + ',' + map[obj.name])
                     }
-                })
+                });
                 this.cur_page = 1;
-                let option
+                let option;
                 if(this.searchName!=''){
                     option = '?page='+parseInt(self.cur_page-1)+'&size='+this.pagesize+'&type=HEADHUNTER&username='+this.searchName
                 }else{
@@ -211,18 +212,18 @@
                 }
                 self.$axios.get(GETAUDITEDHES+option).then((response) => {
                     console.log(response)
-                    this.totalNumber=parseInt(response.data.totalElements)
-                    this.hr_list=response.data.content
+                    this.totalNumber=parseInt(response.data.totalElements);
+                    this.hr_list=response.data.content;
                     console.log(this.hr_list)
-                })
+                });
                 this.getData();
             },
             getData(){
                 let self = this;
-                var option = '?page='+parseInt(self.cur_page-1)+'&size='+this.pagesize+'&type=HEADHUNTER'
-                var sortStr = ''
+                let option = '?page='+parseInt(self.cur_page-1)+'&size='+this.pagesize+'&type=HEADHUNTER';
+                let sortStr = '';
                 if (self.sortBy.length != 0) {
-                    for (var s in self.sortBy) {
+                    for (let s in self.sortBy) {
                         sortStr = sortStr + '&sort=' + self.sortBy[s]
                     }
                 }
@@ -231,32 +232,32 @@
                 }
                 self.url = GETAUDITEDHES;
                 self.$axios.get(self.url+option).then((response) => {
-                    console.log(response)
-                    this.totalNumber=parseInt(response.data.totalElements)
-                    this.hr_list=response.data.content
+                    console.log(response);
+                    this.totalNumber=parseInt(response.data.totalElements);
+                    this.hr_list=response.data.content;
                     console.log(this.hr_list)
                 })
             },
             deleteHR(id){
-                this.deleteId=id
+                this.deleteId=id;
                 let self = this;
                 self.url = DELETEHR;
                 self.$axios.delete(self.url+this.deleteId).then((response) => {
-                    console.log(response)
-                    if(response.data==''){
-                        this.getData()
+                    console.log(response);
+                    if(response.data ==''){
+                        this.getData();
                         self.$message.error('删除成功！')
                     }
                 })
             },
             modifyManageplatform(id){
-                this.modifyId=id
-                this.form.newPass=''
-                this.form.password=''
+                this.modifyId=id;
+                this.form.newPass='';
+                this.form.password='';
                 this.dialogFormVisible=true
             },
             modifyPassword(){
-                let self = this
+                let self = this;
                 if((self.form.password!='' && self.form.newPass!='') && (self.form.newPass == self.form.password)){
                     let newModify = {
                         id: self.modifyId,
@@ -264,8 +265,8 @@
                     }
                     self.url = MODIEFYHRPASSWORD;
                     self.$axios.post(self.url, newModify).then((response) => {
-                        console.log(response)
-                        this.dialogFormVisible = false
+                        console.log(response);
+                        this.dialogFormVisible = false;
                         this.$message({
                             type: 'success',
                             message: '密码修改成功'

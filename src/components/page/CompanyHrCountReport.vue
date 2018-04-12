@@ -111,7 +111,6 @@
         },
         created() {
             this.getCompaniesSelect()
-            // this.setSort();
         },
         computed: {
             data() {
@@ -139,7 +138,6 @@
                     for(let i=0;i<this.allCompanies.length;i++){
                         this.companiesArr.push(this.allCompanies[i].name)
                     }
-                    // console.log(this.companiesArr)
                 }).catch((error) => {
                     console.log(error)
                 })
@@ -147,8 +145,6 @@
             remoteMethod(query) {
                 if (query !== '') {
                     this.loading = true;
-                    // console.log('显示this.list')
-                    // console.log(this.list)
                     setTimeout(() => {
                         this.loading = false;
                         this.options4 = this.list.filter(item => {
@@ -162,20 +158,6 @@
                 }
             },
             search() {
-                // const self = this
-                // var list = document.querySelectorAll('.sortOption .el-input__inner')
-                // var el = this.$refs.sel
-                // var map = {}
-                // self.sortBy = []
-                // el.forEach(obj => {
-                //     return map[obj.$options.propsData.name] = obj.$options.propsData.value
-                // })
-                // Array.prototype.map.call(list, obj => {
-                //     if (map[obj.name] != '0') {
-                //         self.sortBy.push(obj.name + ',' + map[obj.name])
-                //     }
-                // })
-
                 this.getData();
             },
             sizeChange(val) {

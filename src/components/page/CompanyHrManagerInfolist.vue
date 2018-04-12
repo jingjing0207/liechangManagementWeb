@@ -55,6 +55,7 @@
         <table class="table table-bordered"cellpadding="0" cellspacing="0" >
             <tr class="tr-header">
                 <th>{{username.label}}</th>
+                <th>{{jobNumber.label}}</th>
                 <th>{{createTime.label}}</th>
                 <th>{{lastLoginTime.label}}</th>
                 <th>{{type.label}}</th>
@@ -64,6 +65,7 @@
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
                 <td>{{pro.username}}</td>
+                <td>{{pro.jobNumber}}</td>
                 <td>{{new Date(pro.createTime).toLocaleString()}}</td>
                 <td>{{new Date(pro.lastLoginTime).toLocaleString()}}</td>
                 <td>{{pro.type}}</td>
@@ -123,6 +125,10 @@
                 username:{
                     title:'username',
                     label:'用户名'
+                },
+                jobNumber:{
+                    title:'jobNumber',
+                    label:'工号'
                 },
                 createTime:{
                     title:'createTime',
@@ -189,12 +195,12 @@
             }
         },
         created(){
+
+        },
+        mounted(){
             this.getData();
             this.setSort();
             this.getCompaniesSelect();
-        },
-        mounted(){
-
         },
         updated(){
             this.list = this.allCompanies.map(item => {

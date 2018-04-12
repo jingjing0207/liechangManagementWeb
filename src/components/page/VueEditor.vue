@@ -20,7 +20,8 @@
     export default {
         data: function(){
             return {
-                content: '<p>Hello BBK</p>',
+                content: '<ul>' +
+                '<li>携带身份证远近及复印件</li></ul>',
                 editorOption: {
 
                 }
