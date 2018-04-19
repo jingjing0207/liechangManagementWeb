@@ -239,13 +239,25 @@
                 this.deleteId=id
                 let self = this;
                 self.url = DELETEHR;
-                self.$axios.delete(self.url+this.deleteId).then((response) => {
-                    console.log(response)
-                    if(response.data==''){
-                        this.getData()
-                        self.$message.error('删除成功！')
-                    }
-                })
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    self.$axios.delete(self.url+this.deleteId).then((response) => {
+                        console.log(response)
+                        if(response.data==''){
+                            this.getData()
+                            self.$message.error('删除成功！')
+                        }
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             modifyManageplatform(id){
                 this.modifyId=id

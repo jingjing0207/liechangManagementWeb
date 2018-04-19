@@ -173,6 +173,7 @@
                     newPass:'',
                     password:''
                 },
+
                 search_title: '',
                 sortBy: [],
                 sortGroup: [

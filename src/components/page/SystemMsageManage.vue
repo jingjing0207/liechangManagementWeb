@@ -83,6 +83,7 @@
                     {value: 'asc', label: '升序'},
                     {value: 'desc', label: '降序'}],
                 tableData: [],
+
                 searchName:'',
                 crrentCompanyBy:[],
             }
@@ -99,11 +100,12 @@
         methods: {
             getData(){
                 let self = this;
-                var option = '?page='+parseInt(self.currentPage-1)+'&size='+this.pageSize
-                var sortStr = ''
+                let option = '?page='+parseInt(self.currentPage-1)+'&size='+this.pageSize
+                let sortStr = ''
                 if (self.sortBy.length != 0) {
                     for (var s in self.sortBy) {
-                        sortStr = sortStr + '&sort=' + self.sortBy[s]
+                        sortStr = sortStr + '&sor' +
+                            't=' + self.sortBy[s]
                     }
                 }
                 if (sortStr.length != 0) {
@@ -128,9 +130,9 @@
             },
             search() {
                 const self = this
-                var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = this.$refs.sel
-                var map = {}
+                let list = document.querySelectorAll('.sortOption .el-input__inner')
+                let el = this.$refs.sel
+                let map = {}
                 self.sortBy = []
                 el.forEach(obj => {
                     return map[obj.$options.propsData.name] = obj.$options.propsData.value
@@ -153,8 +155,8 @@
 
             },
             dateTimeFormat(row, column) {
-                var time = new Date(+row.createTime);
-                var rightTwo = (v) => {
+                let time = new Date(+row.createTime);
+                let rightTwo = (v) => {
                     v = '0' + v
                     return v.substring(v.length - 2, v.length)
                 }
@@ -162,13 +164,14 @@
                 return new Date(time).toLocaleString()
             },
             setTimeFormat(row, column) {
-                var time = new Date(+row.scheduleTime);
-                var rightTwo = (v) => {
+                let time = new Date(+row.scheduleTime);
+                let rightTwo = (v) => {
                     v = '0' + v
                     return v.substring(v.length - 2, v.length)
                 }
                 if (time == null) return;
                 return new Date(time).toLocaleString()
+                // return new Date(time).getFullYear()+'/'+(new Date(time).getMonth()+1)+'/'+new Date(time).getDate()+' '+new Date(time).getHours()+':'+new Date(time).getMinutes()+':'+new Date(time).getSeconds()
             }
         },
         filters: {

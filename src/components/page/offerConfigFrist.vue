@@ -11,7 +11,7 @@
             <p class="workplace ">您的工作地点目前是: <span style="border-bottom: 1px solid #dcdfe6;">${workplace}</span> 并根据工作需要服从安排 </p>
             <p class="leader ">您的直接上级是：<span style="border-bottom: 1px solid #dcdfe6;">${leader}</span></p>
             <p class="salary ">您的工资是：<span style="border-bottom: 1px solid #dcdfe6;">${salary}</span></p>
-            <p class="probationSalary ">试用期工资：<span style="border-bottom: 1px solid #dcdfe6;">${probationSalary}</span></p>
+            <p class="probationSalary ">试用期工资：<span style="border-bottom: 1px solid #dcdfe6;">${probationSalary}</span> </p>
             <p class="reportDutyTime ">您的工作起始时间是：<span style="border-bottom: 1px solid #dcdfe6;">${reportDutyTime?string("yyyy-MM-dd")}</span></p>
             <p class="contractPeriod ">您的合同年限是：<span style="border-bottom: 1px solid #dcdfe6;">${contractPeriod}</span></p>
             <p class="probationPeriod">试用期：<span style="border-bottom: 1px solid #dcdfe6;">${probationPeriod}</span></p>

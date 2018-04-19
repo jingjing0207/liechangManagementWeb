@@ -6,7 +6,7 @@
                     <el-input disabled="disabled" v-model="form.oldPercentageServiceFee" auto-complete="off" style="width:70%;border:none;"></el-input>
                 </el-form-item>
                 <el-form-item label="新服务费" :label-width="formLabelWidth">
-                    <el-input v-model="form.percentageServiceFee" auto-complete="off" style="width:70%;"></el-input>
+                    <el-input @blur="modalshow()" v-model="form.percentageServiceFee" auto-complete="off" style="width:70%;"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -356,7 +356,7 @@
             searchCompany(){
                 let self = this;
                 var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = this.$refs.sel
+                var el = self.$refs.sel
                 var map = {}
                 self.sortBy = []
                 el.forEach(obj => {
@@ -367,7 +367,7 @@
                         self.sortBy.push(obj.name + ',' + map[obj.name])
                     }
                 })
-                this.getData()
+                self.getData()
                 self.cur_page = 1;
                 self.url = GETCOMPONANIESLIST;
                 self.$axios.get(self.url+'?page='+parseInt(self.cur_page-1)+'&size='+self.pagesize+'&name='+self.searchName).then((response) => {
@@ -386,12 +386,12 @@
                 let self = this;
                 this.modifyId=id
                 self.url = SEARCHCOMPANY;
-                self.$axios.get(self.url+'/'+this.modifyId).then((response) => {
+                self.$axios.get(self.url+'/'+self.modifyId).then((response) => {
                     console.log(response)
-                    this.form.oldPercentageServiceFee=response.data.percentageServiceFee
+                    self.form.oldPercentageServiceFee=response.data.percentageServiceFee
                 })
-                this.form.percentageServiceFee=''
-                this.dialogFormVisible=true
+                self.form.percentageServiceFee=''
+                self.dialogFormVisible=true
             },
             getHRManager(id,name){
                 this.currentCompany=id
@@ -399,14 +399,12 @@
                 sessionStorage.setItem('companyId',this.currentCompany)
                 let self = this;
                 self.url = GETHRMANAGER;
-                self.$axios.get(self.url+this.currentCompany).then((response) => {
-                    this.outerVisible =true
-                    console.log('success getHRManager')
-                    console.log(response)
-                    this.hrInfo=response.data
+                self.$axios.get(self.url+self.currentCompany).then((response) => {
+                    self.outerVisible =true
+                    self.hrInfo=response.data
                     sessionStorage.setItem('hrManagerId', response.data.id)
                 }).catch(() => {
-                    this.$message({
+                    self.$message({
                         type: 'info',
                         message: '查找失败，该企业无HR管理员信息！'
                     })
@@ -417,12 +415,12 @@
                 if((self.oldPassword!='' && self.newPassword!='') && (self.newPassword == self.oldPassword)){
                     let modifyManager={
                         id:sessionStorage.getItem('hrManagerId'),
-                        password:this.newPassword
+                        password:self.newPassword
                     }
                     self.url = MODIFYHRMANAGEPASSWORD;
                     self.$axios.post(self.url,modifyManager).then((response) => {
                         console.log(response)
-                        this.$message({
+                        self.$message({
                             type: 'success',
                             message: '密码修改成功'
                         })
@@ -438,19 +436,24 @@
             ResetPercentageServiceFee() {
                 let self = this
                 let newModify = {
-                    id: this.modifyId,
-                    percentageServiceFee: this.form.percentageServiceFee
+                    id: self.modifyId,
+                    percentageServiceFee: self.form.percentageServiceFee
                 }
                 self.url = SETCOMPANYSERVICEFEE;
-                self.$axios.post(self.url, newModify).then((response) => {
-                    console.log(response)
-                    this.dialogFormVisible = false
-                    this.$message({
-                        type: 'success',
-                        message: '重置成功'
+                if(self.form.percentageServiceFee <=1 ){
+                    self.$axios.post(self.url, newModify).then((response) => {
+                        console.log(response)
+                        self.dialogFormVisible = false
+                        self.$message({
+                            type: 'success',
+                            message: '重置成功'
+                        })
+                        self.form.oldPercentageServiceFee=self.form.percentageServiceFee
                     })
-                    this.form.oldPercentageServiceFee=this.form.percentageServiceFee
-                })
+                }else{
+                    self.$message.error('输入错误，平台服务费最大为1')
+                }
+
             },
             resetHrManager(){
                 console.log(this.currentCompany)
@@ -466,36 +469,33 @@
                 self.$axios.post(self.url, resetInfo).then((response) => {
                     console.log(response)
                     if(response.status==200){
-                        this.$message({
+                        self.$message({
                             type: 'success',
                             message: '变更成功'
                         })
                         self.url2 = GETHRMANAGER;
-                        self.$axios.get(self.url2+this.currentCompany).then((response) => {
+                        self.$axios.get(self.url2+self.currentCompany).then((response) => {
                             console.log('reset getHRManager')
                             console.log(response)
-                            this.hrInfo=response.data
+                            self.hrInfo=response.data
                         })
                     }
                 })
             },
             changeState(id,state,idx) {
                 let self = this;
-                this.changeCompanyId=id
-                this.changestate=state
-                console.log(this.changeCompanyId)
-                console.log(this.changestate)
-                if(this.changestate==='ON'){
-                     this.changestate='OFF'
-                }else if(this.changestate==='OFF'){
-                     this.changestate='ON'
+                self.changeCompanyId=id
+                self.changestate=state
+                if(self.changestate==='ON'){
+                    self.changestate='OFF'
+                }else if(self.changestate==='OFF'){
+                    self.changestate='ON'
                 }
-                console.log(this.changestate)
                 let changedState={
-                    id:this.changeCompanyId,
-                    state: this.changestate
+                    id:self.changeCompanyId,
+                    state: self.changestate
                 }
-                this.$confirm('您确认要变更企业状态吗？', '提示', {
+                self.$confirm('您确认要变更企业状态吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -505,13 +505,13 @@
                         console.log(response)
                         console.log(response.data.state)
                         self.hr_list[idx].state=response.data.state
-                        this.$message({
+                        self.$message({
                             type: 'success',
                             message: '变更成功!'
                         });
                     })
                 }).catch(() => {
-                    this.$message({
+                    self.$message({
                         type: 'info',
                         message: '已取消变更企业状态！'
                     });

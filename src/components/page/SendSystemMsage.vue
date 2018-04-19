@@ -23,7 +23,7 @@
                 <el-table-column header-align="center" property="username" label="用户名" width="">
 
                 </el-table-column>
-                <el-table-column :formatter="dateTimeFormat" width="170" header-align="center" property="createTime" label="创建时间">
+                <el-table-column width="170" header-align="center" property="createTime" label="创建时间" :formatter="dateTimeFormat">
 
                 </el-table-column>
                 <el-table-column header-align="center" property="type" label="类型" :formatter="typeFormat" width="">
@@ -398,7 +398,6 @@
                         self.$message.error('输入不可为空，请检查并重新输入')
                     }
                 }
-
             },
             giveupSubmit(){
                 this.$message({
@@ -410,6 +409,7 @@
                 this.selectedUserId=''
                 this.value10=''
                 this.currentCpmpany=''
+                this.selectSendTime='1'
             }
         },
         filters: {
@@ -573,4 +573,6 @@
     .detailInfo .el-collapse-item__content {
         padding: 10px 15px;
     }
+    /*
+    */
 </style>

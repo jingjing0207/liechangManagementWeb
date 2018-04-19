@@ -67,7 +67,6 @@
     import {GET_JOB_LIST, GET_COMMISSION_COMFIRM, SET_COMMISSION_COMFIRM} from '../../constants/Constants'
 
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8';
-    // axios.defaults.headers['X-UserToken'] = sessionStorage.getItem('userName');
     axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage');
 
     export default {
@@ -205,7 +204,6 @@
                 }
                 axios.get(GET_JOB_LIST + option)
                     .then(res => {
-
                         this.pagesize = parseInt(this.size);
                         this.totalElements = parseInt(res.data.totalElements);
                         this.tableData = res.data.content

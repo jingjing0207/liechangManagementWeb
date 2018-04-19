@@ -122,7 +122,9 @@
         return leg / 2;
     };
     export default {
-        components: {OfferConfigFrist},
+        components: {
+            OfferConfigFrist
+        },
         data() {
             return {
                 showData:true,
