@@ -66,7 +66,7 @@
 
 <script>
     import axios from 'axios';
-    import OfferConfigFrist from './offerConfigFrist'
+    import OfferConfigFrist from './OfferConfigFrist'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
     axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     import { CREATEOFFERCONFIG,UPDATEOFFERCONFIG } from '../../constants/Constants'

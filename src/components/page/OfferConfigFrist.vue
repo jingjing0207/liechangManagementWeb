@@ -8,13 +8,13 @@
                 现非常荣幸的通知您，您已被我司录取。</p>
             <p class="department">您的工作部门是：<span style="border-bottom: 1px solid #dcdfe6;">${department} </span></p>
             <p class="position ">职位是：<span style="border-bottom: 1px solid #dcdfe6;"> ${position}</span></p>
-            <p class="workplace ">您的工作地点目前是: <span style="border-bottom: 1px solid #dcdfe6;">${workplace}</span> 并根据工作需要服从安排 </p>
+            <p class="workplace ">您的工作地点目前是: <span style="border-bottom: 1px solid #dcdfe6;">${workplace}</span> （并根据工作需要服从安排）</p>
             <p class="leader ">您的直接上级是：<span style="border-bottom: 1px solid #dcdfe6;">${leader}</span></p>
-            <p class="salary ">您的工资是：<span style="border-bottom: 1px solid #dcdfe6;">${salary}</span></p>
-            <p class="probationSalary ">试用期工资：<span style="border-bottom: 1px solid #dcdfe6;">${probationSalary}</span> </p>
+            <p class="salary ">您的工资是：<span style="border-bottom: 1px solid #dcdfe6;">${salary}</span> 元</p>
+            <p class="probationSalary ">试用期工资：<span style="border-bottom: 1px solid #dcdfe6;">${probationSalary}</span> 元</p>
             <p class="reportDutyTime ">您的工作起始时间是：<span style="border-bottom: 1px solid #dcdfe6;">${reportDutyTime?string("yyyy-MM-dd")}</span></p>
-            <p class="contractPeriod ">您的合同年限是：<span style="border-bottom: 1px solid #dcdfe6;">${contractPeriod}</span></p>
-            <p class="probationPeriod">试用期：<span style="border-bottom: 1px solid #dcdfe6;">${probationPeriod}</span></p>
+            <p class="contractPeriod ">您的合同年限是：<span style="border-bottom: 1px solid #dcdfe6;">${contractPeriod}</span> 年</p>
+            <p class="probationPeriod">试用期：<span style="border-bottom: 1px solid #dcdfe6;">${probationPeriod}</span> 个月</p>
         </div>
     </div>
 </template>

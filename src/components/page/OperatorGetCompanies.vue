@@ -356,7 +356,7 @@
             searchCompany(){
                 let self = this;
                 var list = document.querySelectorAll('.sortOption .el-input__inner')
-                var el = self.$refs.sel
+                var el = this.$refs.sel
                 var map = {}
                 self.sortBy = []
                 el.forEach(obj => {
@@ -367,7 +367,7 @@
                         self.sortBy.push(obj.name + ',' + map[obj.name])
                     }
                 })
-                self.getData()
+                this.getData()
                 self.cur_page = 1;
                 self.url = GETCOMPONANIESLIST;
                 self.$axios.get(self.url+'?page='+parseInt(self.cur_page-1)+'&size='+self.pagesize+'&name='+self.searchName).then((response) => {
@@ -386,12 +386,12 @@
                 let self = this;
                 this.modifyId=id
                 self.url = SEARCHCOMPANY;
-                self.$axios.get(self.url+'/'+self.modifyId).then((response) => {
+                self.$axios.get(self.url+'/'+this.modifyId).then((response) => {
                     console.log(response)
-                    self.form.oldPercentageServiceFee=response.data.percentageServiceFee
+                    this.form.oldPercentageServiceFee=response.data.percentageServiceFee
                 })
-                self.form.percentageServiceFee=''
-                self.dialogFormVisible=true
+                this.form.percentageServiceFee=''
+                this.dialogFormVisible=true
             },
             getHRManager(id,name){
                 this.currentCompany=id
@@ -399,12 +399,12 @@
                 sessionStorage.setItem('companyId',this.currentCompany)
                 let self = this;
                 self.url = GETHRMANAGER;
-                self.$axios.get(self.url+self.currentCompany).then((response) => {
-                    self.outerVisible =true
-                    self.hrInfo=response.data
+                self.$axios.get(self.url+this.currentCompany).then((response) => {
+                    this.outerVisible =true
+                    this.hrInfo=response.data
                     sessionStorage.setItem('hrManagerId', response.data.id)
                 }).catch(() => {
-                    self.$message({
+                    this.$message({
                         type: 'info',
                         message: '查找失败，该企业无HR管理员信息！'
                     })
@@ -415,12 +415,12 @@
                 if((self.oldPassword!='' && self.newPassword!='') && (self.newPassword == self.oldPassword)){
                     let modifyManager={
                         id:sessionStorage.getItem('hrManagerId'),
-                        password:self.newPassword
+                        password:this.newPassword
                     }
                     self.url = MODIFYHRMANAGEPASSWORD;
                     self.$axios.post(self.url,modifyManager).then((response) => {
                         console.log(response)
-                        self.$message({
+                        this.$message({
                             type: 'success',
                             message: '密码修改成功'
                         })

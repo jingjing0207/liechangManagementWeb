@@ -249,6 +249,7 @@
                 }
                 self.$axios.get(GET_RESUME_LIST + option)
                     .then(res => {
+                        console.log(res)
                         self.pagesize = parseInt(self.size);
                         self.totalElements = parseInt(res.data.totalElements);
                         self.tableData = res.data.content.map(v => {
