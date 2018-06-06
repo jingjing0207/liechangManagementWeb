@@ -6,12 +6,26 @@
                     <el-input disabled="disabled" v-model="form.oldPercentageServiceFee" auto-complete="off" style="width:70%;border:none;"></el-input>
                 </el-form-item>
                 <el-form-item label="新服务费" :label-width="formLabelWidth">
-                    <el-input @blur="modalshow()" v-model="form.percentageServiceFee" auto-complete="off" style="width:70%;"></el-input>
+                    <el-input v-model="form.percentageServiceFee" auto-complete="off" style="width:70%;"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="ResetPercentageServiceFee()">确 定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="企业账户" :visible.sync="CompanyPriceVisible">
+            <el-form :model="form">
+                <el-form-item label="账户余额：" :label-width="formLabelWidth">
+                    <p style="display: inline-block;">{{currentCompanyAccount | priceFormat}}</p> 元
+                </el-form-item>
+                <el-form-item label="充值金额：" :label-width="formLabelWidth">
+                    <el-input v-model="changeChargeAccont" auto-complete="off" style="width:50%;"></el-input> 元
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="CompanyPriceVisible = false">取 消</el-button>
+                <el-button type="primary" @click="reChargeAccount()">确 定</el-button>
             </div>
         </el-dialog>
         <div class="crumbs">
@@ -47,11 +61,12 @@
                 <th>{{taxNumber.label}}</th>
                 <th>{{address.label}}</th>
                 <th>{{state.label}}</th>
+                <th>{{setCompanyPirce.label}}</th>
                 <th>{{setCompanyServiceFee.label}}</th>
                 <th>{{gethrManager.label}}</th>
             </tr>
             <tr class="tr-con"  v-for="(pro,idx) in hr_list">
-                <td style="max-width:78px;" @click="showOffer(pro.id,pro.name)">{{pro.name}}</td>
+                <td style="max-width:78px;">{{pro.name}}</td>
                 <td>{{pro.settleType| stateFormat}}</td>
                 <td>
                     {{pro.contacts==null?"":pro.contacts}}
@@ -61,17 +76,22 @@
                 </td>
                 <td>{{pro.taxNumber==''?"":pro.taxNumber}}</td>
                 <td style="max-width:78px;">{{pro.address==null?"":pro.address}}</td>
+
                 <td class="currentState" @click="changeState(pro.id,pro.state,idx)">
-                    <el-button v-if="pro.state != 'OFF'" type="primary"  round style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>
-                    <el-button v-if="pro.state=='OFF'" type="info"  round style="padding: 4px 10px!important;background-color: #c8c9cc;border-color: #c8c9cc;">{{pro.state| stateChange}}</el-button>
+                    <el-button v-if="pro.state !== 'OFF'" type="primary"  round style="padding: 4px 10px!important;">{{pro.state| stateChange}}</el-button>
+                    <el-button v-if="pro.state==='OFF'" type="info"  round style="padding: 4px 10px!important;background-color: #c8c9cc;border-color: #c8c9cc;">{{pro.state| stateChange}}</el-button>
                 </td>
                 <td>
-                    <el-button v-if="pro.state != 'OFF'" type="primary"  @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
-                    <el-button v-if="pro.state == 'OFF'" disabled="disabled"  type="info">重置平台服务费</el-button>
+                    <el-button v-if="pro.state !== 'OFF'" type="primary"  @click="chongCompanyPirce(pro.id)">账户充值</el-button>
+                    <el-button v-if="pro.state === 'OFF'" disabled="disabled"  type="info">账户充值</el-button>
+                </td>
+                <td>
+                    <el-button v-if="pro.state !== 'OFF'" type="primary"  @click="modifyManageplatform(pro.id)">重置平台服务费</el-button>
+                    <el-button v-if="pro.state === 'OFF'" disabled="disabled"  type="info">重置平台服务费</el-button>
                 </td>
                 <td class="last-td">
-                    <el-button v-if="pro.state != 'OFF'" type="primary"  @click="getHRManager(pro.id,pro.name)" >查看HR管理员信息</el-button>
-                    <el-button v-if="pro.state == 'OFF'" disabled="disabled" type="info">查看HR管理员信息</el-button>
+                    <el-button v-if="pro.state !== 'OFF'" type="primary"  @click="getHRManager(pro.id,pro.name)" >查看HR管理员信息</el-button>
+                    <el-button v-if="pro.state === 'OFF'" disabled="disabled" type="info">查看HR管理员信息</el-button>
                 </td>
             </tr>
         </table>
@@ -176,7 +196,8 @@
     import { GETCOMPONANIESLIST,
         SETCOMPANYSERVICEFEE,SEARCHCOMPANY,
         GETHRMANAGER,MODIFYHRMANAGEPASSWORD,
-        CHANGEHRMANAGER,CHANGECOMPANYSTATE } from '../../constants/Constants'
+        CHANGEHRMANAGER,CHANGECOMPANYSTATE,
+        GETCOMPANYPRICE,POSTCHONGCOMPANYPRICE} from '../../constants/Constants'
     axios.defaults.headers['Content-Type'] = 'application/json; charset=UTF-8'
     axios.defaults.headers['X-OperatorToken'] = sessionStorage.getItem('resultMessage')
     export default {
@@ -200,6 +221,21 @@
                 } else {
                     return ''
                 }
+            },
+            priceFormat(val) {
+                function addCommas(nStr){
+                    nStr += '';
+                    let  x = nStr.split('.');
+                    let x1 = x[0];
+                    let x2 = x[1];
+                    var rgx = /(\d+)(\d{3})/;
+                    while (rgx.test(x1)) {
+                        x1 = x1.replace(rgx, '$1,$2');
+                    }
+                    return x1 + '.' + (x2 ? x2.replace(/(\d{3})(?=[^$])/g,'$1,') : '00');
+                }
+
+                return addCommas(val);
             }
         },
         computed: {
@@ -237,6 +273,10 @@
                 address:{
                     title:'address',
                     label:'地址'
+                },
+                setCompanyPirce:{
+                    title:'setCompanyPirce',
+                    label:'企业账户充值'
                 },
                 setCompanyServiceFee:{
                     title:'setCompanyServiceFee',
@@ -287,6 +327,10 @@
                     resetIdCardNumber:'',
                     resetJobNumber:'',
                 },
+                CompanyPriceVisible:false,
+                currentCompanyId:'',
+                currentCompanyAccount:'',
+                changeChargeAccont:'',
 
                 search_title: '',
                 sortBy: [],
@@ -396,17 +440,20 @@
             getHRManager(id,name){
                 this.currentCompany=id
                 this.currentCompanyName=name
+                console.log(this.currentCompany)
+                console.log(this.currentCompanyName)
                 sessionStorage.setItem('companyId',this.currentCompany)
                 let self = this;
                 self.url = GETHRMANAGER;
                 self.$axios.get(self.url+this.currentCompany).then((response) => {
+                    console.log(response)
                     this.outerVisible =true
                     this.hrInfo=response.data
                     sessionStorage.setItem('hrManagerId', response.data.id)
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '查找失败，该企业无HR管理员信息！'
+                        message: '查找失败，该企业暂无HR管理员信息！'
                     })
                 })
             },
@@ -451,7 +498,7 @@
                         self.form.oldPercentageServiceFee=self.form.percentageServiceFee
                     })
                 }else{
-                    self.$message.error('输入错误，平台服务费最大为1')
+                    self.$message.error('输入错误，平台服务费最大为1，请重新输入!')
                 }
 
             },
@@ -476,7 +523,6 @@
                         self.url2 = GETHRMANAGER;
                         self.$axios.get(self.url2+self.currentCompany).then((response) => {
                             console.log('reset getHRManager')
-                            console.log(response)
                             self.hrInfo=response.data
                         })
                     }
@@ -504,6 +550,7 @@
                     self.$axios.post(self.url,changedState).then((response) => {
                         console.log(response)
                         console.log(response.data.state)
+                        console.log(response.data)
                         self.hr_list[idx].state=response.data.state
                         self.$message({
                             type: 'success',
@@ -516,6 +563,44 @@
                         message: '已取消变更企业状态！'
                     });
                 });
+            },
+            chongCompanyPirce(id){
+                this.CompanyPriceVisible=true
+                let self = this;
+                self.changeChargeAccont=''
+                this.currentCompanyId=id
+                let option = '?id='+this.currentCompanyId
+                self.url = GETCOMPANYPRICE;
+                self.$axios.get(self.url+option).then((res) => {
+                    console.log(res)
+                    this.currentCompanyAccount=res.data.balance/100
+                }).catch(() => {
+
+                })
+            },
+            reChargeAccount(){
+                let self = this
+                console.log(this.changeChargeAccont)
+                self.url = POSTCHONGCOMPANYPRICE;
+                if(this.changeChargeAccont > 0 || this.changeChargeAccont!==''){
+                    let amount=this.changeChargeAccont*100
+                    let reChargeAccount = {
+                        id: self.currentCompanyId,
+                        amount: amount
+                    }
+                    self.$axios.post(self.url, reChargeAccount).then((response) => {
+                        console.log(response)
+                        self.CompanyPriceVisible = false
+                        if(response.status===200){
+                            self.$message({
+                                type: 'success',
+                                message: '充值成功'
+                            })
+                        }
+                    })
+                }else {
+                    self.$message.error('充值金额有误，请重新输入！')
+                }
             }
         }
     }

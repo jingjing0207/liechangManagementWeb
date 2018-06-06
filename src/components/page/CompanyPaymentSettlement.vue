@@ -23,7 +23,6 @@
                             :value="item.id">
                         </el-option>
                     </el-select>
-                    <!--<div class="selectTime">-->
                     <el-date-picker
                         v-model="value10"
                         type="date"
@@ -38,7 +37,6 @@
                         format="yyyy 年 MM 月 dd 日"
                         value-format="timestamp">
                     </el-date-picker>
-                    <!--</div>-->
                 </div>
                 <el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
             </div>

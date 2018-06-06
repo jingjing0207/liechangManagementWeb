@@ -318,13 +318,6 @@
             submitForm(){
                 let self = this;
                 console.log('this is sendMsageContent')
-                console.log(this.value10)
-                console.log(this.radio)
-                console.log(this.createTime)
-                console.log(this.messageType)
-                console.log(this.receiverId)
-                console.log(this.scheduleTime)
-                console.log(this.sendType)
 
                 if(this.radio==1){
                     this.receiverId=0
@@ -344,11 +337,6 @@
                     this.scheduleTime=this.value10==''?'':this.value10
                     this.sendType='SEND_SCHEDULE'
                 }
-                console.log(this.messageType)
-                console.log(this.receiverId)
-                console.log('打印指定发送时间')
-                console.log(this.scheduleTime)
-                console.log(this.messageType)
                 self.url = SENDSYSTEMMSG;
                 let sendMsageContent={
                     content: this.description,
@@ -395,7 +383,7 @@
                             }
                         })
                     }else{
-                        self.$message.error('输入不可为空，请检查并重新输入')
+                        self.$message.error('输入不可为空，请检查并重新输入！')
                     }
                 }
             },

@@ -204,6 +204,7 @@
                 let self = this;
                 self.$axios.get(GET_RESUME_DETAIL + self.human_id)
                     .then((res) => {
+                        console.log(res)
                         self.info = res.data
                         self.info.selfEvaluation = self.splitText(self.info.selfEvaluation)
                         self.info.workSkills = self.splitText(self.info.workSkills)

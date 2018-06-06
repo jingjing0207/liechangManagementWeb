@@ -151,7 +151,6 @@
                 let self = this;
                 self.url = GETALLCOMPANIES;
                 self.$axios.get(self.url).then((response) => {
-                    console.log(response)
                     this.allCompanies=response.data
                 }).catch((error) => {
                     console.log(error)
@@ -181,21 +180,16 @@
                 if(this.currentCompany!=''){
                     self.$axios.get(self.url+option).then((response) => {
                         if(response.data.content!=''){
-                            console.log(response)
                             this.isShow=true
                             let desc=response.data.content[0].descriptions
                             for(let i=0;i<desc.length;i++){
                                 this.cl.push(desc[i].description)
                             }
-                            console.log(this.cl)
                             let pre=response.data.content[0].preparations
                             for(let i=0;i<pre.length;i++){
                                 this.sm.push(pre[i].description)
                             }
-                            console.log(this.sm)
                             sessionStorage.setItem('offerId',response.data.content[0].id)
-                            console.log("打印出offerId")
-                            console.log(sessionStorage.getItem('offerId'))
                         }else{
                             this.isShow=false
                             this.cl=[]
@@ -209,7 +203,6 @@
                     this.cl=[]
                     this.sm=[]
                 }
-
             },
             saveClick() {
                 let saveData={
@@ -217,11 +210,9 @@
                     descriptionList: this.cl,
                     preparationList: this.sm
                 }
-                console.log(saveData)
                 let self = this;
                 self.url = CREATEOFFERCONFIG;
                 self.$axios.post(self.url,saveData).then((response) => {
-                    console.log(response)
                     if(response.status==200){
                         self.$message({
                             type: 'success',
@@ -229,7 +220,6 @@
                         })
                         self.isShow=true
                     }
-
                 }).catch((error) => {
                     console.log(error)
                 })
@@ -247,11 +237,9 @@
                     id:sessionStorage.getItem('offerId'),
                     preparationList: this.sm
                 }
-                console.log(editData)
                 let self = this;
                 self.url = UPDATEOFFERCONFIG;
                 self.$axios.post(self.url,editData).then((response) => {
-                    console.log(response)
                     if(response.status==200){
                         this.isShow=true
                         this.$message({

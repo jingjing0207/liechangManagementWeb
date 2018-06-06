@@ -91,6 +91,9 @@
                             <div id="QR"></div>
                         </div>
                         <h5><input class="curent-input" :style="{width:'calc(' + inp.dbLength() + 'em + 12px)'}" v-model="inp"></h5>
+                        <div class="currentCompanyLogo">
+                            <img :src=companyLogo alt="">
+                        </div>
                         <h5><input class="curent-input" :style="{width:'calc(' + relativeCompany.dbLength() + 'em + 12px)'}" v-model="relativeCompany"></h5>
                         <h5><input class="curent-input" :style="{width:'calc(' + TimeData.dbLength() + 'em + 12px)'}" v-model="TimeData"></h5>
                     </el-card>
@@ -159,7 +162,8 @@
                 initText:'',
                 isShowSave:false,
                 isShowEdit:false,
-                isShowCancel:false
+                isShowCancel:false,
+                companyLogo:''
             }
         },
         created() {
@@ -171,7 +175,7 @@
         },
         updated(){
             this.list = this.allCompanies.map(item => {
-                return { id:item.id, name:item.name }
+                return { id:item.id, name:item.name,logo:item.logo }
             })
         },
         methods: {
@@ -188,6 +192,7 @@
             remoteMethod(query) {
                 if (query !== '') {
                     this.loading = true;
+                    console.log("logo")
                     console.log(this.list)
                     setTimeout(() => {
                         this.loading = false;
@@ -202,10 +207,14 @@
             },
             search() {
                 let self = this;
-                this.cl=[]
-                this.sm=[]
-                let option='?company='+this.currentCompany
-                console.log(this.currentCompany)
+                self.cl=[]
+                self.sm=[]
+                let option='?company='+self.currentCompany
+                for(let i=0;i<self.list.length;i++){
+                    if(self.currentCompany===self.list[i].id){
+                        self.companyLogo=self.list[i].logo
+                    }
+                }
                 self.url = GETOFFERCONFIGS;
                 if(this.currentCompany!=''){
                     self.$axios.get(self.url+option).then((response) => {
@@ -231,17 +240,17 @@
                             getInputLength()
                             $("#addcailiaoButton").live("click", function(){
                                 $('.cailiao').append('<li style="position: relative;text-indent: unset;">\n' +
-                                    '                                <i style="cursor: pointer;color: #409EFF;padding: 0;margin: unset;position: absolute;left: -3.5em;top: 7px;" class="el-icon-error remove-button"></i>\n' +
-                                    '                                <input  style="border:1px solid transparent;border-bottom-color: #c0c4cc;outline: none;padding:0.1rem 0.2rem;width:98%;" class="currentClass curent-input"/>\n' +
-                                    '                            </li>');
+                                    '<i style="cursor: pointer;color: #409EFF;padding: 0;margin: unset;position: absolute;left: -3.5em;top: 7px;" class="el-icon-error remove-button"></i>\n' +
+                                    '<input  style="border:1px solid transparent;border-bottom-color: #c0c4cc;outline: none;padding:0.1rem 0.2rem;width:98%;" class="currentClass curent-input"/>\n' +
+                                    '</li>');
                                 changeContent();
                             });
 
                             $("#addShenmingButton").live("click", function(){
                                 $('.shenming').append('<li style="position: relative;text-indent: unset;">\n' +
-                                    '                                <i style="cursor: pointer;color: #409EFF;padding: 0;margin: unset;position: absolute;left: -3.5em;top: 7px;" class="el-icon-error remove-button" @click="removeItem2(index)"></i>\n' +
-                                    '                                <textarea style="width:100%;border-color: #c0c4cc;outline: none;padding:0.1rem 0.2rem;font-size: 14px;" name="NewsIntro" contenteditable="true" class=" curent-input shenmingTexteara" ></textarea>\n' +
-                                    '                            </li>');
+                                    '<i style="cursor: pointer;color: #409EFF;padding: 0;margin: unset;position: absolute;left: -3.5em;top: 7px;" class="el-icon-error remove-button" @click="removeItem2(index)"></i>\n' +
+                                    '<textarea style="width:100%;border:1px solid #c0c4cc;outline: none;padding:0.1rem 0.2rem;font-size: 14px;" name="NewsIntro" contenteditable="true" class=" curent-input shenmingTexteara" ></textarea>\n' +
+                                    '</li>');
                                 changeContent();
                             });
                             function deletcurrentInput() {
@@ -256,13 +265,12 @@
                             }
                             function getInputLength() {
                                 let brr=$('.top-input')
-                                var testLength
+                                let testLength
                                 brr.each(function(){
                                     testLength=$(this).attr('value').length
                                     $(this).css('width', testLength*14 + 'px')
                                 });
                             }
-                            $('.shemnming li textarea').addClass('curent-input')
                         }else{
                             console.log("没有数据！")
                             this.cl=[]
@@ -341,13 +349,12 @@
                     content: str,
                     id: sessionStorage.getItem('offerId')
                 }
-                console.log('htmljjj')
-                console.log($('textarea').html)
                 console.log(editData)
+                console.log(this.company)
+                console.log(this.str)
                 let self = this;
                 self.url = UPDATEOFFERCONFIG;
                 self.$axios.post(self.url,editData).then((response) => {
-                    console.log(response)
                     if(response.status==200){
                         $('.top-div').css('display','block')
                         self.$message({
@@ -391,6 +398,15 @@
 </script>
 
 <style scoped>
+    .currentCompanyLogo{
+        width:50px;
+        height: 50px;
+        margin:5px auto;
+    }
+    .currentCompanyLogo img{
+        width: 100%;
+        height: 100%;
+    }
     #QR{
         width:auto;
         height: auto;
@@ -407,11 +423,12 @@
         width: 98%;
     }
     textarea{
-      border-color: #c0c4cc;
+        /*display: block;*/
+      border:1px solid #c0c4cc;
       outline: none;
       padding:0.1rem 0.2rem;
       min-width: 0.56rem;
-      }
+    }
     .shenming-input ul li input{
         max-width: 100%;
         flex-wrap: wrap;
@@ -479,9 +496,9 @@
         margin-top: 15px;
     }
 
-    .el-card__body p, li {
-        text-indent: 2em;
-    }
+    /*.el-card__body p{*/
+        /*text-indent: 2em;*/
+    /*}*/
 
     ul {
         list-style-type: decimal;
@@ -505,7 +522,7 @@
     }
 
     .el-input {
-        text-indent: 0em;
+        text-indent: 0em!important;
     }
 
     .add-button {
@@ -515,7 +532,6 @@
 
     .remove-button {
         cursor: pointer;
-        /*color: #f56c6c;*/
         padding: 0;
         margin: unset;
         position: absolute;

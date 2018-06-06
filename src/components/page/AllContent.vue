@@ -199,6 +199,7 @@
                     id: sessionStorage.getItem('offerId')
                 }
                 console.log(editData)
+                console.log(str)
                 let self = this;
                 self.url = UPDATEOFFERCONFIG;
                 self.$axios.post(self.url,editData).then((response) => {

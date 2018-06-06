@@ -308,7 +308,7 @@
 
     #jdlist.el-table .cell, #jdlist.el-table th div {
         color: #333;
-        padding: 0 10px;
+        padding: 0 5px;
     }
 
     .jdlist-row {
@@ -344,4 +344,5 @@
     .sortOption .el-collapse-item__content {
         padding: 10px 15px;
     }
+
 </style>
